@@ -580,101 +580,127 @@ function applyTheme(bookName) {
 //   foreignVoice: index 0-2
 
 function initFromGlide() {
-  // Try URL params first (for testing/direct embed)
   var params = new URLSearchParams(window.location.search);
+  var chapterTitle = params.get('chapter') || 'First Impressions';
+  var bookName = params.get('book') || 'Black Book';
+  var nativeVoice = parseInt(params.get('nv') || '0');
+  var foreignVoice = parseInt(params.get('fv') || '0');
 
-  // Try Glide's component props via postMessage
+  // Listen for Glide postMessage (future upgrade path)
   window.addEventListener('message', function(e) {
     if (e.data && e.data.type === 'bb-player-init') {
       loadData(e.data);
     }
   });
 
-  // Check for Glide props passed as global
-  if (window.glideProps) {
-    loadData(window.glideProps);
-    return;
-  }
+  // Show loading state
+  document.getElementById('header-title').textContent = chapterTitle;
+  document.getElementById('source-book').textContent = bookName;
+  document.getElementById('header-count').textContent = 'Loading...';
 
-  // TEST DATA — used when no Glide data is present
-  // Replace with real data in production
-  var testPhrases = [
-    {
-      Russian: 'Ты красивая.',
-      English: "You're beautiful.",
-      Romanization: 'Ty krasivaya.',
-      Context: 'General beauty',
-      EN_M1_URL: 'https://res.cloudinary.com/dkd8okrw3/video/upload/v1771889670/clark_001_ev2z2f.mp3',
-      EN_F1_URL: 'https://res.cloudinary.com/dkd8okrw3/video/upload/v1771889670/clark_001_ev2z2f.mp3',
-      RU_F1_URL: 'https://res.cloudinary.com/dkd8okrw3/video/upload/v1772176441/arabella_001_yqr6ac.mp3',
-      RU_F2_URL: 'https://res.cloudinary.com/dkd8okrw3/video/upload/v1772176441/arabella_001_yqr6ac.mp3',
-      RU_M1_URL: 'https://res.cloudinary.com/dkd8okrw3/video/upload/v1772176441/arabella_001_yqr6ac.mp3',
-      Chapter_Title: 'First Impressions',
-      Book: 'Black Book'
-    },
-    {
-      Russian: 'У тебя потрясающие глаза.',
-      English: 'You have stunning eyes.',
-      Romanization: 'U tebya potryasayushchiye glaza.',
-      Context: 'Physical compliments',
-      EN_M1_URL: 'https://res.cloudinary.com/dkd8okrw3/video/upload/v1771889670/clark_001_ev2z2f.mp3',
-      EN_F1_URL: 'https://res.cloudinary.com/dkd8okrw3/video/upload/v1771889670/clark_001_ev2z2f.mp3',
-      RU_F1_URL: 'https://res.cloudinary.com/dkd8okrw3/video/upload/v1772176441/arabella_001_yqr6ac.mp3',
-      RU_F2_URL: 'https://res.cloudinary.com/dkd8okrw3/video/upload/v1772176441/arabella_001_yqr6ac.mp3',
-      RU_M1_URL: 'https://res.cloudinary.com/dkd8okrw3/video/upload/v1772176441/arabella_001_yqr6ac.mp3',
-      Chapter_Title: 'First Impressions',
-      Book: 'Black Book'
-    },
-    {
-      Russian: 'Твоя улыбка освещает комнату.',
-      English: 'Your smile lights up the room.',
-      Romanization: 'Tvoya ulybka osveshchayet komnatu.',
-      Context: 'Physical compliments',
-      EN_M1_URL: 'https://res.cloudinary.com/dkd8okrw3/video/upload/v1771889670/clark_001_ev2z2f.mp3',
-      EN_F1_URL: 'https://res.cloudinary.com/dkd8okrw3/video/upload/v1771889670/clark_001_ev2z2f.mp3',
-      RU_F1_URL: 'https://res.cloudinary.com/dkd8okrw3/video/upload/v1772176441/arabella_001_yqr6ac.mp3',
-      RU_F2_URL: 'https://res.cloudinary.com/dkd8okrw3/video/upload/v1772176441/arabella_001_yqr6ac.mp3',
-      RU_M1_URL: 'https://res.cloudinary.com/dkd8okrw3/video/upload/v1772176441/arabella_001_yqr6ac.mp3',
-      Chapter_Title: 'First Impressions',
-      Book: 'Black Book'
-    },
-    {
-      Russian: 'Ты выглядишь великолепно сегодня.',
-      English: 'You look gorgeous tonight.',
-      Romanization: 'Ty vyglyadish velikolepno segodnya.',
-      Context: 'Physical compliments',
-      EN_M1_URL: 'https://res.cloudinary.com/dkd8okrw3/video/upload/v1771889670/clark_001_ev2z2f.mp3',
-      EN_F1_URL: 'https://res.cloudinary.com/dkd8okrw3/video/upload/v1771889670/clark_001_ev2z2f.mp3',
-      RU_F1_URL: 'https://res.cloudinary.com/dkd8okrw3/video/upload/v1772176441/arabella_001_yqr6ac.mp3',
-      RU_F2_URL: 'https://res.cloudinary.com/dkd8okrw3/video/upload/v1772176441/arabella_001_yqr6ac.mp3',
-      RU_M1_URL: 'https://res.cloudinary.com/dkd8okrw3/video/upload/v1772176441/arabella_001_yqr6ac.mp3',
-      Chapter_Title: 'First Impressions',
-      Book: 'Black Book'
-    },
-    {
-      Russian: 'Я не могу оторвать от тебя глаз.',
-      English: "I can't stop looking at you.",
-      Romanization: 'Ya ne mogu otorvat ot tebya glaz.',
-      Context: 'Attraction',
-      EN_M1_URL: 'https://res.cloudinary.com/dkd8okrw3/video/upload/v1771889670/clark_001_ev2z2f.mp3',
-      EN_F1_URL: 'https://res.cloudinary.com/dkd8okrw3/video/upload/v1771889670/clark_001_ev2z2f.mp3',
-      RU_F1_URL: 'https://res.cloudinary.com/dkd8okrw3/video/upload/v1772176441/arabella_001_yqr6ac.mp3',
-      RU_F2_URL: 'https://res.cloudinary.com/dkd8okrw3/video/upload/v1772176441/arabella_001_yqr6ac.mp3',
-      RU_M1_URL: 'https://res.cloudinary.com/dkd8okrw3/video/upload/v1772176441/arabella_001_yqr6ac.mp3',
-      Chapter_Title: 'First Impressions',
-      Book: 'Black Book'
-    }
-  ];
-
-  loadData({
-    phrases: testPhrases,
-    sourceType: 'chapter',
-    sourceTitle: 'First Impressions',
-    sourceBook: 'Black Book',
-    nativeVoice: 0,
-    foreignVoice: 0
-  });
+  // Fetch live data from Google Sheet CSV
+  var csvUrl = 'https://docs.google.com/spreadsheets/d/17axpQxBY2jQSaDeU8uv6DGp7EiyQhyVo_ZeRJYWB_EU/export?format=csv&gid=595375825';
+  fetch(csvUrl)
+    .then(function(r) {
+      if (!r.ok) throw new Error('CSV fetch failed');
+      return r.text();
+    })
+    .then(function(csv) {
+      var phrases = parseCSV(csv, chapterTitle);
+      if (phrases.length === 0) {
+        document.getElementById('header-count').textContent = 'No phrases found';
+        return;
+      }
+      loadData({
+        phrases: phrases,
+        sourceType: 'chapter',
+        sourceTitle: chapterTitle,
+        sourceBook: bookName,
+        nativeVoice: nativeVoice,
+        foreignVoice: foreignVoice
+      });
+    })
+    .catch(function(err) {
+      console.error('Data load error:', err);
+      // Fall back to test data
+      loadData({
+        phrases: FALLBACK_PHRASES,
+        sourceType: 'chapter',
+        sourceTitle: chapterTitle,
+        sourceBook: bookName,
+        nativeVoice: nativeVoice,
+        foreignVoice: foreignVoice
+      });
+    });
 }
+
+function parseCSV(csv, chapterFilter) {
+  var lines = csv.split('\n');
+  if (lines.length < 2) return [];
+  
+  // Parse header row to get column indices
+  var headers = parseCSVRow(lines[0]);
+  var idx = {};
+  headers.forEach(function(h, i) { idx[h.trim()] = i; });
+  
+  var phrases = [];
+  for (var i = 1; i < lines.length; i++) {
+    var line = lines[i].trim();
+    if (!line) continue;
+    var cols = parseCSVRow(line);
+    if (!cols || cols.length < 5) continue;
+    
+    var chapter = (cols[idx['Chapter_Title']] || '').trim();
+    // Decode URI encoding in chapter filter param
+    var filterClean = decodeURIComponent(chapterFilter).trim();
+    if (chapter !== filterClean) continue;
+    
+    phrases.push({
+      Russian:      cols[idx['Russian']]      || '',
+      English:      cols[idx['English']]      || '',
+      Romanization: cols[idx['Romanization']] || '',
+      Context:      cols[idx['Context']]      || '',
+      Chapter_Title:cols[idx['Chapter_Title']]|| '',
+      Book:         cols[idx['Book']]         || '',
+      EN_M1_URL:    cols[idx['EN_M1_URL']]    || '',
+      EN_F1_URL:    cols[idx['EN_F1_URL']]    || '',
+      RU_F1_URL:    cols[idx['RU_F1_URL']]    || '',
+      RU_F2_URL:    cols[idx['RU_F2_URL']]    || '',
+      RU_M1_URL:    cols[idx['RU_M1_URL']]    || ''
+    });
+  }
+  return phrases;
+}
+
+function parseCSVRow(row) {
+  var result = [];
+  var cur = '';
+  var inQuote = false;
+  for (var i = 0; i < row.length; i++) {
+    var c = row[i];
+    if (c === '"') {
+      if (inQuote && row[i+1] === '"') { cur += '"'; i++; }
+      else inQuote = !inQuote;
+    } else if (c === ',' && !inQuote) {
+      result.push(cur); cur = '';
+    } else {
+      cur += c;
+    }
+  }
+  result.push(cur);
+  return result;
+}
+
+var FALLBACK_PHRASES = [
+  { Russian: 'Ты красивая.', English: "You're beautiful.", Romanization: 'Ty krasivaya.', Context: 'General beauty',
+    EN_M1_URL: 'https://res.cloudinary.com/dkd8okrw3/video/upload/v1771889670/clark_001_ev2z2f.mp3',
+    EN_F1_URL: 'https://res.cloudinary.com/dkd8okrw3/video/upload/v1771889670/clark_001_ev2z2f.mp3',
+    RU_F1_URL: 'https://res.cloudinary.com/dkd8okrw3/video/upload/v1772176441/arabella_001_yqr6ac.mp3',
+    RU_F2_URL: 'https://res.cloudinary.com/dkd8okrw3/video/upload/v1772176441/arabella_001_yqr6ac.mp3',
+    RU_M1_URL: 'https://res.cloudinary.com/dkd8okrw3/video/upload/v1772176441/arabella_001_yqr6ac.mp3',
+    Chapter_Title: 'First Impressions', Book: 'Black Book' }
+];
+
 
 function loadData(data) {
   if (!data || !data.phrases || data.phrases.length === 0) {
