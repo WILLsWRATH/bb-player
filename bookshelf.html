@@ -434,7 +434,7 @@ body {
       <div class="dot"></div>
     </div>
   </div>
-  <div class="tap-hint">Tap to open</div>
+  <div class="tap-hint">Tap to enter</div>
 </div>
 
 <script>
@@ -519,8 +519,15 @@ function onEnd(e) {
     if (card) {
       var idx = parseInt(card.dataset.index);
       if (idx === current) {
-        // Open book — postMessage to Glide
-        window.parent.postMessage({ type: 'bb-open-book', book: card.dataset.book }, '*');
+        // Navigate to book in Glide
+        var urls = {
+          'Black Book':  'https://black-book-lkkx.glide.page/dl/ced490/s/b219a3/r/TOzQVZxsuPIRC9AZJXlq',
+          'Red Book':    'https://black-book-lkkx.glide.page/dl/ced490/s/b219a3/r/upsdaNYCKCuAyYHX8Cl6',
+          'The Wall':    'https://black-book-lkkx.glide.page/dl/ced490/s/b219a3/r/FRKRAQGZBzoaK6Ecqwyx',
+          'Vocabulary':  'https://black-book-lkkx.glide.page/dl/ced490/s/b219a3/r/cnyvzRHVMusKmtt86AIY'
+        };
+        var url = urls[card.dataset.book];
+        if (url) window.top.location.href = url;
       } else {
         goTo(idx);
       }
