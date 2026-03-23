@@ -267,6 +267,29 @@
   .queue-item.qi-active { background: var(--surface); }
   .queue-item.qi-done { opacity: 0.3; }
   .queue-item.qi-pending { opacity: 0.55; }
+
+  .qi-heart {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    cursor: pointer;
+    color: rgba(255,255,255,0.35);
+    transition: color 0.2s, transform 0.15s;
+    border-radius: 50%;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .qi-heart:active { transform: scale(1.3); }
+  #btn-save.saved { color: var(--accent) !important; fill: var(--accent); }
+  #btn-save svg { transition: fill 0.2s; }
+  #btn-save.saved svg { fill: var(--accent); stroke: var(--accent); }
+  .qi-heart.saved { color: var(--accent); text-shadow: 0 0 8px var(--accent); }
+  .qi-heart:hover { color: rgba(255,255,255,0.7); }
+  .qi-dot { display: none; }
+
   .qi-num {
     font-size: 11px;
     color: var(--text3);
@@ -440,6 +463,11 @@
   </button>
   <button class="ctrl-btn stroke-icon" id="btn-shuffle" onclick="toggleShuffle()" title="Shuffle">
     <svg viewBox="0 0 24 24"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
+  </button>
+  <button class="ctrl-btn" id="btn-save" onclick="saveCurrentPhrase()" title="Add to Playlist">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+    </svg>
   </button>
 </div>
 
@@ -767,6 +795,19 @@ function updateNowPlaying() {
   updateVoiceIndicators();
   updatePhraseCount();
   resetProgress();
+  // Update save button state
+  var saveBtn = document.getElementById('btn-save');
+  if (saveBtn) {
+    if (isSaved(p)) {
+      saveBtn.classList.add('saved');
+      saveBtn.querySelector('svg').style.fill = 'var(--accent)';
+      saveBtn.querySelector('svg').style.stroke = 'var(--accent)';
+    } else {
+      saveBtn.classList.remove('saved');
+      saveBtn.querySelector('svg').style.fill = 'none';
+      saveBtn.querySelector('svg').style.stroke = 'currentColor';
+    }
+  }
 }
 
 function updateVoiceIndicators() {
@@ -1054,6 +1095,61 @@ function shuffleArray(arr) {
 }
 
 // ── QUEUE ──
+
+// ── PLAYLIST SAVE ──
+function getPlaylistKey() {
+  return 'bb_playlist_' + (state.chapter || 'all');
+}
+function getSaved() {
+  try { return JSON.parse(localStorage.getItem('bb_saved') || '{}'); } catch(e) { return {}; }
+}
+function isSaved(phrase) {
+  var saved = getSaved();
+  return !!saved[phrase.Russian];
+}
+function toggleSave(phrase, btn) {
+  var saved = getSaved();
+  if (saved[phrase.Russian]) {
+    delete saved[phrase.Russian];
+    btn.textContent = '♡';
+    btn.classList.remove('saved');
+  } else {
+    saved[phrase.Russian] = {
+      Russian: phrase.Russian,
+      English: phrase.English,
+      Romanization: phrase.Romanization,
+      Chapter_Title: phrase.Chapter_Title,
+      Book: phrase.Book,
+      EN_M1_URL: phrase.EN_M1_URL,
+      EN_F1_URL: phrase.EN_F1_URL,
+      RU_F1_URL: phrase.RU_F1_URL,
+      RU_F2_URL: phrase.RU_F2_URL,
+      RU_M1_URL: phrase.RU_M1_URL,
+      savedAt: Date.now()
+    };
+    btn.textContent = '♥';
+    btn.classList.add('saved');
+    // Brief pulse animation
+    btn.style.transform = 'scale(1.4)';
+    setTimeout(function() { btn.style.transform = ''; }, 200);
+  }
+  localStorage.setItem('bb_saved', JSON.stringify(saved));
+  // Notify Glide parent of save count
+  var count = Object.keys(saved).length;
+  window.parent.postMessage({ type: 'bb-playlist-update', count: count }, '*');
+}
+
+
+function saveCurrentPhrase() {
+  var idx = state.shuffleOrder[state.current];
+  var phrase = state.phrases[idx];
+  if (!phrase) return;
+  var btn = document.getElementById('btn-save');
+  toggleSave(phrase, btn);
+  // Visual feedback
+  btn.style.color = isSaved(phrase) ? 'var(--accent)' : '';
+}
+
 function buildQueue() {
   var list = document.getElementById('queue-list');
   list.innerHTML = '';
@@ -1085,7 +1181,16 @@ function buildQueue() {
         '<div class="qi-en">' + (p.English || '') + '</div>' +
         sourceHtml +
       '</div>' +
-      '<div class="qi-dot"></div>';
+      '<div class="qi-heart" data-idx="' + phraseIdx + '">' +
+        (isSaved(p) ? '♥' : '♡') +
+      '</div>';
+
+    item.querySelector('.qi-heart').addEventListener('click', (function(phrase, btn) {
+      return function(e) {
+        e.stopPropagation();
+        toggleSave(phrase, btn);
+      };
+    })(p, item.querySelector('.qi-heart')));
 
     item.addEventListener('click', (function(pos) {
       return function() { jumpToPhrase(pos); };
