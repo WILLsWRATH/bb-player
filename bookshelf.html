@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Black Book Shelf</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+body {
+  background: #0D0D0D;
+  font-family: Georgia, 'Times New Roman', serif;
+  overflow: hidden;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+.shelf-label {
+  font-size: 10px;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.2);
+  margin-bottom: 24px;
+}
+
+.carousel-wrap {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.carousel {
+  display: flex;
+  gap: 20px;
+  padding: 20px 0 28px;
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform;
+  cursor: grab;
+}
+.carousel.dragging { transition: none; cursor: grabbing; }
+
+.book-card {
+  flex: 0 0 200px;
+  height: 280px;
+  border-radius: 4px;
+  position: relative;
+  transition: transform 0.4s ease, box-shadow 0.4s ease, filter 0.4s ease;
+  overflow: hidden;
+  cursor: pointer;
+  transform-origin: bottom center;
+}
+
+.book-card.active {
+  transform: scale(1.08) translateY(-6px);
+  filter: none;
+}
+.book-card:not(.active) {
+  transform: scale(0.9) translateY(8px);
+  filter: brightness(0.6);
+}
+
+/* Book spines / shadows */
+.book-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 8px;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  z-index: 2;
+}
+.book-card::after {
+  content: '';
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 20px;
+  background: rgba(0,0,0,0.4);
+  filter: blur(8px);
+  border-radius: 50%;
+  z-index: 0;
+}
+
+.book-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 4px;
+}
+
+/* Fallback painted covers if no image loaded */
+.cover-bb { background: #0A0A0A; }
+.cover-rb { background: #8B0000; }
+.cover-tw { background: #00B4BE; }
+.cover-vc { background: #1A1A2E; }
+
+.cover-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  border-radius: 4px;
+}
+
+/* Black Book placeholder */
+.cover-bb .cover-placeholder { border: 1px solid rgba(192,192,192,0.2); }
+.cover-bb .book-title { color: #C0C0C0; text-shadow: 0 0 8px rgba(192,192,192,0.4); }
+.cover-bb .book-sub { color: rgba(192,192,192,0.5); }
+
+/* Red Book placeholder */
+.cover-rb .cover-placeholder { border: 1px solid rgba(201,150,10,0.3); }
+.cover-rb .book-title { color: #C9960A; text-shadow: 0 0 8px rgba(201,150,10,0.4); }
+.cover-rb .book-sub { color: rgba(201,150,10,0.5); }
+
+/* The Wall placeholder */
+.cover-tw .cover-placeholder { border: 1px solid rgba(0,80,85,0.4); }
+.cover-tw .book-title { color: #F0EDE8; }
+.cover-tw .book-sub { color: rgba(240,237,232,0.5); }
+
+/* Vocabulary placeholder */
+.cover-vc .cover-placeholder { border: 1px solid rgba(83,52,131,0.4); }
+.cover-vc .book-title { color: rgba(200,180,255,0.9); }
+.cover-vc .book-sub { color: rgba(200,180,255,0.4); }
+
+.book-title {
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  letter-spacing: 3px;
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+.book-divider {
+  width: 40px;
+  height: 1px;
+  margin: 0 auto 12px;
+  opacity: 0.5;
+}
+.cover-bb .book-divider { background: #8B0000; }
+.cover-rb .book-divider { background: #C9960A; }
+.cover-tw .book-divider { background: #1C1C1C; }
+.cover-vc .book-divider { background: rgba(83,52,131,0.8); }
+
+.book-sub {
+  font-size: 9px;
+  text-align: center;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+/* Dot indicators */
+.dots {
+  display: flex;
+  gap: 8px;
+  margin-top: 20px;
+}
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  transition: all 0.3s ease;
+}
+.dot.active {
+  background: #8B0000;
+  transform: scale(1.3);
+}
+
+/* Book name below carousel */
+.active-title {
+  margin-top: 16px;
+  font-size: 13px;
+  letter-spacing: 4px;
+  color: rgba(255,255,255,0.7);
+  text-transform: uppercase;
+  height: 20px;
+  transition: opacity 0.3s;
+}
+.active-subtitle {
+  margin-top: 6px;
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: rgba(255,255,255,0.3);
+  text-transform: uppercase;
+  height: 16px;
+}
+
+/* Tap hint -->
+.tap-hint {
+  margin-top: 28px;
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: rgba(255,255,255,0.15);
+}
+
+/* Shelf base line */
+.shelf-base {
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, rgba(139,0,0,0.4), rgba(139,0,0,0.6), rgba(139,0,0,0.4), transparent);
+  margin-bottom: 4px;
+}
+.shelf-shadow {
+  width: 100%;
+  height: 6px;
+  background: linear-gradient(180deg, rgba(0,0,0,0.4), transparent);
+}
+</style>
+</head>
+<body>
+
+<div class="shelf-label">Select a Book</div>
+
+<div class="carousel-wrap">
+  <div class="carousel" id="carousel">
+
+    <!-- Black Book -->
+    <div class="book-card cover-bb active" data-book="Black Book" data-desc="Romantic &amp; Sweet" data-index="0">
+      <div class="cover-placeholder">
+        <div class="book-title">BLACK<br>BOOK</div>
+        <div class="book-divider"></div>
+        <div class="book-sub">Romantic &amp; Sweet</div>
+      </div>
+    </div>
+
+    <!-- Red Book -->
+    <div class="book-card cover-rb" data-book="Red Book" data-desc="Passionate &amp; Intense" data-index="1">
+      <div class="cover-placeholder">
+        <div class="book-title">RED<br>BOOK</div>
+        <div class="book-divider"></div>
+        <div class="book-sub">Passionate &amp; Intense</div>
+      </div>
+    </div>
+
+    <!-- The Wall -->
+    <div class="book-card cover-tw" data-book="The Wall" data-desc="Explicit &amp; Raw" data-index="2">
+      <div class="cover-placeholder">
+        <div class="book-title">THE<br>WALL</div>
+        <div class="book-divider"></div>
+        <div class="book-sub">Explicit &amp; Raw</div>
+      </div>
+    </div>
+
+    <!-- Vocabulary -->
+    <div class="book-card cover-vc" data-book="Vocabulary" data-desc="Scenarios &amp; Context" data-index="3">
+      <div class="cover-placeholder">
+        <div class="book-title">VOCAB<br>ULARY</div>
+        <div class="book-divider"></div>
+        <div class="book-sub">Scenarios &amp; Context</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="shelf-base"></div>
+<div class="shelf-shadow"></div>
+
+<div class="active-title" id="activeTitle">Black Book</div>
+<div class="active-subtitle" id="activeSubtitle">Romantic &amp; Sweet</div>
+
+<div class="dots" id="dots">
+  <div class="dot active"></div>
+  <div class="dot"></div>
+  <div class="dot"></div>
+  <div class="dot"></div>
+</div>
+
+<div class="tap-hint">Tap to open</div>
+
+<script>
+var carousel = document.getElementById('carousel');
+var cards = Array.from(carousel.querySelectorAll('.book-card'));
+var dots = Array.from(document.getElementById('dots').querySelectorAll('.dot'));
+var activeTitle = document.getElementById('activeTitle');
+var activeSub = document.getElementById('activeSubtitle');
+
+var CARD_WIDTH = 200;
+var GAP = 20;
+var STEP = CARD_WIDTH + GAP;
+var current = 0;
+var startX = 0;
+var startTranslate = 0;
+var dragging = false;
+var translate = 0;
+var viewWidth = window.innerWidth;
+
+function getOffset() {
+  return (viewWidth / 2) - (CARD_WIDTH / 2);
+}
+
+function goTo(index, animate) {
+  index = Math.max(0, Math.min(cards.length - 1, index));
+  current = index;
+  translate = -(index * STEP) + getOffset();
+  if (animate !== false) {
+    carousel.classList.remove('dragging');
+  }
+  carousel.style.transform = 'translateX(' + translate + 'px)';
+  updateActive();
+}
+
+function updateActive() {
+  cards.forEach(function(c, i) {
+    c.classList.toggle('active', i === current);
+  });
+  dots.forEach(function(d, i) {
+    d.classList.toggle('active', i === current);
+  });
+  activeTitle.textContent = cards[current].dataset.book;
+  activeSub.innerHTML = cards[current].dataset.desc;
+}
+
+// Touch/mouse drag
+carousel.addEventListener('mousedown', onStart);
+carousel.addEventListener('touchstart', onStart, { passive: true });
+
+function onStart(e) {
+  dragging = true;
+  startX = e.touches ? e.touches[0].clientX : e.clientX;
+  startTranslate = translate;
+  carousel.classList.add('dragging');
+}
+
+window.addEventListener('mousemove', onMove);
+window.addEventListener('touchmove', onMove, { passive: true });
+
+function onMove(e) {
+  if (!dragging) return;
+  var x = e.touches ? e.touches[0].clientX : e.clientX;
+  var diff = x - startX;
+  translate = startTranslate + diff;
+  carousel.style.transform = 'translateX(' + translate + 'px)';
+}
+
+window.addEventListener('mouseup', onEnd);
+window.addEventListener('touchend', onEnd);
+
+function onEnd(e) {
+  if (!dragging) return;
+  dragging = false;
+  var x = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
+  var diff = x - startX;
+  if (Math.abs(diff) > 40) {
+    if (diff < 0) goTo(current + 1);
+    else goTo(current - 1);
+  } else if (Math.abs(diff) < 8) {
+    // Tap — navigate into book
+    var tapped = document.elementFromPoint(
+      e.changedTouches ? e.changedTouches[0].clientX : e.clientX,
+      e.changedTouches ? e.changedTouches[0].clientY : e.clientY
+    );
+    var card = tapped && tapped.closest('.book-card');
+    if (card) {
+      var idx = parseInt(card.dataset.index);
+      if (idx === current) {
+        // Navigate — send message to Glide parent
+        var book = card.dataset.book;
+        window.parent.postMessage({ type: 'bb-navigate', book: book }, '*');
+        // Also try direct URL approach for Glide deeplink
+        window.parent.postMessage({ action: 'openScreen', book: book }, '*');
+      } else {
+        goTo(idx);
+      }
+    }
+  } else {
+    goTo(current);
+  }
+}
+
+// Dot clicks
+dots.forEach(function(d, i) {
+  d.addEventListener('click', function() { goTo(i); });
+});
+
+// Card clicks (desktop)
+cards.forEach(function(c, i) {
+  c.addEventListener('click', function() {
+    if (i !== current) goTo(i);
+  });
+});
+
+// Init
+window.addEventListener('resize', function() {
+  viewWidth = window.innerWidth;
+  goTo(current, false);
+});
+
+goTo(0, false);
+
+// Listen for cover image URLs from parent
+window.addEventListener('message', function(e) {
+  if (e.data && e.data.type === 'bb-covers') {
+    var covers = e.data.covers; // { 'Black Book': url, 'Red Book': url, ... }
+    cards.forEach(function(card) {
+      var url = covers[card.dataset.book];
+      if (url) {
+        var img = document.createElement('img');
+        img.className = 'book-cover';
+        img.src = url;
+        img.onload = function() {
+          card.querySelector('.cover-placeholder') && card.querySelector('.cover-placeholder').remove();
+          card.appendChild(img);
+        };
+      }
+    });
+  }
+});
+</script>
+</body>
+</html>
