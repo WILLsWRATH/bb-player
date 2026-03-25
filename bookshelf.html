@@ -517,7 +517,7 @@ function onEnd(e) {
   dragging = false;
   carousel.classList.remove('dragging');
 
-  var endX = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
+  var endX = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;h
   var diff = endX - startX;
 
   if (didDrag && Math.abs(diff) > 40) {
@@ -537,10 +537,10 @@ function onEnd(e) {
       if (idx === current) {
         // Tapped active book → open chapter
         var urls = {
-          'Black Book':  'https://black-book-lkkx.glide.page/dl/ced490/s/b219a3/r/TOzQVZxsuPIRC9AZJXlq',
-          'Red Book':    'https://black-book-lkkx.glide.page/dl/ced490/s/b219a3/r/upsdaNYCKCuAyYHX8Cl6',
-          'The Wall':    'https://black-book-lkkx.glide.page/dl/ced490/s/b219a3/r/FRKRAQGZBzoaK6Ecqwyx',
-          'Vocabulary':  'https://black-book-lkkx.glide.page/dl/ced490/s/b219a3/r/cnyvzRHVMusKmtt86AIY'
+          'Black Book':  'https://black-book-lkkx.glide.page/dl/ced490/r/TOzQVZxsuPIRC9AZJXlq',
+          'Red Book':    'https://black-book-lkkx.glide.page/dl/ced490/r/upsdaNYCKCuAyYHX8Cl6',
+          'The Wall':    'https://black-book-lkkx.glide.page/dl/ced490/r/FRKRAQGZBzoaK6Ecqwyx',
+          'Vocabulary':  'https://black-book-lkkx.glide.page/dl/ced490/r/cnyvzRHVMusKmtt86AIY'
         };
         var url = urls[card.dataset.book];
         if (url) {
