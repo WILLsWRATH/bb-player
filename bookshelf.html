@@ -656,14 +656,10 @@ var GAP = 20;
 var STEP = CARD_WIDTH + GAP;
 var current = 0;
 var startX = 0;
-var startY = 0;
 var startTranslate = 0;
 var dragging = false;
 var didDrag = false;
 var translate = 0;
-var tapStartTime = 0;
-var tapStartX = 0;
-var tapStartY = 0;
 
 function getOffset() {
   return (window.innerWidth / 2) - (CARD_WIDTH / 2);
@@ -694,17 +690,10 @@ var urls = {
 function navigateTo(bookName) {
   var url = urls[bookName];
   if (!url) return;
-  try {
-    window.parent.postMessage({ type: 'bb-navigate', url: url }, '*');
-  } catch(e) {}
-  setTimeout(function() {
-    try { window.top.location.href = url; } catch(e) {
-      window.location.href = url;
-    }
-  }, 80);
+  try { window.parent.postMessage({ type: 'bb-navigate', url: url }, '*'); } catch(e) {}
+  setTimeout(function() { window.top.location.href = url; }, 50);
 }
 
-/* ── Drag / Swipe ── */
 carousel.addEventListener('mousedown', onStart);
 carousel.addEventListener('touchstart', onStart, { passive: true });
 
@@ -712,10 +701,6 @@ function onStart(e) {
   dragging = true;
   didDrag = false;
   startX = e.touches ? e.touches[0].clientX : e.clientX;
-  startY = e.touches ? e.touches[0].clientY : e.clientY;
-  tapStartX = startX;
-  tapStartY = startY;
-  tapStartTime = Date.now();
   startTranslate = translate;
   carousel.classList.add('dragging');
 }
@@ -726,11 +711,9 @@ window.addEventListener('touchmove', onMove, { passive: false });
 function onMove(e) {
   if (!dragging) return;
   var x = e.touches ? e.touches[0].clientX : e.clientX;
-  var y = e.touches ? e.touches[0].clientY : e.clientY;
-  var dx = x - startX;
-  var dy = y - startY;
-  if (Math.abs(dx) > 6 || Math.abs(dy) > 6) didDrag = true;
-  translate = startTranslate + dx;
+  var diff = x - startX;
+  if (Math.abs(diff) > 6) didDrag = true;
+  translate = startTranslate + diff;
   carousel.style.transform = 'translateX(' + translate + 'px)';
   if (e.cancelable) e.preventDefault();
 }
@@ -742,26 +725,18 @@ function onEnd(e) {
   if (!dragging) return;
   dragging = false;
   carousel.classList.remove('dragging');
-
   var endX = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
-  var totalDx = endX - tapStartX;
-  var tapDuration = Date.now() - tapStartTime;
+  var diff = endX - startX;
 
-  /* ── Swipe: significant drag + fast enough ── */
-  if (didDrag && Math.abs(totalDx) > 40) {
-    goTo(totalDx < 0 ? current + 1 : current - 1);
+  if (didDrag && Math.abs(diff) > 40) {
+    goTo(diff < 0 ? current + 1 : current - 1);
     return;
   }
 
-  /* ── Tap: short duration, minimal movement ── */
-  if (tapDuration < 350 && Math.abs(totalDx) < 12) {
-    /* Use tapStart coords — finger is already lifted, elementFromPoint
-       works better with the original touch-down position on some browsers */
-    var hitX = tapStartX;
-    var hitY = tapStartY;
-    var el = document.elementFromPoint(hitX, hitY);
+  if (!didDrag) {
+    var touch = e.changedTouches ? e.changedTouches[0] : e;
+    var el = document.elementFromPoint(touch.clientX, touch.clientY);
     var card = el && el.closest('.book-card');
-
     if (card) {
       var idx = parseInt(card.dataset.index, 10);
       if (idx === current) {
@@ -769,24 +744,12 @@ function onEnd(e) {
       } else {
         goTo(idx);
       }
-      return;
     }
-
-    /* Fallback: if hit-test missed (child element outside book-card),
-       check if tap landed within the active card's bounding rect */
-    var activeCard = cards[current];
-    var rect = activeCard.getBoundingClientRect();
-    if (hitX >= rect.left && hitX <= rect.right && hitY >= rect.top && hitY <= rect.bottom) {
-      navigateTo(activeCard.dataset.book);
-      return;
-    }
+  } else {
+    goTo(current);
   }
-
-  /* Snap back to current position */
-  goTo(current);
 }
 
-/* ── Dot nav ── */
 dotsEl.forEach(function(d, i) {
   d.addEventListener('click', function() { goTo(i); });
 });
