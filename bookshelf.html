@@ -657,7 +657,6 @@ var STEP = CARD_WIDTH + GAP;
 var current = 0;
 var translate = 0;
 
-/* ── tap tracking ── */
 var tapStartX = 0;
 var tapStartY = 0;
 var tapStartTime = 0;
@@ -665,7 +664,7 @@ var dragStartTranslate = 0;
 var isDragging = false;
 var hasDragged = false;
 
-var urls = {
+var URLS = {
   'Black Book': 'https://black-book-lkkx.glide.page/dl/ced490/s/b219a3/r/TOzQVZxsuPIRC9AZJXlq',
   'Red Book':   'https://black-book-lkkx.glide.page/dl/ced490/s/b219a3/r/upsdaNYCKCuAyYHX8Cl6',
   'The Wall':   'https://black-book-lkkx.glide.page/dl/ced490/s/b219a3/r/FRKRAQGZBzoaK6Ecqwyx',
@@ -692,19 +691,34 @@ function updateActive() {
 }
 
 function navigateTo(bookName) {
-  var url = urls[bookName];
+  var url = URLS[bookName];
   if (!url) return;
-  /* postMessage for Glide iframe */
-  try { window.parent.postMessage({ type: 'bb-navigate', url: url }, '*'); } catch(e) {}
-  /* fallback: direct navigation after short delay */
+
+  /* 1. postMessage — Glide listens for this to handle navigation internally */
+  try {
+    window.parent.postMessage({ type: 'bb-navigate', url: url }, '*');
+  } catch(e) {}
+
+  /* 2. Fallback chain — try every exit route after a short delay */
   setTimeout(function() {
-    try { window.top.location.href = url; } catch(e) {
-      window.location.href = url;
-    }
-  }, 80);
+    try {
+      if (window.top && window.top !== window) {
+        window.top.location.href = url;
+        return;
+      }
+    } catch(e) {}
+    try {
+      if (window.parent && window.parent !== window) {
+        window.parent.location.href = url;
+        return;
+      }
+    } catch(e) {}
+    /* Last resort — navigate the iframe itself */
+    window.location.href = url;
+  }, 100);
 }
 
-/* ── Touch handlers on carousel ── */
+/* ── TOUCH — primary path on mobile ── */
 carousel.addEventListener('touchstart', function(e) {
   var t = e.touches[0];
   tapStartX = t.clientX;
@@ -742,25 +756,24 @@ window.addEventListener('touchend', function(e) {
     return;
   }
 
-  /* Tap — must be short and minimal movement */
-  if (!hasDragged && elapsed < 350 && Math.abs(dx) < 12) {
-    /* Hit-test using touchstart position (finger already lifted) */
+  /* Tap — short duration, minimal movement */
+  if (!hasDragged && elapsed < 400 && Math.abs(dx) < 15) {
+    /* Use touchstart coords — finger already lifted by touchend */
     var el = document.elementFromPoint(tapStartX, tapStartY);
     var card = el && el.closest('.book-card');
 
     if (card) {
       var idx = parseInt(card.dataset.index, 10);
       if (idx === current) {
-        /* Tapped active card — navigate */
         navigateTo(card.dataset.book);
       } else {
-        /* Tapped inactive card — select it */
         goTo(idx);
       }
       return;
     }
 
-    /* Fallback: check if tap landed inside active card rect */
+    /* Bounding rect fallback — handles taps on child elements
+       that aren't .book-card themselves */
     var activeCard = cards[current];
     var rect = activeCard.getBoundingClientRect();
     if (tapStartX >= rect.left && tapStartX <= rect.right &&
@@ -770,11 +783,10 @@ window.addEventListener('touchend', function(e) {
     }
   }
 
-  /* Snap back */
   goTo(current);
 }, { passive: true });
 
-/* ── Mouse handlers (desktop/editor preview) ── */
+/* ── MOUSE — desktop / Glide editor preview ── */
 carousel.addEventListener('mousedown', function(e) {
   tapStartX = e.clientX;
   tapStartY = e.clientY;
@@ -806,20 +818,28 @@ window.addEventListener('mouseup', function(e) {
     return;
   }
 
-  if (!hasDragged && elapsed < 350) {
+  if (!hasDragged && elapsed < 400 && Math.abs(dx) < 15) {
     var el = document.elementFromPoint(tapStartX, tapStartY);
     var card = el && el.closest('.book-card');
     if (card) {
       var idx = parseInt(card.dataset.index, 10);
-      if (idx === current) { navigateTo(card.dataset.book); } else { goTo(idx); }
+      if (idx === current) { navigateTo(card.dataset.book); }
+      else { goTo(idx); }
       return;
     }
+    /* Bounding rect fallback */
+    var activeCard = cards[current];
+    var rect = activeCard.getBoundingClientRect();
+    if (tapStartX >= rect.left && tapStartX <= rect.right &&
+        tapStartY >= rect.top  && tapStartY <= rect.bottom) {
+      navigateTo(activeCard.dataset.book);
+    }
+  } else {
+    goTo(current);
   }
-
-  goTo(current);
 });
 
-/* ── Dot nav ── */
+/* ── DOTS ── */
 dotsEl.forEach(function(d, i) {
   d.addEventListener('click', function() { goTo(i); });
 });
