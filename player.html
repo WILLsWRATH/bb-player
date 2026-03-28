@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Black Book Player</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+:root {
+  --bg: #0E0E0E;
+  --surface: #141414;
+  --border: rgba(255,255,255,0.07);
+  --gold: rgba(180,150,80,0.7);
+  --gold-dim: rgba(180,150,80,0.25);
+  --text-primary: rgba(255,255,255,0.85);
+  --text-secondary: rgba(255,255,255,0.38);
+  --text-tertiary: rgba(255,255,255,0.18);
+  --accent: #8B1A1A;
+  --accent-glow: rgba(139,26,26,0.3);
+}
+
+body {
+  background: var(--bg);
+  font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+/* ── LEATHER TEXTURE OVERLAY ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,255,255,0.008) 3px, rgba(255,255,255,0.008) 4px),
+    repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(255,255,255,0.008) 3px, rgba(255,255,255,0.008) 4px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── CHAPTER HEADER ── */
+.chapter-header {
+  position: relative;
+  z-index: 1;
+  padding: 20px 24px 16px;
+  border-bottom: 0.5px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.chapter-book {
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 8px;
+  letter-spacing: 4px;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+}
+
+.chapter-title {
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: var(--text-primary);
+  text-transform: uppercase;
+}
+
+.chapter-count {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--text-tertiary);
+}
+
+/* ── VOICE SELECTOR ── */
+.voice-selector {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  padding: 12px 24px;
+  gap: 8px;
+  border-bottom: 0.5px solid var(--border);
+}
+
+.voice-btn {
+  flex: 1;
+  padding: 8px 6px;
+  background: transparent;
+  border: 0.5px solid var(--border);
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-align: center;
+}
+
+.voice-btn.active {
+  background: rgba(139,26,26,0.15);
+  border-color: rgba(139,26,26,0.4);
+  color: rgba(255,255,255,0.75);
+}
+
+/* ── PHRASE DISPLAY ── */
+.phrase-display {
+  position: relative;
+  z-index: 1;
+  padding: 32px 28px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  min-height: 160px;
+  justify-content: center;
+}
+
+.phrase-rule {
+  width: 32px;
+  height: 0.5px;
+  background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+}
+
+.phrase-original {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--text-primary);
+  line-height: 1.3;
+  letter-spacing: 0.5px;
+}
+
+.phrase-translation {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: 16px;
+  color: var(--text-secondary);
+  letter-spacing: 0.5px;
+  line-height: 1.4;
+}
+
+.phrase-romanization {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  color: var(--text-tertiary);
+}
+
+.phrase-context {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: rgba(180,150,80,0.3);
+  margin-top: 4px;
+}
+
+/* ── PLAYER CONTROLS ── */
+.player-section {
+  position: relative;
+  z-index: 1;
+  padding: 0 28px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Progress bar */
+.progress-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.progress-bar-track {
+  width: 100%;
+  height: 1px;
+  background: rgba(255,255,255,0.1);
+  position: relative;
+  cursor: pointer;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, rgba(139,26,26,0.6), rgba(180,150,80,0.5));
+  width: 0%;
+  transition: width 0.1s linear;
+}
+
+.progress-bar-thumb {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(180,150,80,0.6);
+  left: 0%;
+  transition: left 0.1s linear;
+}
+
+.progress-times {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--text-tertiary);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+}
+
+/* Controls row */
+.controls-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+}
+
+.ctrl-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s;
+  color: var(--text-secondary);
+  padding: 4px;
+}
+
+.ctrl-btn:hover { opacity: 0.7; }
+.ctrl-btn:active { opacity: 0.4; transform: scale(0.95); }
+
+.ctrl-btn.secondary svg { opacity: 0.45; }
+
+.play-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: transparent;
+  border: 0.5px solid rgba(139,26,26,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+}
+
+.play-btn::before {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 0.5px solid rgba(139,26,26,0.15);
+}
+
+.play-btn:hover {
+  background: rgba(139,26,26,0.12);
+  border-color: rgba(139,26,26,0.7);
+}
+
+.play-btn:active { transform: scale(0.96); }
+
+.play-btn svg { color: rgba(255,255,255,0.75); margin-left: 2px; }
+.play-btn.playing svg { margin-left: 0; }
+
+/* Favorite */
+.fav-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-tertiary);
+  transition: all 0.25s;
+  padding: 4px;
+}
+
+.fav-btn.active { color: var(--accent); }
+
+/* ── LANGUAGE TOGGLE ── */
+.lang-toggle {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  margin: 0 28px;
+  border: 0.5px solid var(--border);
+  margin-bottom: 4px;
+}
+
+.lang-btn {
+  flex: 1;
+  padding: 10px;
+  background: transparent;
+  border: none;
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.lang-btn.active {
+  background: rgba(139,26,26,0.12);
+  color: rgba(255,255,255,0.65);
+  border-bottom: 0.5px solid rgba(139,26,26,0.4);
+}
+
+/* ── QUEUE ── */
+.queue-section {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  border-top: 0.5px solid var(--border);
+}
+
+.queue-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 24px 10px;
+}
+
+.queue-label {
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 8px;
+  letter-spacing: 4px;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+}
+
+.queue-count {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: 11px;
+  color: var(--text-tertiary);
+}
+
+.queue-list {
+  overflow-y: auto;
+  max-height: 320px;
+}
+
+.queue-item {
+  display: flex;
+  align-items: center;
+  padding: 11px 24px;
+  border-bottom: 0.5px solid var(--border);
+  cursor: pointer;
+  transition: background 0.2s;
+  gap: 14px;
+}
+
+.queue-item:hover { background: rgba(255,255,255,0.02); }
+.queue-item.active { background: rgba(139,26,26,0.06); }
+
+.queue-num {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 10px;
+  color: var(--text-tertiary);
+  width: 18px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.queue-item.active .queue-num { color: rgba(139,26,26,0.6); }
+
+.queue-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.queue-primary {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 14px;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+
+.queue-item.active .queue-primary { color: rgba(255,255,255,0.95); }
+
+.queue-secondary {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: 11px;
+  color: var(--text-tertiary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.queue-fav {
+  background: none;
+  border: none;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  padding: 2px;
+  flex-shrink: 0;
+  transition: color 0.2s;
+}
+
+.queue-fav.active { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<!-- CHAPTER HEADER -->
+<div class="chapter-header">
+  <div class="chapter-book">Black Book</div>
+  <div class="chapter-title">First Impressions</div>
+  <div class="chapter-count">Phrase <span id="phraseNum">1</span> of <span id="phraseTotal">38</span></div>
+</div>
+
+<!-- LANGUAGE TOGGLE -->
+<div class="lang-toggle">
+  <button class="lang-btn active" id="btnNative" onclick="setLang('native')">Native</button>
+  <button class="lang-btn" id="btnForeign" onclick="setLang('foreign')">Foreign</button>
+</div>
+
+<!-- VOICE SELECTOR -->
+<div class="voice-selector" id="voiceSelector">
+  <!-- populated by JS -->
+</div>
+
+<!-- PHRASE DISPLAY -->
+<div class="phrase-display">
+  <div class="phrase-rule"></div>
+  <div class="phrase-original" id="phraseOriginal">Ты красивая.</div>
+  <div class="phrase-translation" id="phraseTranslation">You're beautiful.</div>
+  <div class="phrase-romanization" id="phraseRoman">Ty krasivaya.</div>
+  <div class="phrase-context" id="phraseContext"></div>
+  <div class="phrase-rule"></div>
+</div>
+
+<!-- PLAYER CONTROLS -->
+<div class="player-section">
+  <div class="progress-wrap">
+    <div class="progress-bar-track" id="progressTrack" onclick="seekAudio(event)">
+      <div class="progress-bar-fill" id="progressFill"></div>
+      <div class="progress-bar-thumb" id="progressThumb"></div>
+    </div>
+    <div class="progress-times">
+      <span id="timeElapsed">0:00</span>
+      <span id="timeDuration">0:00</span>
+    </div>
+  </div>
+
+  <div class="controls-row">
+    <!-- Repeat -->
+    <button class="ctrl-btn secondary" id="btnRepeat" onclick="toggleRepeat()" title="Repeat">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="17 1 21 5 17 9"></polyline>
+        <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+        <polyline points="7 23 3 19 7 15"></polyline>
+        <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
+      </svg>
+    </button>
+
+    <!-- Previous -->
+    <button class="ctrl-btn" onclick="prevPhrase()" title="Previous">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="19 20 9 12 19 4 19 20"></polygon>
+        <line x1="5" y1="19" x2="5" y2="5"></line>
+      </svg>
+    </button>
+
+    <!-- Play/Pause -->
+    <button class="play-btn" id="playBtn" onclick="togglePlay()">
+      <svg id="playIcon" width="22" height="22" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+      </svg>
+    </button>
+
+    <!-- Next -->
+    <button class="ctrl-btn" onclick="nextPhrase()" title="Next">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="5 4 15 12 5 20 5 4"></polygon>
+        <line x1="19" y1="5" x2="19" y2="19"></line>
+      </svg>
+    </button>
+
+    <!-- Favorite -->
+    <button class="fav-btn" id="favBtn" onclick="toggleFav()" title="Favourite">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<!-- QUEUE -->
+<div class="queue-section">
+  <div class="queue-header">
+    <div class="queue-label">Chapter Queue</div>
+    <div class="queue-count" id="queueCount">38 phrases</div>
+  </div>
+  <div class="queue-list" id="queueList"></div>
+</div>
+
+<audio id="audioEl"></audio>
+
+<script>
+// ── STATE ──
+var state = {
+  phrases: [],
+  current: 0,
+  lang: 'native',
+  voice: null,
+  voices: [],
+  playing: false,
+  repeat: false,
+  favs: {}
+};
+
+// ── GLIDE DATA INJECTION ──
+// Glide passes data via postMessage or URL params
+// This player expects to receive phrase data as JSON
+window.addEventListener('message', function(e) {
+  if (!e.data) return;
+  if (e.data.type === 'bb-load') {
+    loadPhrases(e.data.phrases, e.data.voices, e.data.startIndex || 0);
+  }
+  if (e.data.type === 'bb-navigate' && e.data.url) {
+    window.location.href = e.data.url;
+  }
+});
+
+// Demo data for preview/testing
+var DEMO = [
+  { id:1, ru:'Ты красивая.', en:"You're beautiful.", roman:'Ty krasivaya.', context:'Complimenting appearance',
+    clark:'https://res.cloudinary.com/demo/video/upload/dog.mp3',
+    natasha:'https://res.cloudinary.com/demo/video/upload/dog.mp3' },
+  { id:2, ru:'У тебя потрясающие глаза.', en:'You have stunning eyes.', roman:'U tebya potryasayushchiye glaza.', context:'',
+    clark:'', natasha:'' },
+  { id:3, ru:'Твоя улыбка освещает комнату.', en:'Your smile lights up the room.', roman:"Tvoya ulybka osveshchayet komnatu.", context:'',
+    clark:'', natasha:'' },
+];
+
+function loadPhrases(phrases, voices, startIndex) {
+  state.phrases = phrases;
+  state.voices = voices || ['Clark', 'Natasha'];
+  state.voice = state.voices[0];
+  state.current = startIndex;
+  renderVoiceSelector();
+  renderPhrase();
+  renderQueue();
+}
+
+function renderVoiceSelector() {
+  var el = document.getElementById('voiceSelector');
+  el.innerHTML = state.voices.map(function(v) {
+    return '<button class="voice-btn' + (v === state.voice ? ' active' : '') + '" onclick="setVoice(\'' + v + '\')">' + v + '</button>';
+  }).join('');
+}
+
+function setVoice(v) {
+  state.voice = v;
+  stopAudio();
+  renderVoiceSelector();
+}
+
+function setLang(l) {
+  state.lang = l;
+  document.getElementById('btnNative').classList.toggle('active', l === 'native');
+  document.getElementById('btnForeign').classList.toggle('active', l === 'foreign');
+  stopAudio();
+  renderPhrase();
+}
+
+function renderPhrase() {
+  var p = state.phrases[state.current];
+  if (!p) return;
+  document.getElementById('phraseNum').textContent = state.current + 1;
+  document.getElementById('phraseTotal').textContent = state.phrases.length;
+
+  if (state.lang === 'foreign') {
+    document.getElementById('phraseOriginal').textContent = p.ru || p.foreign || '';
+    document.getElementById('phraseTranslation').textContent = p.en || p.native || '';
+    document.getElementById('phraseRoman').textContent = p.roman || p.romanization || '';
+  } else {
+    document.getElementById('phraseOriginal').textContent = p.en || p.native || '';
+    document.getElementById('phraseTranslation').textContent = p.ru || p.foreign || '';
+    document.getElementById('phraseRoman').textContent = p.roman || p.romanization || '';
+  }
+  document.getElementById('phraseContext').textContent = p.context || '';
+  document.getElementById('favBtn').classList.toggle('active', !!state.favs[p.id]);
+  renderQueue();
+}
+
+function renderQueue() {
+  var el = document.getElementById('queueList');
+  document.getElementById('queueCount').textContent = state.phrases.length + ' phrases';
+  el.innerHTML = state.phrases.map(function(p, i) {
+    var active = i === state.current ? ' active' : '';
+    return '<div class="queue-item' + active + '" onclick="goTo(' + i + ')">' +
+      '<div class="queue-num">' + (i+1) + '</div>' +
+      '<div class="queue-text">' +
+        '<div class="queue-primary">' + (p.ru || p.foreign || '') + '</div>' +
+        '<div class="queue-secondary">' + (p.en || p.native || '') + '</div>' +
+      '</div>' +
+      '<button class="queue-fav' + (state.favs[p.id] ? ' active' : '') + '" onclick="event.stopPropagation();toggleFavFor(' + i + ')">' +
+        '<svg width="14" height="14" viewBox="0 0 24 24" fill="' + (state.favs[p.id] ? 'currentColor' : 'none') + '" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>' +
+      '</button>' +
+    '</div>';
+  }).join('');
+  // scroll active into view
+  var activeEl = el.querySelector('.queue-item.active');
+  if (activeEl) activeEl.scrollIntoView({ block:'nearest', behavior:'smooth' });
+}
+
+function goTo(i) {
+  state.current = i;
+  stopAudio();
+  renderPhrase();
+}
+
+function prevPhrase() {
+  if (state.current > 0) goTo(state.current - 1);
+}
+
+function nextPhrase() {
+  if (state.current < state.phrases.length - 1) goTo(state.current + 1);
+}
+
+function toggleFav() { toggleFavFor(state.current); }
+function toggleFavFor(i) {
+  var p = state.phrases[i];
+  if (!p) return;
+  state.favs[p.id] = !state.favs[p.id];
+  renderPhrase();
+}
+
+function toggleRepeat() {
+  state.repeat = !state.repeat;
+  document.getElementById('btnRepeat').style.color = state.repeat ? 'rgba(139,26,26,0.8)' : '';
+}
+
+// ── AUDIO ──
+var audio = document.getElementById('audioEl');
+
+audio.addEventListener('timeupdate', updateProgress);
+audio.addEventListener('ended', onEnded);
+audio.addEventListener('loadedmetadata', function() {
+  document.getElementById('timeDuration').textContent = formatTime(audio.duration);
+});
+
+function getAudioUrl() {
+  var p = state.phrases[state.current];
+  if (!p) return null;
+  var v = (state.voice || '').toLowerCase();
+  return p[v] || null;
+}
+
+function togglePlay() {
+  if (state.playing) {
+    pauseAudio();
+  } else {
+    playAudio();
+  }
+}
+
+function playAudio() {
+  var url = getAudioUrl();
+  if (!url) return;
+  if (audio.src !== url) {
+    audio.src = url;
+  }
+  audio.play().then(function() {
+    state.playing = true;
+    updatePlayBtn();
+  }).catch(function() {});
+}
+
+function pauseAudio() {
+  audio.pause();
+  state.playing = false;
+  updatePlayBtn();
+}
+
+function stopAudio() {
+  audio.pause();
+  audio.src = '';
+  state.playing = false;
+  updatePlayBtn();
+  document.getElementById('progressFill').style.width = '0%';
+  document.getElementById('progressThumb').style.left = '0%';
+  document.getElementById('timeElapsed').textContent = '0:00';
+  document.getElementById('timeDuration').textContent = '0:00';
+}
+
+function updatePlayBtn() {
+  var btn = document.getElementById('playBtn');
+  var icon = document.getElementById('playIcon');
+  btn.classList.toggle('playing', state.playing);
+  if (state.playing) {
+    icon.innerHTML = '<rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect>';
+  } else {
+    icon.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"></polygon>';
+  }
+}
+
+function onEnded() {
+  state.playing = false;
+  updatePlayBtn();
+  if (state.repeat) {
+    playAudio();
+  } else if (state.current < state.phrases.length - 1) {
+    nextPhrase();
+    setTimeout(playAudio, 300);
+  }
+}
+
+function updateProgress() {
+  if (!audio.duration) return;
+  var pct = (audio.currentTime / audio.duration) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressThumb').style.left = pct + '%';
+  document.getElementById('timeElapsed').textContent = formatTime(audio.currentTime);
+}
+
+function seekAudio(e) {
+  if (!audio.duration) return;
+  var track = document.getElementById('progressTrack');
+  var rect = track.getBoundingClientRect();
+  var pct = (e.clientX - rect.left) / rect.width;
+  audio.currentTime = pct * audio.duration;
+}
+
+function formatTime(s) {
+  if (!s || isNaN(s)) return '0:00';
+  var m = Math.floor(s / 60);
+  var sec = Math.floor(s % 60);
+  return m + ':' + (sec < 10 ? '0' : '') + sec;
+}
+
+// ── INIT WITH DEMO DATA ──
+loadPhrases(DEMO, ['Clark', 'Natasha'], 0);
+</script>
+</body>
+</html>

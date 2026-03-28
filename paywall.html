@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Black Book — Unlock Access</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+body {
+  background: #0D0D0D;
+  font-family: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 24px 48px;
+  color: rgba(255,255,255,0.8);
+}
+
+/* ── HEADER ── */
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 36px;
+  text-align: center;
+}
+
+.rule {
+  width: 48px;
+  height: 0.5px;
+  background: linear-gradient(90deg, transparent, rgba(180,150,80,0.5), transparent);
+}
+
+.eyebrow {
+  font-family: 'Cinzel', 'Palatino Linotype', Georgia, serif;
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 5px;
+  color: rgba(180,150,80,0.55);
+  text-transform: uppercase;
+}
+
+.headline {
+  font-family: 'Cinzel', 'Palatino Linotype', Georgia, serif;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  color: rgba(255,255,255,0.85);
+  text-transform: uppercase;
+  line-height: 1.3;
+}
+
+.subline {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: 15px;
+  letter-spacing: 0.5px;
+  color: rgba(255,255,255,0.35);
+  line-height: 1.7;
+  max-width: 280px;
+}
+
+/* ── HERO TIER — $199 ── */
+.tier-hero {
+  width: 100%;
+  max-width: 340px;
+  border: 0.5px solid rgba(180,150,80,0.3);
+  background: rgba(180,150,80,0.04);
+  padding: 28px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  position: relative;
+}
+
+.tier-hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 10%; right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(180,150,80,0.6), transparent);
+}
+
+.badge {
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 8px;
+  letter-spacing: 3px;
+  color: rgba(180,150,80,0.7);
+  text-transform: uppercase;
+  border: 0.5px solid rgba(180,150,80,0.3);
+  padding: 3px 10px;
+}
+
+.tier-price {
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 42px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.9);
+  letter-spacing: 1px;
+  line-height: 1;
+}
+
+.tier-price-note {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.25);
+}
+
+.tier-title {
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  color: rgba(255,255,255,0.7);
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.tier-divider {
+  width: 100%;
+  height: 0.5px;
+  background: rgba(180,150,80,0.15);
+  margin: 4px 0;
+}
+
+.tier-benefits {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  width: 100%;
+}
+
+.benefit {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+  color: rgba(255,255,255,0.4);
+  line-height: 1.4;
+}
+
+.benefit-dot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: rgba(180,150,80,0.55);
+  flex-shrink: 0;
+  margin-top: 5px;
+}
+
+.btn-hero {
+  width: 100%;
+  padding: 14px;
+  background: rgba(180,150,80,0.12);
+  border: 0.5px solid rgba(180,150,80,0.45);
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  color: rgba(255,255,255,0.8);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-top: 6px;
+  text-decoration: none;
+  display: block;
+  text-align: center;
+}
+
+.btn-hero:hover, .btn-hero:active {
+  background: rgba(180,150,80,0.2);
+  color: rgba(255,255,255,1);
+}
+
+/* ── SECONDARY TIER — $79 ── */
+.tier-secondary {
+  width: 100%;
+  max-width: 340px;
+  border: 0.5px solid rgba(255,255,255,0.08);
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 32px;
+}
+
+.tier-secondary .tier-price {
+  font-size: 28px;
+  color: rgba(255,255,255,0.65);
+}
+
+.tier-secondary .tier-title {
+  color: rgba(255,255,255,0.45);
+  font-size: 10px;
+}
+
+.btn-secondary {
+  width: 100%;
+  padding: 12px;
+  background: transparent;
+  border: 0.5px solid rgba(255,255,255,0.15);
+  font-family: 'Cinzel', Georgia, serif;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 3px;
+  color: rgba(255,255,255,0.4);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-top: 4px;
+  text-decoration: none;
+  display: block;
+  text-align: center;
+}
+
+.btn-secondary:hover, .btn-secondary:active {
+  border-color: rgba(255,255,255,0.3);
+  color: rgba(255,255,255,0.65);
+}
+
+/* ── FREE TIER ── */
+.free-note {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.18);
+  text-align: center;
+}
+
+.free-note a {
+  color: rgba(255,255,255,0.28);
+  text-decoration: none;
+  border-bottom: 0.5px solid rgba(255,255,255,0.15);
+}
+
+.footer-rule {
+  width: 32px;
+  height: 0.5px;
+  background: rgba(255,255,255,0.08);
+  margin: 20px 0 12px;
+}
+
+.footer-note {
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: rgba(255,255,255,0.12);
+  text-align: center;
+  font-style: italic;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="eyebrow">Black Book</div>
+  <div class="rule"></div>
+  <div class="headline">Unlock the Full<br>Experience</div>
+  <div class="rule"></div>
+  <div class="subline">Speak the language of intimacy.<br>Every word. Every voice.<br>Every language we build — forever yours.</div>
+</div>
+
+<!-- HERO TIER: $199 Lifetime All Access -->
+<div class="tier-hero">
+  <div class="badge">Most Popular</div>
+  <div class="tier-price">$199</div>
+  <div class="tier-price-note">one-time · no subscription · no renewals</div>
+  <div class="tier-title">Lifetime All Access</div>
+  <div class="tier-divider"></div>
+  <div class="tier-benefits">
+    <div class="benefit"><div class="benefit-dot"></div>All books — Black Book, Red Book &amp; The Wall</div>
+    <div class="benefit"><div class="benefit-dot"></div>All 5 voices per language</div>
+    <div class="benefit"><div class="benefit-dot"></div>Russian now · Spanish, Mandarin &amp; more coming</div>
+    <div class="benefit"><div class="benefit-dot"></div>Every language we add — included forever</div>
+    <div class="benefit"><div class="benefit-dot"></div>Founding member price — locked in permanently</div>
+  </div>
+  <a class="btn-hero" href="https://buy.stripe.com/3cI6oIcosbswb3f3SM9oc00" target="_top">
+    Own It Forever — $199
+  </a>
+</div>
+
+<!-- SECONDARY TIER: $79 Single Language -->
+<div class="tier-secondary">
+  <div class="tier-price">$79</div>
+  <div class="tier-price-note">one-time · single language</div>
+  <div class="tier-title">Single Language Lifetime</div>
+  <div class="tier-divider"></div>
+  <div class="tier-benefits">
+    <div class="benefit"><div class="benefit-dot"></div>Full access to one language of your choice</div>
+    <div class="benefit"><div class="benefit-dot"></div>All books &amp; all voices for that language</div>
+  </div>
+  <a class="btn-secondary" href="SINGLE_LANGUAGE_URL_HERE" target="_top">
+    Single Language — $79
+  </a>
+</div>
+
+<!-- FREE NOTE -->
+<div class="free-note">Already exploring? <a href="#">Continue with free access →</a></div>
+
+<div class="footer-rule"></div>
+<div class="footer-note">Secure checkout powered by Stripe · Instant access after purchase</div>
+
+</body>
+</html>
