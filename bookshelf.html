@@ -19,7 +19,6 @@ body {
   user-select: none;
 }
 
-/* ── HEADER ── */
 .app-header {
   width: 100%;
   display: flex;
@@ -42,7 +41,7 @@ body {
   font-weight: 600;
   letter-spacing: 8px;
   text-transform: uppercase;
-  background: linear-gradient(90deg, #555 0%, #999 15%, #ddd 35%, #fff 50%, #ddd 65%, #999 85%, #555 100%);
+  background: linear-gradient(90deg,#555 0%,#999 15%,#ddd 35%,#fff 50%,#ddd 65%,#999 85%,#555 100%);
   background-size: 300% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -90,7 +89,6 @@ body {
   color: rgba(255,255,255,0.8);
 }
 
-/* ── SHELF ── */
 .shelf-section {
   flex: 1;
   width: 100%;
@@ -131,7 +129,6 @@ body {
   cursor: grabbing;
 }
 
-/* ── BOOK CARD ── */
 .book-card {
   flex: 0 0 180px;
   height: 256px;
@@ -162,7 +159,6 @@ body {
   overflow: hidden;
 }
 
-/* Spine shadow */
 .book-cover::before {
   content: '';
   position: absolute;
@@ -173,7 +169,6 @@ body {
   pointer-events: none;
 }
 
-/* Right page-edge glint */
 .book-cover::after {
   content: '';
   position: absolute;
@@ -192,9 +187,7 @@ body {
   box-shadow: 0 8px 20px rgba(0,0,0,0.5);
 }
 
-/* ══════════════════════════════════
-   BLACK BOOK — leather, silver text, red rule
-══════════════════════════════════ */
+/* BLACK BOOK */
 .cover-bb {
   background-color: #0C0C0C;
   background-image:
@@ -229,7 +222,6 @@ body {
   padding: 0 22px;
 }
 
-/* Thin silver ornament lines */
 .cover-bb .book-ornament {
   width: 40px;
   height: 0.5px;
@@ -237,7 +229,6 @@ body {
   margin: 8px 0;
 }
 
-/* Red rule sitting below the title text */
 .cover-bb .red-rule {
   width: 70%;
   height: 2px;
@@ -246,10 +237,7 @@ body {
   margin-bottom: 4px;
 }
 
-.cover-bb .bb-flourish {
-  opacity: 0.4;
-  margin-bottom: 6px;
-}
+.cover-bb .bb-flourish { opacity: 0.4; margin-bottom: 6px; }
 
 .cover-bb .book-main-title {
   font-family: 'Cinzel', serif;
@@ -274,9 +262,7 @@ body {
   text-align: center;
 }
 
-/* ══════════════════════════════════
-   RED BOOK — deep velvet
-══════════════════════════════════ */
+/* RED BOOK */
 .cover-rb {
   background-color: #580000;
   background-image:
@@ -342,9 +328,7 @@ body {
   text-align: center;
 }
 
-/* ══════════════════════════════════
-   THE WALL — white & cyan tile
-══════════════════════════════════ */
+/* THE WALL */
 .cover-tw {
   background-color: #F0FAFA;
   background-image:
@@ -395,9 +379,7 @@ body {
   text-align: center;
 }
 
-/* ══════════════════════════════════
-   VOCABULARY — night blue
-══════════════════════════════════ */
+/* VOCABULARY */
 .cover-vc {
   background-color: #0F0F1A;
   background-image:
@@ -467,7 +449,6 @@ body {
   text-align: center;
 }
 
-/* ── SHELF BASE ── */
 .shelf-base {
   width: 88%;
   height: 6px;
@@ -484,7 +465,6 @@ body {
   flex-shrink: 0;
 }
 
-/* ── BOOK INFO ── */
 .book-info {
   display: flex;
   flex-direction: column;
@@ -517,18 +497,14 @@ body {
 }
 
 .dot {
-  width: 4px;
-  height: 4px;
+  width: 4px; height: 4px;
   border-radius: 50%;
   background: rgba(255,255,255,0.15);
   transition: all 0.35s;
   cursor: pointer;
 }
 
-.dot.active {
-  background: #8B1A1A;
-  transform: scale(1.5);
-}
+.dot.active { background: #8B1A1A; transform: scale(1.5); }
 
 .tap-hint {
   font-family: 'Cormorant Garamond', serif;
@@ -569,7 +545,7 @@ body {
     <div class="carousel" id="carousel">
 
       <!-- BLACK BOOK -->
-      <div class="book-card" data-index="0" data-book="Black Book" data-desc="romantic &amp; sweet">
+      <div class="book-card active" data-index="0" data-book="Black Book" data-desc="romantic &amp; sweet">
         <div class="book-cover cover-bb">
           <div class="inner-border"></div>
           <div class="book-title-wrap">
@@ -645,27 +621,37 @@ body {
 </div>
 
 <script>
-var carousel = document.getElementById('carousel');
-var cards = Array.from(carousel.querySelectorAll('.book-card'));
-var dotsEl = Array.from(document.getElementById('dots').querySelectorAll('.dot'));
+var carousel  = document.getElementById('carousel');
+var cards     = Array.from(carousel.querySelectorAll('.book-card'));
+var dotsEl    = Array.from(document.getElementById('dots').querySelectorAll('.dot'));
 var activeTitle = document.getElementById('activeTitle');
-var activeSub = document.getElementById('activeSubtitle');
+var activeSub   = document.getElementById('activeSubtitle');
 
 var CARD_WIDTH = 180;
-var GAP = 20;
-var STEP = CARD_WIDTH + GAP;
-var current = 0;
-var translate = 0;
+var GAP        = 20;
+var STEP       = CARD_WIDTH + GAP;
+var current    = 0;
+var translate  = 0;
 var isDragging = false;
 var hasDragged = false;
-var tapStartX = 0;
+var tapStartX  = 0;
 
-var URLs = {
-  'Black Book': 'https://black-book-lkkx.glide.page/dl/da0c72?book=Black%20Book',
-  'Red Book': 'https://black-book-lkkx.glide.page/dl/da0c72?book=Red%20Book',
-  'The Wall': 'https://black-book-lkkx.glide.page/dl/da0c72?book=The%20Wall',
-  'Vocabulary': 'https://black-book-lkkx.glide.page/dl/da0c72?book=Vocabulary'
+// ── KEY FIX: direct Player URLs for each book's Chapter 1 ──
+var PLAYER_BASE = 'https://willswrath.github.io/bb-player/bb-player-v1.html';
+var BOOK_CHAPTERS = {
+  'Black Book': { chapter: 'First Impressions',  book: 'Black Book' },
+  'Red Book':   { chapter: 'The Spark',          book: 'Red Book'   },
+  'The Wall':   { chapter: 'Anatomy Basics',     book: 'The Wall'   },
+  'Vocabulary': { chapter: 'Essential Terms',    book: 'Vocabulary' }
 };
+
+function buildPlayerUrl(bookName) {
+  var entry = BOOK_CHAPTERS[bookName];
+  if (!entry) return null;
+  return PLAYER_BASE +
+    '?chapter=' + encodeURIComponent(entry.chapter) +
+    '&book='    + encodeURIComponent(entry.book);
+}
 
 function getOffset() {
   return (window.innerWidth / 2) - (CARD_WIDTH / 2) - 10;
@@ -673,57 +659,45 @@ function getOffset() {
 
 function goTo(index) {
   index = Math.max(0, Math.min(cards.length - 1, index));
-  current = index;
+  current   = index;
   translate = -(index * STEP) + getOffset();
-  carousel.style.transform = `translateX(${translate}px)`;
+  carousel.style.transform = 'translateX(' + translate + 'px)';
   updateActive();
 }
 
 function updateActive() {
-  cards.forEach((c, i) => c.classList.toggle('active', i === current));
-  dotsEl.forEach((d, i) => d.classList.toggle('active', i === current));
+  cards.forEach(function(c, i) { c.classList.toggle('active', i === current); });
+  dotsEl.forEach(function(d, i) { d.classList.toggle('active', i === current); });
   activeTitle.textContent = cards[current].dataset.book;
-  activeSub.textContent = cards[current].dataset.desc;
+  activeSub.textContent   = cards[current].dataset.desc;
 }
 
 function navigateTo(bookName) {
-  var url = URLs[bookName];
-  if (url) {
-    try {
-      window.parent.postMessage({ type: 'bb-navigate', url: url }, '*');
-    } catch(e) {}
-    setTimeout(() => {
-      window.top.location.href = url;
-    }, 80);
-  }
+  var url = buildPlayerUrl(bookName);
+  if (!url) return;
+  // Try postMessage to parent first (works when embedded in Glide)
+  try { window.parent.postMessage({ type: 'bb-navigate', url: url }, '*'); } catch(e) {}
+  // Always also navigate top-level after short delay (fallback for WebView)
+  setTimeout(function() {
+    try { window.top.location.href = url; } catch(e) { window.location.href = url; }
+  }, 80);
 }
 
-/* Touch & Mouse handlers */
-function startDrag(x) {
-  tapStartX = x;
-  isDragging = true;
-  hasDragged = false;
-  carousel.classList.add('dragging');
-}
-
+function startDrag(x) { tapStartX=x; isDragging=true; hasDragged=false; carousel.classList.add('dragging'); }
 function moveDrag(x) {
   if (!isDragging) return;
   var dx = x - tapStartX;
   if (Math.abs(dx) > 8) hasDragged = true;
-  translate = -(current * STEP) + getOffset() + dx;
-  carousel.style.transform = `translateX(${translate}px)`;
+  carousel.style.transform = 'translateX(' + (-(current*STEP)+getOffset()+dx) + 'px)';
 }
-
 function endDrag(x) {
   if (!isDragging) return;
   isDragging = false;
   carousel.classList.remove('dragging');
-
   var dx = x - tapStartX;
   if (hasDragged && Math.abs(dx) > 50) {
     goTo(dx < 0 ? current + 1 : current - 1);
   } else {
-    // Tap detection
     var activeCard = cards[current];
     var rect = activeCard.getBoundingClientRect();
     if (x >= rect.left && x <= rect.right) {
@@ -735,19 +709,19 @@ function endDrag(x) {
 }
 
 // Touch
-carousel.addEventListener('touchstart', e => startDrag(e.touches[0].clientX), { passive: true });
-window.addEventListener('touchmove', e => moveDrag(e.touches[0].clientX), { passive: false });
-window.addEventListener('touchend', e => endDrag(e.changedTouches[0].clientX));
+carousel.addEventListener('touchstart', function(e) { startDrag(e.touches[0].clientX); }, { passive: true });
+window.addEventListener('touchmove',    function(e) { moveDrag(e.touches[0].clientX); },  { passive: false });
+window.addEventListener('touchend',     function(e) { endDrag(e.changedTouches[0].clientX); });
 
-// Mouse (for editor preview)
-carousel.addEventListener('mousedown', e => startDrag(e.clientX));
-window.addEventListener('mousemove', e => moveDrag(e.clientX));
-window.addEventListener('mouseup', e => endDrag(e.clientX));
+// Mouse
+carousel.addEventListener('mousedown', function(e) { startDrag(e.clientX); });
+window.addEventListener('mousemove',   function(e) { moveDrag(e.clientX); });
+window.addEventListener('mouseup',     function(e) { endDrag(e.clientX); });
 
 // Dots
-dotsEl.forEach((d, i) => d.addEventListener('click', () => goTo(i)));
+dotsEl.forEach(function(d, i) { d.addEventListener('click', function() { goTo(i); }); });
 
-window.addEventListener('resize', () => goTo(current));
+window.addEventListener('resize', function() { goTo(current); });
 goTo(0);
 </script>
 </body>

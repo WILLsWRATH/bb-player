@@ -33,364 +33,145 @@
   }
 
   /* ── HEADER ── */
-  .header {
-    padding: 16px 20px 12px;
-    }
-  /* border-bottom removed from .lt — no bar under language toggles */
-  .header-source {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 4px;
-  }
+  .header { padding: 16px 20px 12px; }
+  .header-source { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
   .source-badge {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    padding: 2px 8px;
-    border-radius: 20px;
+    font-size: 10px; font-weight: 600; letter-spacing: 0.06em;
+    text-transform: uppercase; padding: 2px 8px; border-radius: 20px;
   }
-  .badge-chapter { background: rgba(201,162,39,0.2); color: var(--primary); }
+  .badge-chapter  { background: rgba(201,162,39,0.2); color: var(--primary); }
   .badge-playlist { background: rgba(29,158,117,0.2); color: #5DCAA5; }
-  .source-book { font-size: 11px; color: var(--text3); }
+  .source-book  { font-size: 11px; color: var(--text3); }
   .header-title { font-size: 18px; font-weight: 600; letter-spacing: -0.3px; margin-bottom: 2px; }
   .header-count { font-size: 12px; color: var(--text3); }
 
   /* ── LANGUAGE TOGGLE ── */
-  .lang-toggle {
-    display: flex;
-    gap: 8px;
-    padding: 12px 20px;
-  }
+  .lang-toggle { display: flex; gap: 8px; padding: 12px 20px; }
   .lt-btn {
-    flex: 1;
-    padding: 8px 12px;
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    background: transparent;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--text3);
-    cursor: pointer;
-    transition: all 0.15s;
-    letter-spacing: 0.02em;
+    flex: 1; padding: 8px 12px; border-radius: 8px;
+    border: 1px solid var(--border); background: transparent;
+    font-size: 12px; font-weight: 600; color: var(--text3);
+    cursor: pointer; transition: all 0.15s; letter-spacing: 0.02em;
   }
-  .lt-btn.on-native {
-    border-color: var(--secondary);
-    color: var(--secondary);
-    background: var(--secondary-dim);
-  }
-  .lt-btn.on-foreign {
-    border-color: var(--primary);
-    color: var(--primary);
-    background: var(--primary-dim);
-  }
+  .lt-btn.on-native  { border-color: var(--secondary); color: var(--secondary); background: var(--secondary-dim); }
+  .lt-btn.on-foreign { border-color: var(--primary);   color: var(--primary);   background: var(--primary-dim); }
 
   /* ── NOW PLAYING ── */
-  .now-playing {
-    padding: 16px 20px;
-    border-bottom: 0.5px solid var(--border);
-    flex-shrink: 0;
-  }
-  .np-label {
-    font-size: 9px;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text3);
-    margin-bottom: 10px;
-  }
-  .np-phrase-ru {
-    font-size: 22px;
-    font-weight: 600;
-    line-height: 1.25;
-    margin-bottom: 4px;
-    letter-spacing: -0.2px;
-  }
-  .np-phrase-en {
-    font-size: 14px;
-    color: var(--text2);
-    margin-bottom: 3px;
-  }
-  .np-phrase-rom {
-    font-size: 12px;
-    color: var(--text3);
-    font-style: italic;
-    margin-bottom: 12px;
-  }
+  .now-playing { padding: 16px 20px; border-bottom: 0.5px solid var(--border); flex-shrink: 0; }
+  .np-label { font-size: 9px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); margin-bottom: 10px; }
+  .np-phrase-ru  { font-size: 22px; font-weight: 600; line-height: 1.25; margin-bottom: 4px; letter-spacing: -0.2px; }
+  .np-phrase-en  { font-size: 14px; color: var(--text2); margin-bottom: 3px; }
+  .np-phrase-rom { font-size: 12px; color: var(--text3); font-style: italic; margin-bottom: 12px; }
 
-  .voice-indicators {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-  }
+  .voice-indicators { display: flex; gap: 8px; flex-wrap: wrap; }
   .vi {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    padding: 4px 10px;
-    border-radius: 20px;
-    border: 1px solid var(--border);
-    transition: all 0.2s;
+    display: flex; align-items: center; gap: 5px; padding: 4px 10px;
+    border-radius: 20px; border: 1px solid var(--border); transition: all 0.2s;
   }
-  .vi.active-native {
-    border-color: var(--secondary);
-    background: var(--secondary-dim);
-  }
-  .vi.active-foreign {
-    border-color: var(--primary);
-    background: var(--primary-dim);
-  }
+  .vi.active-native  { border-color: var(--secondary); background: var(--secondary-dim); }
+  .vi.active-foreign { border-color: var(--primary);   background: var(--primary-dim); }
   .vi.skipped { opacity: 0.25; }
-  .vi-dot {
-    width: 5px; height: 5px;
-    border-radius: 50%;
-    background: var(--text3);
-    transition: background 0.2s;
-    flex-shrink: 0;
-  }
-  .vi.active-native .vi-dot { background: var(--secondary); }
+  .vi-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--text3); transition: background 0.2s; flex-shrink: 0; }
+  .vi.active-native .vi-dot  { background: var(--secondary); }
   .vi.active-foreign .vi-dot { background: var(--primary); }
   .vi-name { font-size: 11px; color: var(--text2); font-weight: 500; }
   .vi.active-native .vi-name,
   .vi.active-foreign .vi-name { color: var(--text); }
 
   /* ── PROGRESS ── */
-  .progress-section {
-    padding: 12px 20px 8px;
-  }
-  .progress-track {
-    width: 100%;
-    height: 3px;
-    background: var(--border);
-    border-radius: 3px;
-    margin-bottom: 6px;
-    cursor: pointer;
-    position: relative;
-  }
-  .progress-fill {
-    height: 100%;
-    border-radius: 3px;
-    width: 0%;
-    transition: width 0.1s linear;
-  }
-  .fill-native { background: var(--primary); }
+  .progress-section { padding: 12px 20px 8px; }
+  .progress-track { width: 100%; height: 3px; background: var(--border); border-radius: 3px; margin-bottom: 6px; cursor: pointer; position: relative; }
+  .progress-fill { height: 100%; border-radius: 3px; width: 0%; transition: width 0.1s linear; }
+  .fill-native  { background: var(--primary); }
   .fill-foreign { background: var(--secondary); }
-  .progress-times {
-    display: flex;
-    justify-content: space-between;
-    font-size: 10px;
-    color: var(--text3);
-  }
+  .progress-times { display: flex; justify-content: space-between; font-size: 10px; color: var(--text3); }
 
   /* ── CONTROLS ── */
-  .controls {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-    padding: 8px 20px 14px;
-  }
+  .controls { display: flex; align-items: center; justify-content: center; gap: 20px; padding: 8px 20px 14px; }
   .ctrl-btn {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    transition: background 0.15s;
+    background: transparent; border: none; cursor: pointer; padding: 6px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%; transition: background 0.15s;
   }
   .ctrl-btn:hover { background: var(--surface2); }
   .ctrl-btn svg { fill: var(--text2); width: 22px; height: 22px; display: block; }
   .ctrl-btn.active svg { fill: var(--primary); }
   .ctrl-btn.stroke-icon svg { fill: none; stroke: var(--text2); stroke-width: 2; }
   .ctrl-btn.stroke-icon.active svg { stroke: var(--primary); }
-
   .play-main {
-    width: 56px; height: 56px;
-    border-radius: 50%;
-    background: var(--primary);
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: opacity 0.15s, transform 0.1s;
-    flex-shrink: 0;
+    width: 56px; height: 56px; border-radius: 50%; background: var(--primary);
+    border: none; cursor: pointer; display: flex; align-items: center;
+    justify-content: center; transition: opacity 0.15s, transform 0.1s; flex-shrink: 0;
   }
   .play-main:active { transform: scale(0.94); opacity: 0.85; }
   .play-main svg { fill: #fff; width: 20px; height: 20px; margin-left: 3px; }
   .play-main.is-playing svg { margin-left: 0; }
 
   /* ── QUEUE ── */
-  .queue-section {
-    flex: 1;
-    border-top: 0.5px solid var(--border);
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-  }
+  .queue-section { flex: 1; border-top: 0.5px solid var(--border); overflow-y: auto; -webkit-overflow-scrolling: touch; }
   .queue-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 20px 6px;
-    position: sticky;
-    top: 0;
-    background: var(--bg);
-    z-index: 1;
-    border-bottom: 0.5px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 20px 6px; position: sticky; top: 0;
+    background: var(--bg); z-index: 1; border-bottom: 0.5px solid var(--border);
   }
-  .queue-header-label {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text3);
-  }
-  .queue-phrase-count {
-    font-size: 10px;
-    color: var(--text3);
-  }
+  .queue-header-label { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text3); }
+  .queue-phrase-count { font-size: 10px; color: var(--text3); }
   .queue-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 20px;
-    border-bottom: 0.5px solid var(--border);
-    cursor: pointer;
-    transition: background 0.1s;
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 20px; border-bottom: 0.5px solid var(--border);
+    cursor: pointer; transition: background 0.1s;
   }
-  .queue-item:hover { background: var(--surface); }
+  .queue-item:hover  { background: var(--surface); }
   .queue-item.qi-active { background: var(--surface); }
-  .queue-item.qi-done { opacity: 0.3; }
+  .queue-item.qi-done    { opacity: 0.3; }
   .queue-item.qi-pending { opacity: 0.55; }
-
   .qi-heart {
-    width: 28px;
-    height: 28px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    cursor: pointer;
-    color: rgba(255,255,255,0.35);
-    transition: color 0.2s, transform 0.15s;
-    border-radius: 50%;
-    -webkit-tap-highlight-color: transparent;
+    width: 28px; height: 28px; flex-shrink: 0; display: flex;
+    align-items: center; justify-content: center; font-size: 16px;
+    cursor: pointer; color: rgba(255,255,255,0.35); transition: color 0.2s, transform 0.15s;
+    border-radius: 50%; -webkit-tap-highlight-color: transparent;
   }
   .qi-heart:active { transform: scale(1.3); }
-  #btn-save.saved { color: var(--accent) !important; fill: var(--accent); }
-  #btn-save svg { transition: fill 0.2s; }
-  #btn-save.saved svg { fill: var(--accent); stroke: var(--accent); }
-  .qi-heart.saved { color: var(--accent); text-shadow: 0 0 8px var(--accent); }
-  .qi-heart:hover { color: rgba(255,255,255,0.7); }
-  .qi-dot { display: none; }
-
-  .qi-num {
-    font-size: 11px;
-    color: var(--text3);
-    width: 18px;
-    text-align: right;
-    flex-shrink: 0;
-  }
+  .qi-heart.saved  { color: var(--primary); }
+  .qi-heart:hover  { color: rgba(255,255,255,0.7); }
+  .qi-num  { font-size: 11px; color: var(--text3); width: 18px; text-align: right; flex-shrink: 0; }
   .qi-text { flex: 1; min-width: 0; }
-  .qi-ru {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .qi-en {
-    font-size: 11px;
-    color: var(--text3);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin-top: 1px;
-  }
-  .qi-source {
-    font-size: 9px;
-    color: var(--text3);
-    margin-top: 1px;
-  }
-  .qi-dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--primary);
-    flex-shrink: 0;
-    opacity: 0;
-  }
-  .qi-active .qi-dot { opacity: 1; }
+  .qi-ru { font-size: 13px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .qi-en { font-size: 11px; color: var(--text3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px; }
 
-  /* ── EMPTY STATE ── */
-  .empty-state {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 40px 20px;
-    text-align: center;
-    gap: 8px;
-  }
-  .empty-icon { font-size: 32px; opacity: 0.3; }
+  /* ── EMPTY / LOADING ── */
+  .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; text-align: center; gap: 8px; }
   .empty-title { font-size: 15px; font-weight: 600; color: var(--text2); }
-  .empty-sub { font-size: 13px; color: var(--text3); line-height: 1.5; }
-
-  /* ── LOADING STATE ── */
-  .loading-state {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    gap: 8px;
-  }
-  .loading-dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--primary);
-    animation: pulse 1.2s ease-in-out infinite;
-  }
+  .empty-sub   { font-size: 13px; color: var(--text3); line-height: 1.5; }
+  .loading-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--primary); animation: pulse 1.2s ease-in-out infinite; display: inline-block; margin: 0 3px; }
   .loading-dot:nth-child(2) { animation-delay: 0.2s; }
   .loading-dot:nth-child(3) { animation-delay: 0.4s; }
-  @keyframes pulse {
-    0%, 80%, 100% { opacity: 0.2; transform: scale(0.8); }
-    40% { opacity: 1; transform: scale(1); }
-  }
+  @keyframes pulse { 0%,80%,100% { opacity:0.2; transform:scale(0.8); } 40% { opacity:1; transform:scale(1); } }
 
-
+  /* ── LIGHT QUEUE (The Wall) ── */
   [data-queue-light] .queue-section,
   [data-queue-light] .queue-header { background: var(--bg) !important; }
   [data-queue-light] .qi-ru,
   [data-queue-light] .qi-en,
-  [data-queue-light] .qi-source,
   [data-queue-light] .qi-num,
   [data-queue-light] .queue-header-label,
   [data-queue-light] .queue-phrase-count { color: #F0EDE8 !important; }
   [data-queue-light] .queue-item { border-bottom-color: rgba(255,255,255,0.15) !important; }
 
-
+  /* ── SHIMMER ── */
   @keyframes shimmer-rtl {
     0%   { background-position: 300% center; }
     100% { background-position: -300% center; }
   }
-  .play-main.shimmer {
-    background-size: 300% auto !important;
-    animation: shimmer-rtl 14s linear infinite;
-  }
+  .play-main.shimmer { background-size: 300% auto !important; animation: shimmer-rtl 14s linear infinite; }
   .title-shimmer {
-    background: linear-gradient(90deg, #888 0%, #c0c0c0 20%, #f5f5f5 40%, #fff 50%, #f0f0f0 60%, #b0b0b0 80%, #888 100%);
+    background: linear-gradient(90deg,#888 0%,#c0c0c0 20%,#f5f5f5 40%,#fff 50%,#f0f0f0 60%,#b0b0b0 80%,#888 100%);
     background-size: 300% auto;
     -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     animation: shimmer-rtl 14s linear infinite;
   }
 
-  /* Black Book leather texture — applied via class */
+  /* ── LEATHER (Black Book) ── */
   body.bb-leather,
   body.bb-leather .header,
   body.bb-leather .now-playing,
@@ -400,16 +181,30 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='ln'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.22' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='600' height='600' filter='url(%23ln)' opacity='0.055'/%3E%3C/svg%3E");
   }
 
+  /* ── UNLOCK BUTTON ── */
+  .unlock-bar {
+    padding: 12px 20px 16px;
+    flex-shrink: 0;
+  }
+  .unlock-btn {
+    display: block; width: 100%; padding: 14px 20px;
+    background: var(--primary); color: #fff;
+    border: none; border-radius: 10px; cursor: pointer;
+    font-size: 14px; font-weight: 700; letter-spacing: 0.04em;
+    text-decoration: none; text-align: center;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+  .unlock-btn:active { opacity: 0.85; transform: scale(0.98); }
+
   /* Hide scrollbars */
   ::-webkit-scrollbar { display: none; }
   * { scrollbar-width: none; -ms-overflow-style: none; }
-
   .queue-section::-webkit-scrollbar { width: 3px; }
   .queue-section::-webkit-scrollbar-track { background: transparent; }
   .queue-section::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 </style>
 </head>
-<body>
+<body class="bb-leather">
 
 <!-- HEADER -->
 <div class="header">
@@ -417,21 +212,21 @@
     <span class="source-badge badge-chapter" id="source-badge">Chapter</span>
     <span class="source-book" id="source-book">Black Book</span>
   </div>
-  <div class="header-title" id="header-title">Loading...</div>
-  <div class="header-count" id="header-count"></div>
+  <div class="header-title" id="header-title">First Impressions</div>
+  <div class="header-count" id="header-count">Loading...</div>
 </div>
 
 <!-- LANGUAGE TOGGLE -->
 <div class="lang-toggle">
-  <button class="lt-btn on-native" id="lt-native" onclick="toggleLang('native')">Native</button>
+  <button class="lt-btn on-native"  id="lt-native"  onclick="toggleLang('native')">Native</button>
   <button class="lt-btn on-foreign" id="lt-foreign" onclick="toggleLang('foreign')">Foreign</button>
 </div>
 
 <!-- NOW PLAYING -->
 <div class="now-playing">
   <div class="np-label">Now playing</div>
-  <div class="np-phrase-ru" id="np-ru">—</div>
-  <div class="np-phrase-en" id="np-en"></div>
+  <div class="np-phrase-ru"  id="np-ru">—</div>
+  <div class="np-phrase-en"  id="np-en"></div>
   <div class="np-phrase-rom" id="np-rom"></div>
   <div class="voice-indicators" id="voice-indicators"></div>
 </div>
@@ -439,7 +234,7 @@
 <!-- PROGRESS -->
 <div class="progress-section">
   <div class="progress-track" id="progress-track" onclick="seekClick(event)">
-    <div class="progress-fill fill-native" id="progress-fill"></div>
+    <div class="progress-fill fill-native" id="progress-fill" style="width:0%"></div>
   </div>
   <div class="progress-times">
     <span id="time-cur">0:00</span>
@@ -450,86 +245,69 @@
 <!-- CONTROLS -->
 <div class="controls">
   <button class="ctrl-btn stroke-icon" id="btn-loop" onclick="toggleLoop()" title="Loop">
-    <svg viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+    <svg viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
   </button>
   <button class="ctrl-btn" onclick="skipPrev()" title="Previous">
-    <svg viewBox="0 0 24 24"><polygon points="19,20 9,12 19,4"/><line x1="5" y1="4" x2="5" y2="20" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+    <svg viewBox="0 0 24 24"><polygon points="19,20 9,12 19,4"></polygon><line x1="5" y1="4" x2="5" y2="20" stroke="currentColor" stroke-width="2" fill="none"></line></svg>
   </button>
   <button class="play-main" id="btn-play" onclick="togglePlay()" title="Play/Pause">
-    <svg id="play-icon" viewBox="0 0 20 20"><polygon points="4,2 18,10 4,18"/></svg>
+    <svg id="play-icon" viewBox="0 0 20 20"><polygon points="4,2 18,10 4,18"></polygon></svg>
   </button>
   <button class="ctrl-btn" onclick="skipNext()" title="Next">
-    <svg viewBox="0 0 24 24"><polygon points="5,4 15,12 5,20"/><line x1="19" y1="4" x2="19" y2="20" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+    <svg viewBox="0 0 24 24"><polygon points="5,4 15,12 5,20"></polygon><line x1="19" y1="4" x2="19" y2="20" stroke="currentColor" stroke-width="2" fill="none"></line></svg>
   </button>
   <button class="ctrl-btn stroke-icon" id="btn-shuffle" onclick="toggleShuffle()" title="Shuffle">
-    <svg viewBox="0 0 24 24"><polyline points="16 3 21 3 21 8"/><line x1="4" y1="20" x2="21" y2="3"/><polyline points="21 16 21 21 16 21"/><line x1="15" y1="15" x2="21" y2="21"/></svg>
+    <svg viewBox="0 0 24 24"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line></svg>
   </button>
-  <button class="ctrl-btn" id="btn-save" onclick="saveCurrentPhrase()" title="Add to Playlist">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-    </svg>
+  <button class="ctrl-btn stroke-icon" id="btn-save" onclick="saveCurrentPhrase()" title="Save phrase">
+    <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
   </button>
+</div>
+
+<!-- UNLOCK BUTTON -->
+<div class="unlock-bar">
+  <a class="unlock-btn" href="https://willswrath.github.io/bb-player/paywall.html" target="_blank">
+    Unlock Full Access — $199 Lifetime
+  </a>
 </div>
 
 <!-- QUEUE -->
 <div class="queue-section">
   <div class="queue-header">
-    <span class="queue-header-label" id="queue-label">Queue</span>
+    <span class="queue-header-label" id="queue-label">Chapter queue</span>
     <span class="queue-phrase-count" id="queue-count"></span>
   </div>
   <div id="queue-list">
-    <div class="loading-state">
-      <div class="loading-dot"></div>
-      <div class="loading-dot"></div>
-      <div class="loading-dot"></div>
+    <div class="empty-state">
+      <div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div>
     </div>
   </div>
 </div>
 
-<!-- Hidden audio elements -->
-<audio id="audio-native" preload="auto"></audio>
+<!-- Audio -->
+<audio id="audio-native"  preload="auto"></audio>
 <audio id="audio-foreign" preload="auto"></audio>
 
 <script>
 // ── VOICE CONFIG ──
-// Maps Glide column names to display names
-// Native = English voices, Foreign = Russian voices
 var VOICES = {
-  native: [
-    { col: 'EN_M1_URL', name: 'Clark' },
-    { col: 'EN_F1_URL', name: 'Stephanie' }
-  ],
-  foreign: [
-    { col: 'RU_F1_URL', name: 'Natasha' },
-    { col: 'RU_F2_URL', name: 'Mila' },
-    { col: 'RU_M1_URL', name: 'Dimitri' }
-  ]
+  native:  [ { col:'EN_M1_URL', name:'Clark' },   { col:'EN_F1_URL', name:'Stephanie' } ],
+  foreign: [ { col:'RU_F1_URL', name:'Natasha' }, { col:'RU_F2_URL', name:'Mila' }, { col:'RU_M1_URL', name:'Dimitri' } ]
 };
 
 // ── STATE ──
 var state = {
-  phrases: [],          // array of phrase objects from Glide
-  current: 0,           // current phrase index
-  voice: 'native',      // which voice track is playing now
-  playing: false,
-  loop: false,
-  shuffle: false,
-  nativeOn: true,
-  foreignOn: true,
-  nativeVoice: 0,       // index into VOICES.native
-  foreignVoice: 0,      // index into VOICES.foreign
-  sourceType: 'chapter', // 'chapter' or 'playlist'
-  sourceTitle: '',
-  sourceBook: '',
-  shuffleOrder: [],
-  tickTimer: null
+  phrases:[], current:0, voice:'native', playing:false,
+  loop:false, shuffle:false, nativeOn:true, foreignOn:true,
+  nativeVoice:0, foreignVoice:0,
+  sourceType:'chapter', sourceTitle:'', sourceBook:'',
+  shuffleOrder:[], tickTimer:null
 };
 
-var audioNative = document.getElementById('audio-native');
+var audioNative  = document.getElementById('audio-native');
 var audioForeign = document.getElementById('audio-foreign');
 
-
-// ── THEME SYSTEM ──
+// ── THEMES ──
 var THEMES = {
   'Black Book': {
     bg:'#0D0D0D', surface:'#141414', surface2:'#1A1A1A',
@@ -552,22 +330,21 @@ var THEMES = {
     primary:'#1C1C1C', primaryDim:'rgba(28,28,28,0.08)',
     secondary:'#007A80', secondaryDim:'rgba(0,122,128,0.10)',
     text:'#0A2526', text2:'rgba(10,37,38,0.65)', text3:'rgba(10,37,38,0.40)',
-    border:'rgba(0,0,0,0.08)', queueOnCyan:true,
-    playShimmer:null
+    border:'rgba(0,0,0,0.08)', queueOnCyan:true, playShimmer:null
+  },
+  'Vocabulary': {
+    bg:'#0A0A1A', surface:'#12122A', surface2:'#1A1A35',
+    primary:'#4A90D9', primaryDim:'rgba(74,144,217,0.12)',
+    secondary:'rgba(255,255,255,0.45)', secondaryDim:'rgba(255,255,255,0.08)',
+    text:'#FFFFFF', text2:'rgba(255,255,255,0.55)', text3:'rgba(255,255,255,0.30)',
+    border:'rgba(255,255,255,0.08)', queueOnCyan:false, playShimmer:null
   }
 };
 
 function applyTheme(bookName) {
   var t = THEMES[bookName] || THEMES['Black Book'];
   var r = document.documentElement.style;
-
-  // Leather texture — applied via CSS class
-  if (bookName === 'Black Book') {
-    document.body.classList.add('bb-leather');
-  } else {
-    document.body.classList.remove('bb-leather');
-  }
-
+  document.body.classList.toggle('bb-leather', bookName === 'Black Book');
   r.setProperty('--primary',       t.primary);
   r.setProperty('--primary-dim',   t.primaryDim);
   r.setProperty('--secondary',     t.secondary);
@@ -579,207 +356,147 @@ function applyTheme(bookName) {
   r.setProperty('--text2',         t.text2);
   r.setProperty('--text3',         t.text3);
   r.setProperty('--border',        t.border);
-  if (t.queueOnCyan) {
-    document.body.setAttribute('data-queue-light', 'true');
-  } else {
-    document.body.removeAttribute('data-queue-light');
-  }
-  // Apply shimmer to play button
+  if (t.queueOnCyan) { document.body.setAttribute('data-queue-light','true'); }
+  else               { document.body.removeAttribute('data-queue-light'); }
   var playBtn = document.getElementById('btn-play');
-  if (playBtn && t.playShimmer) {
-    playBtn.style.background = t.playShimmer;
-    playBtn.classList.add('shimmer');
-  }
-  // Apply title shimmer
+  if (playBtn && t.playShimmer) { playBtn.style.background = t.playShimmer; playBtn.classList.add('shimmer'); }
+  else if (playBtn)              { playBtn.style.background = ''; playBtn.classList.remove('shimmer'); }
   var headerTitle = document.getElementById('header-title');
-  if (headerTitle && t.playShimmer) {
-    headerTitle.classList.add('title-shimmer');
-  }
-  // Apply vignette to Red Book
-  if (bookName === 'Red Book') {
-    document.body.setAttribute('data-vignette', 'true');
-  }
+  if (headerTitle && t.playShimmer) { headerTitle.classList.add('title-shimmer'); }
+  else if (headerTitle)             { headerTitle.classList.remove('title-shimmer'); }
+  if (bookName === 'Red Book') { document.body.setAttribute('data-vignette','true'); }
+  else                         { document.body.removeAttribute('data-vignette'); }
 }
 
-// ── GLIDE INTEGRATION ──
-// Glide passes data via URL parameters or window.glide object
-// This component accepts:
-//   phrases: JSON array of phrase objects
-//   sourceType: 'chapter' or 'playlist'
-//   sourceTitle: chapter/playlist name
-//   sourceBook: book name
-//   nativeVoice: index 0-1
-//   foreignVoice: index 0-2
-
+// ── INIT ──
 function initFromGlide() {
-  var params = new URLSearchParams(window.location.search);
-  var chapterTitle = params.get('chapter') || 'First Impressions';
-  var bookName = params.get('book') || 'Black Book';
-  var nativeVoice = parseInt(params.get('nv') || '0');
-  var foreignVoice = parseInt(params.get('fv') || '0');
+  var params       = new URLSearchParams(window.location.search);
+  var chapterTitle = decodeURIComponent(params.get('chapter') || 'First Impressions');
+  var bookName     = decodeURIComponent(params.get('book')    || 'Black Book');
+  var nativeVoice  = parseInt(params.get('nv')  || '0');
+  var foreignVoice = parseInt(params.get('fv')  || '0');
 
-  // Listen for Glide postMessage (future upgrade path)
   window.addEventListener('message', function(e) {
-    if (e.data && e.data.type === 'bb-player-init') {
-      loadData(e.data);
-    }
+    if (e.data && e.data.type === 'bb-player-init') { loadData(e.data); }
   });
 
-  // Show loading state
   document.getElementById('header-title').textContent = chapterTitle;
-  document.getElementById('source-book').textContent = bookName;
+  document.getElementById('source-book').textContent  = bookName;
   document.getElementById('header-count').textContent = 'Loading...';
+  applyTheme(bookName);
 
-  // Fetch live data from Google Sheet CSV
   var csvUrl = 'https://docs.google.com/spreadsheets/d/17axpQxBY2jQSaDeU8uv6DGp7EiyQhyVo_ZeRJYWB_EU/export?format=csv&gid=595375825';
   fetch(csvUrl)
     .then(function(r) {
-      if (!r.ok) throw new Error('CSV fetch failed');
+      if (!r.ok) throw new Error('CSV fetch failed ' + r.status);
       return r.text();
     })
     .then(function(csv) {
-          var phrases = parseCSV(csv, chapterTitle, bookName);
+      // ── FIX: pass bookName as third argument ──
+      var phrases = parseCSV(csv, chapterTitle, bookName);
       if (phrases.length === 0) {
         document.getElementById('header-count').textContent = 'No phrases found';
+        document.getElementById('queue-list').innerHTML =
+          '<div class="empty-state"><div class="empty-title">No content found</div>' +
+          '<div class="empty-sub">Chapter: ' + chapterTitle + '<br>Book: ' + bookName + '</div></div>';
         return;
       }
-      loadData({
-        phrases: phrases,
-        sourceType: 'chapter',
-        sourceTitle: chapterTitle,
-        sourceBook: bookName,
-        nativeVoice: nativeVoice,
-        foreignVoice: foreignVoice
-      });
+      loadData({ phrases:phrases, sourceType:'chapter', sourceTitle:chapterTitle, sourceBook:bookName, nativeVoice:nativeVoice, foreignVoice:foreignVoice });
     })
     .catch(function(err) {
       console.error('Data load error:', err);
-      // Fall back to test data
-      loadData({
-        phrases: FALLBACK_PHRASES,
-        sourceType: 'chapter',
-        sourceTitle: chapterTitle,
-        sourceBook: bookName,
-        nativeVoice: nativeVoice,
-        foreignVoice: foreignVoice
-      });
+      document.getElementById('header-count').textContent = 'Load failed – check connection';
     });
 }
 
-function parseCSV(csv, chapterFilter) {
+// ── PARSE CSV — fixed: accepts bookFilter as 3rd param ──
+function parseCSV(csv, chapterFilter, bookFilter) {
   var lines = csv.split('\n');
   if (lines.length < 2) return [];
-  
-  // Parse header row to get column indices
   var headers = parseCSVRow(lines[0]);
   var idx = {};
   headers.forEach(function(h, i) { idx[h.trim()] = i; });
-  
+
+  var filterChapter = chapterFilter.trim();
+  var filterBook    = bookFilter ? bookFilter.trim() : '';
+
   var phrases = [];
   for (var i = 1; i < lines.length; i++) {
     var line = lines[i].trim();
     if (!line) continue;
     var cols = parseCSVRow(line);
     if (!cols || cols.length < 5) continue;
-    
-    var chapter = (cols[idx['Chapter_Title']] || '').trim();
-    // Decode URI encoding in chapter filter param
-    var filterClean = decodeURIComponent(chapterFilter).trim();
-        if (chapter !== filterClean) continue;
-    var rowBook = (cols[idx['Book']] || '').trim();
-    if (bookFilter && rowBook !== bookFilter) continue;
-    
+
+    var rowChapter = (cols[idx['Chapter_Title']] || '').trim();
+    var rowBook    = (cols[idx['Book']]          || '').trim();
+
+    // Filter by chapter title (case-insensitive)
+    if (rowChapter.toLowerCase() !== filterChapter.toLowerCase()) continue;
+    // Filter by book name when provided (case-insensitive)
+    if (filterBook && rowBook.toLowerCase() !== filterBook.toLowerCase()) continue;
+
     phrases.push({
-      Russian:      cols[idx['Russian']]      || '',
-      English:      cols[idx['English']]      || '',
-      Romanization: cols[idx['Romanization']] || '',
-      Context:      cols[idx['Context']]      || '',
-      Chapter_Title:cols[idx['Chapter_Title']]|| '',
-      Book:         cols[idx['Book']]         || '',
-      EN_M1_URL:    cols[idx['EN_M1_URL']]    || '',
-      EN_F1_URL:    cols[idx['EN_F1_URL']]    || '',
-      RU_F1_URL:    cols[idx['RU_F1_URL']]    || '',
-      RU_F2_URL:    cols[idx['RU_F2_URL']]    || '',
-      RU_M1_URL:    cols[idx['RU_M1_URL']]    || ''
+      Russian:       cols[idx['Russian']]       || '',
+      English:       cols[idx['English']]       || '',
+      Romanization:  cols[idx['Romanization']]  || '',
+      Context:       cols[idx['Context']]       || '',
+      Chapter_Title: cols[idx['Chapter_Title']] || '',
+      Book:          cols[idx['Book']]          || '',
+      EN_M1_URL:     cols[idx['EN_M1_URL']]     || '',
+      EN_F1_URL:     cols[idx['EN_F1_URL']]     || '',
+      RU_F1_URL:     cols[idx['RU_F1_URL']]     || '',
+      RU_F2_URL:     cols[idx['RU_F2_URL']]     || '',
+      RU_M1_URL:     cols[idx['RU_M1_URL']]     || ''
     });
   }
   return phrases;
 }
 
 function parseCSVRow(row) {
-  var result = [];
-  var cur = '';
-  var inQuote = false;
-  for (var i = 0; i < row.length; i++) {
-    var c = row[i];
-    if (c === '"') {
-      if (inQuote && row[i+1] === '"') { cur += '"'; i++; }
-      else inQuote = !inQuote;
-    } else if (c === ',' && !inQuote) {
-      result.push(cur); cur = '';
-    } else {
-      cur += c;
-    }
+  var result=[], cur='', inQuote=false;
+  for (var i=0; i<row.length; i++) {
+    var c=row[i];
+    if (c==='"') { if (inQuote && row[i+1]==='"') { cur+='"'; i++; } else inQuote=!inQuote; }
+    else if (c===',' && !inQuote) { result.push(cur); cur=''; }
+    else { cur+=c; }
   }
   result.push(cur);
   return result;
 }
 
-var FALLBACK_PHRASES = [
-  { Russian: 'Ты красивая.', English: "You're beautiful.", Romanization: 'Ty krasivaya.', Context: 'General beauty',
-    EN_M1_URL: 'https://res.cloudinary.com/dkd8okrw3/video/upload/v1771889670/clark_001_ev2z2f.mp3',
-    EN_F1_URL: 'https://res.cloudinary.com/dkd8okrw3/video/upload/v1771889670/clark_001_ev2z2f.mp3',
-    RU_F1_URL: 'https://res.cloudinary.com/dkd8okrw3/video/upload/v1772176441/arabella_001_yqr6ac.mp3',
-    RU_F2_URL: 'https://res.cloudinary.com/dkd8okrw3/video/upload/v1772176441/arabella_001_yqr6ac.mp3',
-    RU_M1_URL: 'https://res.cloudinary.com/dkd8okrw3/video/upload/v1772176441/arabella_001_yqr6ac.mp3',
-    Chapter_Title: 'First Impressions', Book: 'Black Book' }
-];
-
-
+// ── LOAD DATA ──
 function loadData(data) {
-  if (!data || !data.phrases || data.phrases.length === 0) {
-    showEmpty();
-    return;
-  }
-
-  state.phrases = data.phrases;
-  state.sourceType = data.sourceType || 'chapter';
-  state.sourceTitle = data.sourceTitle || 'Chapter';
-  state.sourceBook = data.sourceBook || '';
-  state.nativeVoice = data.nativeVoice || 0;
+  if (!data || !data.phrases || data.phrases.length === 0) { showEmpty(); return; }
+  state.phrases      = data.phrases;
+  state.sourceType   = data.sourceType   || 'chapter';
+  state.sourceTitle  = data.sourceTitle  || 'Chapter';
+  state.sourceBook   = data.sourceBook   || '';
+  state.nativeVoice  = data.nativeVoice  || 0;
   state.foreignVoice = data.foreignVoice || 0;
-  state.current = 0;
-  state.voice = state.nativeOn ? 'native' : 'foreign';
+  state.current      = 0;
+  state.voice        = state.nativeOn ? 'native' : 'foreign';
   state.shuffleOrder = buildOrder();
   applyTheme(state.sourceBook);
-
-  updateHeader();
-  updateNowPlaying();
-  loadAudioForCurrent();
-  buildQueue();
+  updateHeader(); updateNowPlaying(); loadAudioForCurrent(); buildQueue();
 }
 
 function showEmpty() {
   document.getElementById('header-title').textContent = 'No content';
   document.getElementById('queue-list').innerHTML =
-    '<div class="empty-state">' +
-    '<div class="empty-title">Nothing to play</div>' +
-    '<div class="empty-sub">Open a chapter or playlist to start listening</div>' +
-    '</div>';
+    '<div class="empty-state"><div class="empty-title">Nothing to play</div>' +
+    '<div class="empty-sub">Open a chapter from the bookshelf to start.</div></div>';
 }
 
 // ── HEADER ──
 function updateHeader() {
   var badge = document.getElementById('source-badge');
   badge.textContent = state.sourceType === 'playlist' ? 'Playlist' : 'Chapter';
-  badge.className = 'source-badge ' + (state.sourceType === 'playlist' ? 'badge-playlist' : 'badge-chapter');
-  document.getElementById('source-book').textContent = state.sourceBook;
+  badge.className   = 'source-badge ' + (state.sourceType === 'playlist' ? 'badge-playlist' : 'badge-chapter');
+  document.getElementById('source-book').textContent  = state.sourceBook;
   document.getElementById('header-title').textContent = state.sourceTitle;
   updatePhraseCount();
 }
-
 function updatePhraseCount() {
-  var idx = state.shuffleOrder[state.current];
   document.getElementById('header-count').textContent =
     'Phrase ' + (state.current + 1) + ' of ' + state.phrases.length;
 }
@@ -789,49 +506,27 @@ function updateNowPlaying() {
   var idx = state.shuffleOrder[state.current];
   var p = state.phrases[idx];
   if (!p) return;
-
-  document.getElementById('np-ru').textContent = p.Russian || '—';
-  document.getElementById('np-en').textContent = p.English || '';
+  document.getElementById('np-ru').textContent  = p.Russian      || '—';
+  document.getElementById('np-en').textContent  = p.English      || '';
   document.getElementById('np-rom').textContent = p.Romanization || '';
-
-  updateVoiceIndicators();
-  updatePhraseCount();
-  resetProgress();
-  // Update save button state
+  updateVoiceIndicators(); updatePhraseCount(); resetProgress();
   var saveBtn = document.getElementById('btn-save');
   if (saveBtn) {
-    if (isSaved(p)) {
-      saveBtn.classList.add('saved');
-      saveBtn.querySelector('svg').style.fill = 'var(--accent)';
-      saveBtn.querySelector('svg').style.stroke = 'var(--accent)';
-    } else {
-      saveBtn.classList.remove('saved');
-      saveBtn.querySelector('svg').style.fill = 'none';
-      saveBtn.querySelector('svg').style.stroke = 'currentColor';
-    }
+    var s = isSaved(p);
+    saveBtn.classList.toggle('active', s);
   }
 }
 
 function updateVoiceIndicators() {
-  var nv = VOICES.native[state.nativeVoice] || VOICES.native[0];
+  var nv = VOICES.native[state.nativeVoice]   || VOICES.native[0];
   var fv = VOICES.foreign[state.foreignVoice] || VOICES.foreign[0];
-  var isNative = state.voice === 'native' && state.playing;
+  var isNative  = state.voice === 'native'  && state.playing;
   var isForeign = state.voice === 'foreign' && state.playing;
-
   var html = '';
-
-  // Native voice pill
-  var nClass = 'vi';
-  if (!state.nativeOn) nClass += ' skipped';
-  else if (isNative) nClass += ' active-native';
-  html += '<div class="' + nClass + '"><div class="vi-dot"></div><span class="vi-name">' + nv.name + '</span></div>';
-
-  // Foreign voice pill
-  var fClass = 'vi';
-  if (!state.foreignOn) fClass += ' skipped';
-  else if (isForeign) fClass += ' active-foreign';
-  html += '<div class="' + fClass + '"><div class="vi-dot"></div><span class="vi-name">' + fv.name + '</span></div>';
-
+  var nCls = 'vi' + (!state.nativeOn ? ' skipped' : isNative ? ' active-native' : '');
+  html += '<div class="' + nCls + '"><div class="vi-dot"></div><span class="vi-name">' + nv.name + '</span></div>';
+  var fCls = 'vi' + (!state.foreignOn ? ' skipped' : isForeign ? ' active-foreign' : '');
+  html += '<div class="' + fCls + '"><div class="vi-dot"></div><span class="vi-name">' + fv.name + '</span></div>';
   document.getElementById('voice-indicators').innerHTML = html;
 }
 
@@ -839,378 +534,173 @@ function updateVoiceIndicators() {
 function getAudioUrl(phraseIdx, voice) {
   var p = state.phrases[phraseIdx];
   if (!p) return null;
-  var col = voice === 'native'
-    ? VOICES.native[state.nativeVoice].col
-    : VOICES.foreign[state.foreignVoice].col;
+  var col = voice === 'native' ? VOICES.native[state.nativeVoice].col : VOICES.foreign[state.foreignVoice].col;
   return p[col] || null;
 }
-
 function loadAudioForCurrent() {
-  var idx = state.shuffleOrder[state.current];
+  var idx  = state.shuffleOrder[state.current];
   var nUrl = getAudioUrl(idx, 'native');
   var fUrl = getAudioUrl(idx, 'foreign');
-
-  if (nUrl) { audioNative.src = nUrl; audioNative.load(); }
+  if (nUrl) { audioNative.src  = nUrl;  audioNative.load(); }
   if (fUrl) { audioForeign.src = fUrl; audioForeign.load(); }
 }
-
 function playCurrentVoice() {
   if (state.voice === 'native') {
     audioForeign.pause();
-    if (state.nativeOn && audioNative.src) {
-      audioNative.currentTime = 0;
-      audioNative.play().catch(function() {});
-    } else {
-      // skip native, go to foreign
-      advanceVoice();
-      return;
-    }
+    if (state.nativeOn && audioNative.src) { audioNative.currentTime=0; audioNative.play().catch(function(){}); }
+    else { advanceVoice(); return; }
   } else {
     audioNative.pause();
-    if (state.foreignOn && audioForeign.src) {
-      audioForeign.currentTime = 0;
-      audioForeign.play().catch(function() {});
-    } else {
-      advanceVoice();
-      return;
-    }
+    if (state.foreignOn && audioForeign.src) { audioForeign.currentTime=0; audioForeign.play().catch(function(){}); }
+    else { advanceVoice(); return; }
   }
-  startProgressTick();
-  updateVoiceIndicators();
+  startProgressTick(); updateVoiceIndicators();
 }
 
-// ── AUDIO ENDED HANDLERS ──
 audioNative.addEventListener('ended', function() {
   if (!state.playing) return;
-  // After native, play foreign
   if (state.foreignOn) {
     state.voice = 'foreign';
-    var idx = state.shuffleOrder[state.current];
+    var idx  = state.shuffleOrder[state.current];
     var fUrl = getAudioUrl(idx, 'foreign');
-    if (fUrl) {
-      audioForeign.src = fUrl;
-      audioForeign.load();
-      audioForeign.play().catch(function() {});
-      updateProgressTrackColor();
-      updateVoiceIndicators();
-      return;
-    }
+    if (fUrl) { audioForeign.src=fUrl; audioForeign.load(); audioForeign.play().catch(function(){}); updateProgressTrackColor(); updateVoiceIndicators(); return; }
   }
   advanceVoice();
 });
-
 audioForeign.addEventListener('ended', function() {
   if (!state.playing) return;
   advanceVoice();
 });
 
 function advanceVoice() {
-  // Done with both voices for this phrase — move to next
   state.current++;
   if (state.current >= state.phrases.length) {
-    if (state.loop) {
-      state.current = 0;
-      if (state.shuffle) state.shuffleOrder = shuffleArray(buildOrder());
-    } else {
-      state.current = state.phrases.length - 1;
-      pause();
-      return;
-    }
+    if (state.loop) { state.current=0; if (state.shuffle) state.shuffleOrder=shuffleArray(buildOrder()); }
+    else { state.current=state.phrases.length-1; pause(); return; }
   }
   state.voice = state.nativeOn ? 'native' : 'foreign';
-  loadAudioForCurrent();
-  updateNowPlaying();
-  buildQueue();
-  scrollQueueToCurrent();
-
-  // Small gap between phrases
-  setTimeout(function() {
-    if (state.playing) playCurrentVoice();
-  }, 400);
+  loadAudioForCurrent(); updateNowPlaying(); buildQueue(); scrollQueueToCurrent();
+  setTimeout(function() { if (state.playing) playCurrentVoice(); }, 400);
 }
 
-function advanceVoiceInternal() {
-  if (state.voice === 'native' && state.foreignOn) {
-    state.voice = 'foreign';
-    playCurrentVoice();
-  } else {
-    advanceVoice();
-  }
-}
-
-// ── PROGRESS TRACKING ──
-function startProgressTick() {
-  clearInterval(state.tickTimer);
-  state.tickTimer = setInterval(updateProgressUI, 100);
-}
-
-function stopProgressTick() {
-  clearInterval(state.tickTimer);
-}
-
+// ── PROGRESS ──
+function startProgressTick() { clearInterval(state.tickTimer); state.tickTimer=setInterval(updateProgressUI,100); }
+function stopProgressTick()  { clearInterval(state.tickTimer); }
 function updateProgressUI() {
-  var audio = state.voice === 'native' ? audioNative : audioForeign;
+  var audio = state.voice==='native' ? audioNative : audioForeign;
   if (!audio.duration || isNaN(audio.duration)) return;
-
-  var pct = (audio.currentTime / audio.duration) * 100;
-  document.getElementById('progress-fill').style.width = Math.min(pct, 100) + '%';
+  var pct = (audio.currentTime/audio.duration)*100;
+  document.getElementById('progress-fill').style.width = Math.min(pct,100)+'%';
   document.getElementById('time-cur').textContent = formatTime(audio.currentTime);
   document.getElementById('time-tot').textContent = formatTime(audio.duration);
 }
-
 function resetProgress() {
-  document.getElementById('progress-fill').style.width = '0%';
-  document.getElementById('time-cur').textContent = '0:00';
-  document.getElementById('time-tot').textContent = '0:00';
+  document.getElementById('progress-fill').style.width='0%';
+  document.getElementById('time-cur').textContent='0:00';
+  document.getElementById('time-tot').textContent='0:00';
   updateProgressTrackColor();
 }
-
 function updateProgressTrackColor() {
-  var fill = document.getElementById('progress-fill');
-  fill.className = 'progress-fill ' + (state.voice === 'native' ? 'fill-native' : 'fill-foreign');
+  document.getElementById('progress-fill').className='progress-fill '+(state.voice==='native'?'fill-native':'fill-foreign');
 }
-
 function seekClick(e) {
-  var track = document.getElementById('progress-track');
-  var rect = track.getBoundingClientRect();
-  var pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-  var audio = state.voice === 'native' ? audioNative : audioForeign;
-  if (audio.duration && !isNaN(audio.duration)) {
-    audio.currentTime = pct * audio.duration;
-  }
+  var track=document.getElementById('progress-track');
+  var rect=track.getBoundingClientRect();
+  var pct=Math.max(0,Math.min(1,(e.clientX-rect.left)/rect.width));
+  var audio=state.voice==='native'?audioNative:audioForeign;
+  if (audio.duration && !isNaN(audio.duration)) audio.currentTime=pct*audio.duration;
 }
-
 function formatTime(s) {
-  if (!s || isNaN(s)) return '0:00';
-  var m = Math.floor(s / 60);
-  var sec = Math.floor(s % 60);
-  return m + ':' + (sec < 10 ? '0' : '') + sec;
+  if (!s||isNaN(s)) return '0:00';
+  var m=Math.floor(s/60), sec=Math.floor(s%60);
+  return m+':'+(sec<10?'0':'')+sec;
 }
 
-// ── PLAYBACK CONTROLS ──
-function togglePlay() {
-  if (state.phrases.length === 0) return;
-  if (state.playing) {
-    pause();
-  } else {
-    play();
-  }
-}
-
+// ── CONTROLS ──
+function togglePlay() { if (state.phrases.length===0) return; state.playing ? pause() : play(); }
 function play() {
-  state.playing = true;
+  state.playing=true;
   document.getElementById('btn-play').classList.add('is-playing');
-  document.getElementById('play-icon').innerHTML = '<rect x="3" y="2" width="5" height="16" rx="1.5"/><rect x="12" y="2" width="5" height="16" rx="1.5"/>';
+  document.getElementById('play-icon').innerHTML='<rect x="3" y="2" width="5" height="16" rx="1.5"/><rect x="12" y="2" width="5" height="16" rx="1.5"/>';
   playCurrentVoice();
 }
-
 function pause() {
-  state.playing = false;
-  audioNative.pause();
-  audioForeign.pause();
-  stopProgressTick();
+  state.playing=false; audioNative.pause(); audioForeign.pause(); stopProgressTick();
   document.getElementById('btn-play').classList.remove('is-playing');
-  document.getElementById('play-icon').innerHTML = '<polygon points="4,2 18,10 4,18"/>';
+  document.getElementById('play-icon').innerHTML='<polygon points="4,2 18,10 4,18"/>';
   updateVoiceIndicators();
 }
+function skipNext() { var w=state.playing; pause(); state.current=Math.min(state.current+1,state.phrases.length-1); state.voice=state.nativeOn?'native':'foreign'; loadAudioForCurrent(); updateNowPlaying(); buildQueue(); scrollQueueToCurrent(); if(w){setTimeout(play,100);} }
+function skipPrev() { var w=state.playing; pause(); state.current=Math.max(state.current-1,0); state.voice=state.nativeOn?'native':'foreign'; loadAudioForCurrent(); updateNowPlaying(); buildQueue(); scrollQueueToCurrent(); if(w){setTimeout(play,100);} }
+function jumpToPhrase(i) { var w=state.playing; pause(); state.current=i; state.voice=state.nativeOn?'native':'foreign'; loadAudioForCurrent(); updateNowPlaying(); buildQueue(); if(w){setTimeout(play,100);} }
 
-function skipNext() {
-  var wasPlaying = state.playing;
-  pause();
-  state.current = Math.min(state.current + 1, state.phrases.length - 1);
-  state.voice = state.nativeOn ? 'native' : 'foreign';
-  loadAudioForCurrent();
-  updateNowPlaying();
-  buildQueue();
-  scrollQueueToCurrent();
-  if (wasPlaying) { setTimeout(play, 100); }
-}
-
-function skipPrev() {
-  var wasPlaying = state.playing;
-  pause();
-  state.current = Math.max(state.current - 1, 0);
-  state.voice = state.nativeOn ? 'native' : 'foreign';
-  loadAudioForCurrent();
-  updateNowPlaying();
-  buildQueue();
-  scrollQueueToCurrent();
-  if (wasPlaying) { setTimeout(play, 100); }
-}
-
-function jumpToPhrase(i) {
-  var wasPlaying = state.playing;
-  pause();
-  state.current = i;
-  state.voice = state.nativeOn ? 'native' : 'foreign';
-  loadAudioForCurrent();
-  updateNowPlaying();
-  buildQueue();
-  if (wasPlaying) { setTimeout(play, 100); }
-}
-
-// ── TOGGLE CONTROLS ──
+// ── TOGGLES ──
 function toggleLang(which) {
-  if (which === 'native') {
-    state.nativeOn = !state.nativeOn;
-    if (!state.nativeOn && !state.foreignOn) state.foreignOn = true;
-  } else {
-    state.foreignOn = !state.foreignOn;
-    if (!state.nativeOn && !state.foreignOn) state.nativeOn = true;
-  }
-  document.getElementById('lt-native').className = 'lt-btn' + (state.nativeOn ? ' on-native' : '');
-  document.getElementById('lt-foreign').className = 'lt-btn' + (state.foreignOn ? ' on-foreign' : '');
+  if (which==='native')  { state.nativeOn=!state.nativeOn;  if(!state.nativeOn&&!state.foreignOn)  state.foreignOn=true; }
+  else                   { state.foreignOn=!state.foreignOn; if(!state.nativeOn&&!state.foreignOn)  state.nativeOn=true; }
+  document.getElementById('lt-native').className ='lt-btn'+(state.nativeOn  ?' on-native':'');
+  document.getElementById('lt-foreign').className='lt-btn'+(state.foreignOn ?' on-foreign':'');
   updateVoiceIndicators();
 }
-
-function toggleLoop() {
-  state.loop = !state.loop;
-  document.getElementById('btn-loop').classList.toggle('active', state.loop);
-}
-
+function toggleLoop()    { state.loop=!state.loop;       document.getElementById('btn-loop').classList.toggle('active',state.loop); }
 function toggleShuffle() {
-  state.shuffle = !state.shuffle;
-  document.getElementById('btn-shuffle').classList.toggle('active', state.shuffle);
-  state.shuffleOrder = buildOrder();
-  applyTheme(state.sourceBook);
-  if (state.shuffle) state.shuffleOrder = shuffleArray(state.shuffleOrder);
-  state.current = 0;
-  loadAudioForCurrent();
-  updateNowPlaying();
-  buildQueue();
+  state.shuffle=!state.shuffle; document.getElementById('btn-shuffle').classList.toggle('active',state.shuffle);
+  state.shuffleOrder=buildOrder(); if(state.shuffle) state.shuffleOrder=shuffleArray(state.shuffleOrder);
+  state.current=0; loadAudioForCurrent(); updateNowPlaying(); buildQueue();
 }
 
-// ── SHUFFLE ──
-function buildOrder() {
-  var arr = [];
-  for (var i = 0; i < state.phrases.length; i++) arr.push(i);
-  return arr;
-}
+// ── ORDER / SHUFFLE ──
+function buildOrder()    { var a=[]; for(var i=0;i<state.phrases.length;i++) a.push(i); return a; }
+function shuffleArray(a) { var b=a.slice(); for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;} return b; }
 
-function shuffleArray(arr) {
-  var a = arr.slice();
-  for (var i = a.length - 1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i + 1));
-    var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+// ── SAVE / PLAYLIST ──
+function getSaved() { try{return JSON.parse(localStorage.getItem('bb_saved')||'{}');}catch(e){return {};} }
+function isSaved(phrase) { return !!getSaved()[phrase.Russian]; }
+function toggleSave(phrase, btn) {
+  var saved=getSaved();
+  if (saved[phrase.Russian]) { delete saved[phrase.Russian]; btn.classList.remove('saved'); btn.textContent='♡'; }
+  else {
+    saved[phrase.Russian]={Russian:phrase.Russian,English:phrase.English,Romanization:phrase.Romanization,Chapter_Title:phrase.Chapter_Title,Book:phrase.Book,EN_M1_URL:phrase.EN_M1_URL,EN_F1_URL:phrase.EN_F1_URL,RU_F1_URL:phrase.RU_F1_URL,RU_F2_URL:phrase.RU_F2_URL,RU_M1_URL:phrase.RU_M1_URL,savedAt:Date.now()};
+    btn.classList.add('saved'); btn.textContent='♥';
+    btn.style.transform='scale(1.4)'; setTimeout(function(){btn.style.transform='';},200);
   }
-  return a;
+  localStorage.setItem('bb_saved',JSON.stringify(saved));
+  window.parent.postMessage({type:'bb-playlist-update',count:Object.keys(saved).length},'*');
+}
+function saveCurrentPhrase() {
+  var idx=state.shuffleOrder[state.current], phrase=state.phrases[idx];
+  if (!phrase) return;
+  var btn=document.getElementById('btn-save');
+  toggleSave(phrase,btn);
 }
 
 // ── QUEUE ──
-
-// ── PLAYLIST SAVE ──
-function getPlaylistKey() {
-  return 'bb_playlist_' + (state.chapter || 'all');
-}
-function getSaved() {
-  try { return JSON.parse(localStorage.getItem('bb_saved') || '{}'); } catch(e) { return {}; }
-}
-function isSaved(phrase) {
-  var saved = getSaved();
-  return !!saved[phrase.Russian];
-}
-function toggleSave(phrase, btn) {
-  var saved = getSaved();
-  if (saved[phrase.Russian]) {
-    delete saved[phrase.Russian];
-    btn.textContent = '♡';
-    btn.classList.remove('saved');
-  } else {
-    saved[phrase.Russian] = {
-      Russian: phrase.Russian,
-      English: phrase.English,
-      Romanization: phrase.Romanization,
-      Chapter_Title: phrase.Chapter_Title,
-      Book: phrase.Book,
-      EN_M1_URL: phrase.EN_M1_URL,
-      EN_F1_URL: phrase.EN_F1_URL,
-      RU_F1_URL: phrase.RU_F1_URL,
-      RU_F2_URL: phrase.RU_F2_URL,
-      RU_M1_URL: phrase.RU_M1_URL,
-      savedAt: Date.now()
-    };
-    btn.textContent = '♥';
-    btn.classList.add('saved');
-    // Brief pulse animation
-    btn.style.transform = 'scale(1.4)';
-    setTimeout(function() { btn.style.transform = ''; }, 200);
-  }
-  localStorage.setItem('bb_saved', JSON.stringify(saved));
-  // Notify Glide parent of save count
-  var count = Object.keys(saved).length;
-  window.parent.postMessage({ type: 'bb-playlist-update', count: count }, '*');
-}
-
-
-function saveCurrentPhrase() {
-  var idx = state.shuffleOrder[state.current];
-  var phrase = state.phrases[idx];
-  if (!phrase) return;
-  var btn = document.getElementById('btn-save');
-  toggleSave(phrase, btn);
-  // Visual feedback
-  btn.style.color = isSaved(phrase) ? 'var(--accent)' : '';
-}
-
 function buildQueue() {
-  var list = document.getElementById('queue-list');
-  list.innerHTML = '';
-  var total = state.phrases.length;
-
-  document.getElementById('queue-label').textContent =
-    state.sourceType === 'playlist' ? 'Playlist queue' : 'Chapter queue';
-  document.getElementById('queue-count').textContent = total + ' phrases';
-
-  state.shuffleOrder.forEach(function(phraseIdx, queuePos) {
-    var p = state.phrases[phraseIdx];
-    if (!p) return;
-
-    var isCurrent = queuePos === state.current;
-    var isDone = queuePos < state.current;
-    var cls = 'queue-item ' + (isCurrent ? 'qi-active' : isDone ? 'qi-done' : 'qi-pending');
-
-    var sourceHtml = state.sourceType === 'playlist' && p.Chapter_Title
-      ? '<div class="qi-source">' + p.Chapter_Title + (p.Book ? ' · ' + p.Book : '') + '</div>'
-      : '';
-
-    var item = document.createElement('div');
-    item.className = cls;
-    item.id = 'qi-' + queuePos;
-    item.innerHTML =
-      '<div class="qi-num">' + (queuePos + 1) + '</div>' +
-      '<div class="qi-text">' +
-        '<div class="qi-ru">' + (p.Russian || '') + '</div>' +
-        '<div class="qi-en">' + (p.English || '') + '</div>' +
-        sourceHtml +
-      '</div>' +
-      '<div class="qi-heart" data-idx="' + phraseIdx + '">' +
-        (isSaved(p) ? '♥' : '♡') +
-      '</div>';
-
-    item.querySelector('.qi-heart').addEventListener('click', (function(phrase, btn) {
-      return function(e) {
-        e.stopPropagation();
-        toggleSave(phrase, btn);
-      };
-    })(p, item.querySelector('.qi-heart')));
-
-    item.addEventListener('click', (function(pos) {
-      return function() { jumpToPhrase(pos); };
-    })(queuePos));
-
+  var list=document.getElementById('queue-list');
+  list.innerHTML='';
+  document.getElementById('queue-label').textContent  = state.sourceType==='playlist'?'Playlist queue':'Chapter queue';
+  document.getElementById('queue-count').textContent  = state.phrases.length+' phrases';
+  state.shuffleOrder.forEach(function(phraseIdx,queuePos){
+    var p=state.phrases[phraseIdx]; if(!p) return;
+    var isCurrent=queuePos===state.current, isDone=queuePos<state.current;
+    var cls='queue-item '+(isCurrent?'qi-active':isDone?'qi-done':'qi-pending');
+    var item=document.createElement('div');
+    item.className=cls; item.id='qi-'+queuePos;
+    item.innerHTML='<div class="qi-num">'+(queuePos+1)+'</div>'+
+      '<div class="qi-text"><div class="qi-ru">'+(p.Russian||'')+'</div><div class="qi-en">'+(p.English||'')+'</div></div>'+
+      '<div class="qi-heart">'+(isSaved(p)?'♥':'♡')+'</div>';
+    item.querySelector('.qi-heart').addEventListener('click',(function(ph,btn){return function(e){e.stopPropagation();toggleSave(ph,btn);};})(p,item.querySelector('.qi-heart')));
+    item.addEventListener('click',(function(pos){return function(){jumpToPhrase(pos);};})(queuePos));
     list.appendChild(item);
   });
 }
-
 function scrollQueueToCurrent() {
-  var el = document.getElementById('qi-' + state.current);
-  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  var el=document.getElementById('qi-'+state.current);
+  if(el) el.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 
 // ── INIT ──
-document.addEventListener('DOMContentLoaded', function() {
-  initFromGlide();
-});
+document.addEventListener('DOMContentLoaded', function() { initFromGlide(); });
 </script>
 </body>
 </html>
