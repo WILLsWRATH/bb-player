@@ -692,12 +692,12 @@ function updateActive() {
 
 function navigateTo(bookName) {
   var url = URLs[bookName];
-  if (!url) return;
+  if (url) {
 
   /* 1. postMessage — Glide listens for this to handle navigation internally */
   try {
-    window.parent.postMessage({ type: 'bb-navigate', url: url }, '*');
-  } catch(e) {}
+      window.parent.postMessage({ type: 'bb-navigate', url: url }, '*');
+    } catch(e) {}
 
   /* 2. Fallback chain — try every exit route after a short delay */
   setTimeout(function() {
