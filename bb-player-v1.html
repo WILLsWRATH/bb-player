@@ -638,7 +638,7 @@ function initFromGlide() {
       return r.text();
     })
     .then(function(csv) {
-      var phrases = parseCSV(csv, chapterTitle);
+          var phrases = parseCSV(csv, chapterTitle, bookName);
       if (phrases.length === 0) {
         document.getElementById('header-count').textContent = 'No phrases found';
         return;
@@ -685,7 +685,9 @@ function parseCSV(csv, chapterFilter) {
     var chapter = (cols[idx['Chapter_Title']] || '').trim();
     // Decode URI encoding in chapter filter param
     var filterClean = decodeURIComponent(chapterFilter).trim();
-    if (chapter !== filterClean) continue;
+        if (chapter !== filterClean) continue;
+    var rowBook = (cols[idx['Book']] || '').trim();
+    if (bookFilter && rowBook !== bookFilter) continue;
     
     phrases.push({
       Russian:      cols[idx['Russian']]      || '',
