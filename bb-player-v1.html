@@ -2,775 +2,203 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Black Book Player</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
 <style>
-:root{
-  --primary:#8B0000;--primary-dim:rgba(139,0,0,0.15);
-  --secondary:#B8A060;--secondary-dim:rgba(184,160,96,0.12);
-  --bg:#0A0A0A;--surface:rgba(255,255,255,0.04);--surface2:rgba(255,255,255,0.07);
-  --border:rgba(255,255,255,0.09);--border2:rgba(255,255,255,0.04);
-  --text:#F5F0E8;--text2:rgba(245,240,232,0.55);--text3:rgba(245,240,232,0.28);
-  --gold:#B8A060;--gold-bright:#D4B97A;
-}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-html,body{height:100%;}
-body{
-  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;
-  background:var(--bg);color:var(--text);
-  display:flex;flex-direction:column;overflow:hidden;height:100dvh;
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #0A0A0A;
+  color: #E8E8E8;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
-/* ── BOOK TEXTURES ── */
-body.theme-black .bg-texture{
-  position:fixed;inset:0;z-index:0;pointer-events:none;
-  background:
-    radial-gradient(ellipse at 30% 0%,rgba(80,20,0,0.4) 0%,transparent 55%),
-    radial-gradient(ellipse at 80% 100%,rgba(60,0,0,0.35) 0%,transparent 50%),
-    #0A0808;
+/* Header */
+header {
+  background: rgba(10,10,10,0.98);
+  border-bottom: 1px solid rgba(160,160,160,0.12);
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
-body.theme-black .bg-texture::after{
-  content:'';position:absolute;inset:0;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-  background-size:200px 200px;
-}
-body.theme-red .bg-texture{
-  position:fixed;inset:0;z-index:0;pointer-events:none;
-  background:
-    radial-gradient(ellipse at 20% 10%,rgba(160,20,20,0.9) 0%,transparent 45%),
-    radial-gradient(ellipse at 85% 85%,rgba(80,0,0,1) 0%,transparent 50%),
-    radial-gradient(ellipse at 50% 50%,rgba(120,10,10,0.95) 0%,transparent 70%),
-    #580000;
-}
-body.theme-red .bg-texture::after{
-  content:'';position:absolute;inset:0;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.45' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
-  background-size:200px 200px;
-}
-body.theme-wall .bg-texture{
-  position:fixed;inset:0;z-index:0;pointer-events:none;
-  background:#F2EDE5;
-}
-body.theme-wall .bg-texture::after{
-  content:'';position:absolute;inset:0;
-  background-image:
-    repeating-linear-gradient(0deg,transparent,transparent 27px,rgba(0,150,160,0.18) 27px,rgba(0,150,160,0.18) 28.5px),
-    repeating-linear-gradient(90deg,transparent,transparent 27px,rgba(0,150,160,0.12) 27px,rgba(0,150,160,0.12) 28.5px);
-}
-body.theme-vocab .bg-texture{
-  position:fixed;inset:0;z-index:0;pointer-events:none;
-  background:
-    radial-gradient(ellipse at 50% 20%,rgba(30,30,80,0.9) 0%,transparent 60%),
-    #070712;
+header h1 {
+  font-family: 'Cinzel', serif;
+  font-size: 19px;
+  letter-spacing: 5px;
+  color: #C8A070;
+  text-transform: uppercase;
 }
 
-/* SCROLLABLE CONTENT */
-.scroll-body{
-  position:relative;z-index:1;
-  flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;
-  display:flex;flex-direction:column;
+/* Main Player */
+.player-container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 20px;
 }
-::-webkit-scrollbar{width:2px;}
-::-webkit-scrollbar-track{background:transparent;}
-::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:2px;}
 
-/* ── HEADER ── */
-.header{padding:20px 22px 16px;flex-shrink:0;}
-.header-eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
-.book-indicator{
-  font-family:'Cinzel',serif;font-size:8px;font-weight:600;letter-spacing:.15em;
-  text-transform:uppercase;padding:3px 10px;border-radius:0;
-  border:1px solid currentColor;opacity:.7;
+/* Phrase Card */
+.phrase-card {
+  background: rgba(255,255,255,0.035);
+  border: 1px solid rgba(160,160,160,0.18);
+  border-radius: 16px;
+  padding: 36px 28px;
+  margin-bottom: 32px;
+  text-align: center;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.7);
 }
-.book-indicator-black{color:var(--gold);border-color:rgba(184,160,96,0.4);}
-.book-indicator-red{color:rgba(255,220,130,0.8);border-color:rgba(255,220,130,0.3);}
-.book-indicator-wall{color:#1A3A3B;border-color:rgba(0,100,110,0.4);}
-.book-indicator-vocab{color:rgba(130,170,240,0.8);border-color:rgba(130,170,240,0.3);}
-.header-ornament{flex:1;height:.5px;background:linear-gradient(90deg,var(--border),transparent);}
-.phrase-counter{font-size:10px;letter-spacing:.06em;color:var(--text3);}
+.phrase-russian {
+  font-size: 32px;
+  line-height: 1.3;
+  margin-bottom: 14px;
+  font-weight: 300;
+}
+.phrase-english {
+  font-size: 19px;
+  color: #C8A070;
+  margin-bottom: 8px;
+}
+.phrase-romanization {
+  font-size: 16px;
+  color: rgba(255,255,255,0.55);
+  font-style: italic;
+}
 
-.chapter-name{
-  font-family:'Cormorant Garamond',serif;
-  font-size:26px;font-weight:300;font-style:italic;
-  letter-spacing:.01em;line-height:1.2;
-  color:var(--text);margin-bottom:4px;
+/* Voice Selector */
+.voice-selector {
+  display: flex;
+  background: rgba(255,255,255,0.06);
+  border-radius: 30px;
+  padding: 5px;
+  margin: 24px 0 36px;
 }
-body.theme-black .chapter-name{
-  background:linear-gradient(135deg,#C8C8C8 0%,#E8E8E8 30%,#FFFFFF 50%,#D0D0D0 70%,#A0A0A0 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+.voice-btn {
+  flex: 1;
+  padding: 14px;
+  border-radius: 26px;
+  text-align: center;
+  font-size: 15px;
+  transition: all 0.3s;
 }
-body.theme-red .chapter-name{
-  background:linear-gradient(135deg,#F0D070 0%,#FFE090 40%,#C9960A 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+.voice-btn.active {
+  background: #8B1A1A;
+  color: white;
+  box-shadow: 0 4px 15px rgba(139,26,26,0.5);
 }
-body.theme-wall .chapter-name{color:#0D2526;}
-body.theme-vocab .chapter-name{color:rgba(200,220,255,0.9);}
 
-/* ── LANG TOGGLE ── */
-.lang-toggle{display:flex;gap:0;margin:0 22px 16px;border:1px solid var(--border);border-radius:6px;overflow:hidden;flex-shrink:0;}
-.lt-btn{
-  flex:1;padding:9px 12px;background:transparent;
-  font-family:'Cinzel',serif;font-size:9px;font-weight:600;letter-spacing:.12em;
-  color:var(--text3);cursor:pointer;transition:all .2s;border:none;text-transform:uppercase;
+/* Controls */
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 36px;
+  margin: 40px 0;
 }
-.lt-btn+.lt-btn{border-left:1px solid var(--border);}
-.lt-btn.on-native{background:var(--secondary-dim);color:var(--gold-bright);}
-.lt-btn.on-foreign{background:var(--primary-dim);color:var(--primary);}
-body.theme-red .lt-btn.on-native{background:rgba(200,160,30,0.15);color:#FFD97A;}
-body.theme-red .lt-btn.on-foreign{background:rgba(0,0,0,0.2);color:rgba(255,200,200,0.8);}
-body.theme-wall .lt-btn{color:rgba(20,50,52,0.45);}
-body.theme-wall .lt-btn.on-native{background:rgba(0,120,130,0.1);color:#006870;}
-body.theme-wall .lt-btn.on-foreign{background:rgba(0,0,0,0.06);color:#1A3A3B;}
+.btn-control {
+  background: none;
+  border: none;
+  color: #E8E8E8;
+  font-size: 38px;
+  cursor: pointer;
+}
+.play-btn {
+  width: 82px;
+  height: 82px;
+  background: #8B1A1A;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 42px;
+  box-shadow: 0 10px 30px rgba(139,26,26,0.6);
+}
 
-/* ── NOW PLAYING ── */
-.now-playing{
-  padding:18px 22px 16px;
-  border-top:.5px solid var(--border);border-bottom:.5px solid var(--border);
-  flex-shrink:0;position:relative;
+/* Progress */
+.progress-container {
+  margin: 20px 0 40px;
 }
-.np-label{
-  font-family:'Cinzel',serif;font-size:7px;font-weight:600;
-  letter-spacing:.18em;text-transform:uppercase;color:var(--text3);margin-bottom:14px;
+.progress {
+  height: 4px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
+  position: relative;
 }
-body.theme-red .np-label{color:rgba(255,220,130,0.35);}
-body.theme-wall .np-label{color:rgba(20,50,52,0.35);}
+.progress-bar {
+  height: 100%;
+  width: 48%;
+  background: linear-gradient(to right, #C8A070, #E8C090);
+  border-radius: 2px;
+}
 
-.np-phrase-ru{
-  font-family:'Cormorant Garamond',serif;
-  font-size:32px;font-weight:400;line-height:1.2;
-  letter-spacing:-.01em;margin-bottom:8px;
+/* Queue */
+.queue {
+  margin-top: 20px;
 }
-body.theme-black .np-phrase-ru{color:#F8F4EC;}
-body.theme-red .np-phrase-ru{color:#FFF8E8;}
-body.theme-wall .np-phrase-ru{color:#0D2526;}
-body.theme-vocab .np-phrase-ru{color:#E8EEFF;}
-
-.np-phrase-en{
-  font-size:15px;font-weight:300;letter-spacing:.02em;
-  margin-bottom:5px;
+.queue h3 {
+  font-size: 13px;
+  letter-spacing: 2.5px;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: 14px;
 }
-body.theme-black .np-phrase-en{color:rgba(245,240,232,0.5);}
-body.theme-red .np-phrase-en{color:rgba(255,240,210,0.5);}
-body.theme-wall .np-phrase-en{color:rgba(13,37,38,0.45);}
-body.theme-vocab .np-phrase-en{color:rgba(200,220,255,0.5);}
-
-.np-phrase-rom{
-  font-family:'Cormorant Garamond',serif;font-style:italic;
-  font-size:13px;font-weight:300;letter-spacing:.03em;margin-bottom:14px;
+.queue-item {
+  padding: 16px 20px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 12px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
 }
-body.theme-black .np-phrase-rom{color:rgba(184,160,96,0.5);}
-body.theme-red .np-phrase-rom{color:rgba(255,200,80,0.4);}
-body.theme-wall .np-phrase-rom{color:rgba(0,120,130,0.4);}
-body.theme-vocab .np-phrase-rom{color:rgba(130,170,240,0.45);}
-
-.voice-indicators{display:flex;gap:8px;flex-wrap:wrap;}
-.vi{
-  display:flex;align-items:center;gap:6px;padding:4px 12px;
-  border-radius:0;border:1px solid var(--border);transition:all .25s;
-  font-family:'Cinzel',serif;
-}
-.vi.active-native{border-color:var(--gold);background:rgba(184,160,96,0.08);}
-.vi.active-foreign{border-color:var(--primary);background:var(--primary-dim);}
-.vi.skipped{opacity:.2;}
-.vi-dot{width:4px;height:4px;border-radius:50%;background:var(--text3);flex-shrink:0;}
-.vi.active-native .vi-dot{background:var(--gold);}
-.vi.active-foreign .vi-dot{background:var(--primary);}
-.vi-name{font-size:9px;letter-spacing:.1em;color:var(--text3);text-transform:uppercase;}
-.vi.active-native .vi-name{color:var(--gold-bright);}
-.vi.active-foreign .vi-name{color:var(--primary);}
-body.theme-red .vi.active-native{border-color:#F0C040;background:rgba(200,160,20,0.1);}
-body.theme-red .vi.active-native .vi-dot{background:#F0C040;}
-body.theme-red .vi.active-native .vi-name{color:#F8D060;}
-
-/* ── PROGRESS ── */
-.progress-section{padding:10px 22px 6px;flex-shrink:0;}
-.progress-track{
-  width:100%;height:2px;
-  background:var(--border);border-radius:0;margin-bottom:6px;
-  cursor:pointer;position:relative;
-}
-.progress-fill{height:100%;border-radius:0;width:0%;transition:width .1s linear;}
-.fill-native{background:linear-gradient(90deg,var(--gold),var(--gold-bright));}
-.fill-foreign{background:var(--primary);}
-body.theme-red .fill-native{background:linear-gradient(90deg,#C9960A,#F0C040);}
-body.theme-wall .fill-native{background:#006870;}
-body.theme-wall .fill-foreign{background:#1A3A3B;}
-.progress-times{display:flex;justify-content:space-between;font-family:'Cinzel',serif;font-size:9px;letter-spacing:.06em;color:var(--text3);}
-
-/* ── CONTROLS ── */
-.controls{
-  display:flex;align-items:center;justify-content:center;
-  gap:0;padding:10px 22px 18px;flex-shrink:0;
-}
-.ctrl-btn{
-  background:transparent;border:none;cursor:pointer;
-  padding:10px 14px;display:flex;align-items:center;justify-content:center;
-  transition:opacity .15s;
-}
-.ctrl-btn:active{opacity:.5;}
-.ctrl-btn svg{fill:var(--text3);width:18px;height:18px;display:block;}
-.ctrl-btn.active svg{fill:var(--gold);}
-.ctrl-btn.stroke-icon svg{fill:none;stroke:var(--text3);stroke-width:1.5;}
-.ctrl-btn.stroke-icon.active svg{stroke:var(--gold);}
-body.theme-red .ctrl-btn.active svg{fill:#F0C040;}
-body.theme-red .ctrl-btn.stroke-icon.active svg{stroke:#F0C040;}
-body.theme-wall .ctrl-btn svg{fill:rgba(13,37,38,0.4);}
-body.theme-wall .ctrl-btn.active svg{fill:#006870;}
-body.theme-wall .ctrl-btn.stroke-icon svg{fill:none;stroke:rgba(13,37,38,0.4);}
-body.theme-wall .ctrl-btn.stroke-icon.active svg{stroke:#006870;}
-
-/* PLAY BUTTON — the centrepiece */
-.play-wrap{padding:0 12px;}
-.play-main{
-  width:64px;height:64px;border-radius:50%;
-  border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;
-  transition:transform .1s,opacity .15s;flex-shrink:0;position:relative;
-}
-.play-main:active{transform:scale(.92);}
-.play-main svg{width:18px;height:18px;margin-left:3px;}
-.play-main.is-playing svg{margin-left:0;}
-/* Outer ring */
-.play-main::before{
-  content:'';position:absolute;inset:-4px;border-radius:50%;
-  border:1px solid rgba(255,255,255,0.12);
-  transition:border-color .3s;
-}
-.play-main.is-playing::before{border-color:rgba(255,255,255,0.25);}
-
-body.theme-black .play-main{
-  background:linear-gradient(145deg,#6B0000,#9B0000,#7B0000);
-  box-shadow:0 0 30px rgba(139,0,0,0.5),inset 0 1px 0 rgba(255,100,100,0.2);
-}
-body.theme-black .play-main svg{fill:#F8E8D0;}
-body.theme-red .play-main{
-  background:linear-gradient(145deg,#8A6200,#C9960A,#A07000);
-  box-shadow:0 0 30px rgba(200,150,10,0.4),inset 0 1px 0 rgba(255,220,100,0.25);
-}
-body.theme-red .play-main svg{fill:#FFF8E0;}
-body.theme-wall .play-main{
-  background:linear-gradient(145deg,#004850,#006870,#005060);
-  box-shadow:0 0 24px rgba(0,100,110,0.35),inset 0 1px 0 rgba(100,220,230,0.15);
-}
-body.theme-wall .play-main svg{fill:#F2EDE5;}
-body.theme-vocab .play-main{
-  background:linear-gradient(145deg,#2A5A9A,#4A80C0,#2A5A9A);
-  box-shadow:0 0 28px rgba(74,128,200,0.4),inset 0 1px 0 rgba(150,200,255,0.2);
-}
-body.theme-vocab .play-main svg{fill:#E8F0FF;}
-
-/* ── UNLOCK BUTTON — elegant ── */
-.unlock-bar{padding:0 22px 16px;flex-shrink:0;}
-.unlock-btn{
-  display:flex;align-items:center;justify-content:center;gap:10px;
-  width:100%;padding:13px 20px;
-  background:transparent;color:var(--gold-bright);
-  border:1px solid rgba(184,160,96,0.4);border-radius:0;
-  cursor:pointer;font-family:'Cinzel',serif;font-size:10px;
-  font-weight:600;letter-spacing:.14em;text-decoration:none;
-  text-align:center;text-transform:uppercase;
-  transition:background .2s,border-color .2s;
-}
-.unlock-btn:active{background:rgba(184,160,96,0.08);}
-.unlock-btn::before,.unlock-btn::after{
-  content:'✦';font-size:8px;opacity:.6;
-}
-body.theme-red .unlock-btn{color:#F0C040;border-color:rgba(200,160,20,0.4);}
-body.theme-red .unlock-btn:active{background:rgba(200,160,20,0.08);}
-body.theme-wall .unlock-btn{color:#006870;border-color:rgba(0,104,112,0.35);}
-body.theme-wall .unlock-btn::before,body.theme-wall .unlock-btn::after{color:#006870;}
-body.theme-vocab .unlock-btn{color:rgba(150,190,255,0.8);border-color:rgba(100,150,220,0.3);}
-
-/* ── CHAPTER NAV ── */
-.chapter-nav{flex-shrink:0;border-top:.5px solid var(--border);}
-.chapter-nav-header{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:11px 22px;cursor:pointer;user-select:none;
-}
-.chapter-nav-label{
-  font-family:'Cinzel',serif;font-size:8px;font-weight:600;
-  letter-spacing:.16em;text-transform:uppercase;color:var(--text3);
-}
-body.theme-wall .chapter-nav-label{color:rgba(13,37,38,0.4);}
-.chapter-nav-current{
-  font-family:'Cormorant Garamond',serif;font-style:italic;
-  font-size:13px;color:var(--text2);
-  max-width:55%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-}
-body.theme-wall .chapter-nav-current{color:rgba(13,37,38,0.55);}
-.chapter-nav-toggle{font-size:10px;color:var(--text3);flex-shrink:0;transition:transform .2s;}
-.chapter-nav-toggle.open{transform:rotate(180deg);}
-.chapter-nav-list{overflow:hidden;max-height:0;transition:max-height .3s ease;}
-.chapter-nav-list.open{max-height:280px;overflow-y:auto;}
-.chapter-nav-item{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:11px 22px;cursor:pointer;border-top:.5px solid var(--border2);
-  transition:background .1s;
-}
-.chapter-nav-item:active{background:var(--surface);}
-.chapter-nav-item.cni-active{background:var(--surface);}
-.cni-title{
-  font-family:'Cormorant Garamond',serif;
-  font-size:15px;font-weight:400;color:var(--text2);
-}
-.chapter-nav-item.cni-active .cni-title{color:var(--gold-bright);font-style:italic;}
-body.theme-red .chapter-nav-item.cni-active .cni-title{color:#F0C040;}
-body.theme-wall .cni-title{color:rgba(13,37,38,0.6);}
-body.theme-wall .chapter-nav-item.cni-active .cni-title{color:#006870;}
-.cni-count{
-  font-family:'Cinzel',serif;font-size:9px;letter-spacing:.08em;color:var(--text3);
-}
-body.theme-wall .cni-count{color:rgba(13,37,38,0.3);}
-
-/* ── QUEUE ── */
-.queue-section{
-  flex:1;border-top:.5px solid var(--border);
-  overflow-y:auto;-webkit-overflow-scrolling:touch;min-height:0;
-}
-.queue-header{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:10px 22px 8px;position:sticky;top:0;background:var(--bg);
-  z-index:2;border-bottom:.5px solid var(--border2);
-}
-/* queue-header bg matches theme */
-body.theme-red .queue-header{background:#580000;}
-body.theme-wall .queue-header{background:#F2EDE5;}
-body.theme-vocab .queue-header{background:#070712;}
-
-.queue-header-label{
-  font-family:'Cinzel',serif;font-size:8px;font-weight:600;
-  letter-spacing:.14em;text-transform:uppercase;color:var(--text3);
-}
-body.theme-wall .queue-header-label{color:rgba(13,37,38,0.35);}
-.queue-phrase-count{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.06em;color:var(--text3);}
-body.theme-wall .queue-phrase-count{color:rgba(13,37,38,0.3);}
-
-.queue-item{
-  display:flex;align-items:center;gap:14px;
-  padding:11px 22px;border-bottom:.5px solid var(--border2);
-  cursor:pointer;transition:background .1s;
-}
-.queue-item:active{background:var(--surface);}
-.queue-item.qi-active{background:var(--surface);}
-.queue-item.qi-done{opacity:.25;}
-.queue-item.qi-pending{opacity:.5;}
-body.theme-wall .queue-item.qi-active{background:rgba(0,0,0,0.04);}
-body.theme-wall .queue-item:active{background:rgba(0,0,0,0.04);}
-
-.qi-heart{
-  width:26px;height:26px;flex-shrink:0;display:flex;align-items:center;
-  justify-content:center;font-size:14px;cursor:pointer;
-  color:rgba(255,255,255,0.2);transition:color .2s,transform .15s;
-}
-.qi-heart:active{transform:scale(1.4);}
-.qi-heart.saved{color:var(--primary);}
-body.theme-wall .qi-heart{color:rgba(13,37,38,0.2);}
-.qi-num{
-  font-family:'Cinzel',serif;font-size:9px;letter-spacing:.04em;
-  color:var(--text3);width:16px;text-align:right;flex-shrink:0;
-}
-body.theme-wall .qi-num{color:rgba(13,37,38,0.25);}
-.qi-text{flex:1;min-width:0;}
-.qi-ru{
-  font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:500;
-  color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-}
-body.theme-wall .qi-ru{color:#0D2526;}
-.qi-en{
-  font-size:11px;font-weight:300;color:var(--text3);
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px;
-}
-body.theme-wall .qi-en{color:rgba(13,37,38,0.35);}
-
-/* ── LOADING ── */
-.empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;text-align:center;gap:12px;}
-.empty-title{font-family:'Cinzel',serif;font-size:13px;letter-spacing:.1em;color:var(--text3);}
-.empty-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:var(--text3);line-height:1.6;}
-.loading-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);animation:pulse 1.4s ease-in-out infinite;display:inline-block;margin:0 4px;}
-.loading-dot:nth-child(2){animation-delay:.2s;}
-.loading-dot:nth-child(3){animation-delay:.4s;}
-@keyframes pulse{0%,80%,100%{opacity:.15;transform:scale(.7);}40%{opacity:1;transform:scale(1);}}
-
-/* Divider ornament between sections */
-.section-rule{
-  height:.5px;
-  background:linear-gradient(90deg,transparent,var(--border),transparent);
-  flex-shrink:0;
+.queue-item.active {
+  background: rgba(139,26,26,0.25);
+  border-left: 4px solid #C8A070;
 }
 </style>
 </head>
-<body class="theme-black">
-<div class="bg-texture"></div>
+<body>
+<header>
+  <h1>BLACK BOOK</h1>
+</header>
 
-<div class="scroll-body">
-
-<!-- HEADER -->
-<div class="header">
-  <div class="header-eyebrow">
-    <span class="book-indicator book-indicator-black" id="book-indicator">Black Book</span>
-    <div class="header-ornament"></div>
-    <span class="phrase-counter" id="header-count">1 of 38</span>
+<div class="player-container">
+  <div class="phrase-card">
+    <div class="phrase-russian" id="russian">Ты красивая.</div>
+    <div class="phrase-english" id="english">You're beautiful.</div>
+    <div class="phrase-romanization" id="romanization">Ty krasivaya.</div>
   </div>
-  <div class="chapter-name" id="header-title">First Impressions</div>
-</div>
 
-<!-- LANG TOGGLE -->
-<div class="lang-toggle">
-  <button class="lt-btn on-native"  id="lt-native"  onclick="toggleLang('native')">Native</button>
-  <button class="lt-btn on-foreign" id="lt-foreign" onclick="toggleLang('foreign')">Foreign</button>
-</div>
-
-<!-- NOW PLAYING -->
-<div class="now-playing">
-  <div class="np-label">Now playing</div>
-  <div class="np-phrase-ru"  id="np-ru">—</div>
-  <div class="np-phrase-en"  id="np-en"></div>
-  <div class="np-phrase-rom" id="np-rom"></div>
-  <div class="voice-indicators" id="voice-indicators"></div>
-</div>
-
-<!-- PROGRESS -->
-<div class="progress-section">
-  <div class="progress-track" id="progress-track" onclick="seekClick(event)">
-    <div class="progress-fill fill-native" id="progress-fill" style="width:0%"></div>
+  <div class="voice-selector">
+    <div class="voice-btn active" id="nativeBtn">Native • Clark</div>
+    <div class="voice-btn" id="foreignBtn">Foreign • Natasha</div>
   </div>
-  <div class="progress-times">
-    <span id="time-cur">0:00</span>
-    <span id="time-tot">0:00</span>
-  </div>
-</div>
 
-<!-- CONTROLS -->
-<div class="controls">
-  <button class="ctrl-btn stroke-icon" id="btn-loop" onclick="toggleLoop()" title="Loop">
-    <svg viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"></polyline><path d="M3 11V9a4 4 0 0 1 4-4h14"></path><polyline points="7 23 3 19 7 15"></polyline><path d="M21 13v2a4 4 0 0 1-4 4H3"></path></svg>
-  </button>
-  <button class="ctrl-btn" onclick="skipPrev()" title="Previous">
-    <svg viewBox="0 0 24 24"><polygon points="19,20 9,12 19,4" fill="currentColor"></polygon><line x1="5" y1="4" x2="5" y2="20" stroke="currentColor" stroke-width="2" fill="none"></line></svg>
-  </button>
-  <div class="play-wrap">
-    <button class="play-main" id="btn-play" onclick="togglePlay()" title="Play/Pause">
-      <svg id="play-icon" viewBox="0 0 20 20"><polygon points="4,2 18,10 4,18" fill="currentColor"></polygon></svg>
-    </button>
-  </div>
-  <button class="ctrl-btn" onclick="skipNext()" title="Next">
-    <svg viewBox="0 0 24 24"><polygon points="5,4 15,12 5,20" fill="currentColor"></polygon><line x1="19" y1="4" x2="19" y2="20" stroke="currentColor" stroke-width="2" fill="none"></line></svg>
-  </button>
-  <button class="ctrl-btn stroke-icon" id="btn-shuffle" onclick="toggleShuffle()" title="Shuffle">
-    <svg viewBox="0 0 24 24"><polyline points="16 3 21 3 21 8"></polyline><line x1="4" y1="20" x2="21" y2="3"></line><polyline points="21 16 21 21 16 21"></polyline><line x1="15" y1="15" x2="21" y2="21"></line></svg>
-  </button>
-  <button class="ctrl-btn stroke-icon" id="btn-save" onclick="saveCurrentPhrase()" title="Save">
-    <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
-  </button>
-</div>
-
-<!-- UNLOCK -->
-<div class="unlock-bar">
-  <a class="unlock-btn" href="https://willswrath.github.io/bb-player/paywall.html" target="_blank">
-    Unlock Full Access — $199 Lifetime
-  </a>
-</div>
-
-<div class="section-rule"></div>
-
-<!-- CHAPTER NAV -->
-<div class="chapter-nav" id="chapter-nav">
-  <div class="chapter-nav-header" onclick="toggleChapterNav()">
-    <span class="chapter-nav-label">Chapters</span>
-    <span class="chapter-nav-current" id="chapter-nav-current">First Impressions</span>
-    <span class="chapter-nav-toggle" id="chapter-nav-toggle">▾</span>
-  </div>
-  <div class="chapter-nav-list" id="chapter-nav-list"></div>
-</div>
-
-<!-- QUEUE -->
-<div class="queue-section">
-  <div class="queue-header">
-    <span class="queue-header-label" id="queue-label">Phrase Queue</span>
-    <span class="queue-phrase-count" id="queue-count"></span>
-  </div>
-  <div id="queue-list">
-    <div class="empty-state">
-      <div><div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div></div>
+  <div class="progress-container">
+    <div class="progress">
+      <div class="progress-bar"></div>
     </div>
   </div>
+
+  <div class="controls">
+    <button class="btn-control">⫻</button>
+    <button class="btn-control play-btn" id="playBtn">▶</button>
+    <button class="btn-control">⫻</button>
+  </div>
+
+  <div class="queue">
+    <h3>CHAPTER QUEUE</h3>
+    <!-- Populated by JS -->
+  </div>
 </div>
 
-</div><!-- end scroll-body -->
-
-<audio id="audio-native"  preload="auto"></audio>
-<audio id="audio-foreign" preload="auto"></audio>
-
 <script>
-var BOOK_CHAPTERS = {
-  'Black Book': [{title:'First Impressions',count:38},{title:'Building Connection',count:32},{title:'Everyday Romance',count:35}],
-  'Red Book':   [{title:'The Spark',count:45},{title:'Physical Escalation',count:40},{title:'Moving Forward',count:51},{title:'Passionate Moments',count:20}],
-  'The Wall':   [{title:'Anatomy Basics',count:97},{title:'Oral Pleasure',count:50},{title:'The Act',count:51},{title:'Intensity',count:55},{title:'Climax - Male',count:30},{title:'Climax - Female',count:53},{title:'Power Dynamics',count:60},{title:'Communication',count:25},{title:'Extended Play',count:64}],
-  'Vocabulary': [{title:'Essential Terms',count:48},{title:'Scenarios & Context',count:25}]
-};
-
-var VOICES = {
-  native:  [{col:'EN_M1_URL',name:'Clark'},{col:'EN_F1_URL',name:'Stephanie'}],
-  foreign: [{col:'RU_F1_URL',name:'Natasha'},{col:'RU_F2_URL',name:'Mila'},{col:'RU_M1_URL',name:'Dimitri'}]
-};
-
-var state = {
-  phrases:[],current:0,voice:'native',playing:false,
-  loop:false,shuffle:false,nativeOn:true,foreignOn:true,
-  nativeVoice:0,foreignVoice:0,
-  sourceType:'chapter',sourceTitle:'',sourceBook:'',
-  shuffleOrder:[],tickTimer:null,chapterNavOpen:false
-};
-
-var audioNative  = document.getElementById('audio-native');
-var audioForeign = document.getElementById('audio-foreign');
-var CSV_URL = 'https://docs.google.com/spreadsheets/d/17axpQxBY2jQSaDeU8uv6DGp7EiyQhyVo_ZeRJYWB_EU/export?format=csv&gid=595375825';
-
-// ── THEME ──
-var THEME_MAP = {
-  'Black Book':{cls:'theme-black',ind:'book-indicator-black'},
-  'Red Book':  {cls:'theme-red',  ind:'book-indicator-red'},
-  'The Wall':  {cls:'theme-wall', ind:'book-indicator-wall'},
-  'Vocabulary':{cls:'theme-vocab',ind:'book-indicator-vocab'}
-};
-function applyTheme(bookName) {
-  var t = THEME_MAP[bookName] || THEME_MAP['Black Book'];
-  document.body.className = t.cls;
-  var ind = document.getElementById('book-indicator');
-  ind.className = 'book-indicator ' + t.ind;
-  ind.textContent = bookName;
-  // Queue header needs bg update
-  var qh = document.querySelector('.queue-header');
-  // handled by CSS
-}
-
-// ── CHAPTER NAV ──
-function toggleChapterNav() {
-  state.chapterNavOpen = !state.chapterNavOpen;
-  document.getElementById('chapter-nav-list').classList.toggle('open', state.chapterNavOpen);
-  document.getElementById('chapter-nav-toggle').classList.toggle('open', state.chapterNavOpen);
-}
-function buildChapterNav(bookName, currentChapter) {
-  document.getElementById('chapter-nav-current').textContent = currentChapter;
-  var list = document.getElementById('chapter-nav-list');
-  list.innerHTML = '';
-  (BOOK_CHAPTERS[bookName] || []).forEach(function(ch) {
-    var div = document.createElement('div');
-    div.className = 'chapter-nav-item' + (ch.title === currentChapter ? ' cni-active' : '');
-    div.innerHTML = '<span class="cni-title">' + ch.title + '</span><span class="cni-count">' + ch.count + '</span>';
-    div.addEventListener('click', function() {
-      if (ch.title === state.sourceTitle) { toggleChapterNav(); return; }
-      loadChapter(ch.title, bookName);
-      if (state.chapterNavOpen) toggleChapterNav();
-    });
-    list.appendChild(div);
-  });
-}
-function loadChapter(chapterTitle, bookName) {
-  pause();
-  document.getElementById('header-title').textContent = chapterTitle;
-  document.getElementById('header-count').textContent = '—';
-  document.getElementById('np-ru').textContent = '—';
-  document.getElementById('np-en').textContent = '';
-  document.getElementById('np-rom').textContent = '';
-  document.getElementById('queue-list').innerHTML = '<div class="empty-state"><div><div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div></div></div>';
-  try {
-    var url = new URL(window.location.href);
-    url.searchParams.set('chapter', chapterTitle);
-    url.searchParams.set('book', bookName);
-    window.history.replaceState({}, '', url.toString());
-  } catch(e) {}
-  fetch(CSV_URL)
-    .then(function(r){if(!r.ok)throw new Error('CSV '+r.status);return r.text();})
-    .then(function(csv){
-      var phrases = parseCSV(csv, chapterTitle, bookName);
-      if (!phrases.length) {
-        document.getElementById('header-count').textContent = 'No content';
-        return;
-      }
-      loadData({phrases:phrases,sourceType:'chapter',sourceTitle:chapterTitle,sourceBook:bookName,nativeVoice:state.nativeVoice,foreignVoice:state.foreignVoice});
-      buildChapterNav(bookName, chapterTitle);
-    })
-    .catch(function(e){ document.getElementById('header-count').textContent = 'Load failed'; });
-}
-
-// ── INIT ──
-function initFromGlide() {
-  var params = new URLSearchParams(window.location.search);
-  var chapterTitle = decodeURIComponent(params.get('chapter') || 'First Impressions');
-  var bookName     = decodeURIComponent(params.get('book')    || 'Black Book');
-  state.nativeVoice  = parseInt(params.get('nv')  || '0');
-  state.foreignVoice = parseInt(params.get('fv')  || '0');
-  document.getElementById('header-title').textContent = chapterTitle;
-  applyTheme(bookName);
-  buildChapterNav(bookName, chapterTitle);
-  fetch(CSV_URL)
-    .then(function(r){if(!r.ok)throw new Error(r.status);return r.text();})
-    .then(function(csv){
-      var phrases = parseCSV(csv, chapterTitle, bookName);
-      if (!phrases.length) {
-        document.getElementById('header-count').textContent = 'No content';
-        document.getElementById('queue-list').innerHTML = '<div class="empty-state"><div class="empty-title">Not found</div><div class="empty-sub">' + chapterTitle + '</div></div>';
-        return;
-      }
-      loadData({phrases:phrases,sourceType:'chapter',sourceTitle:chapterTitle,sourceBook:bookName,nativeVoice:state.nativeVoice,foreignVoice:state.foreignVoice});
-    })
-    .catch(function(e){ document.getElementById('header-count').textContent = 'Load failed'; });
-}
-
-// ── PARSE CSV ──
-function parseCSV(csv, chapterFilter, bookFilter) {
-  var lines = csv.split('\n'); if (lines.length < 2) return [];
-  var headers = parseCSVRow(lines[0]), idx = {};
-  headers.forEach(function(h,i){idx[h.trim()]=i;});
-  var fc = chapterFilter.trim(), fb = bookFilter ? bookFilter.trim() : '';
-  var out = [];
-  for (var i = 1; i < lines.length; i++) {
-    var line = lines[i].trim(); if (!line) continue;
-    var cols = parseCSVRow(line); if (!cols || cols.length < 5) continue;
-    var rc = (cols[idx['Chapter_Title']]||'').trim();
-    var rb = (cols[idx['Book']]||'').trim();
-    if (rc.toLowerCase() !== fc.toLowerCase()) continue;
-    if (fb && rb.toLowerCase() !== fb.toLowerCase()) continue;
-    out.push({Russian:cols[idx['Russian']]||'',English:cols[idx['English']]||'',Romanization:cols[idx['Romanization']]||'',Chapter_Title:rc,Book:rb,EN_M1_URL:cols[idx['EN_M1_URL']]||'',EN_F1_URL:cols[idx['EN_F1_URL']]||'',RU_F1_URL:cols[idx['RU_F1_URL']]||'',RU_F2_URL:cols[idx['RU_F2_URL']]||'',RU_M1_URL:cols[idx['RU_M1_URL']]||''});
-  }
-  return out;
-}
-function parseCSVRow(row) {
-  var result=[],cur='',inQ=false;
-  for(var i=0;i<row.length;i++){var c=row[i];if(c==='"'){if(inQ&&row[i+1]==='"'){cur+='"';i++;}else inQ=!inQ;}else if(c===','&&!inQ){result.push(cur);cur='';}else{cur+=c;}}
-  result.push(cur);return result;
-}
-
-// ── LOAD DATA ──
-function loadData(data) {
-  if (!data||!data.phrases||!data.phrases.length){showEmpty();return;}
-  state.phrases=data.phrases;state.sourceType=data.sourceType||'chapter';
-  state.sourceTitle=data.sourceTitle||'';state.sourceBook=data.sourceBook||'';
-  state.nativeVoice=data.nativeVoice||0;state.foreignVoice=data.foreignVoice||0;
-  state.current=0;state.voice=state.nativeOn?'native':'foreign';state.shuffleOrder=buildOrder();
-  applyTheme(state.sourceBook);
-  updateHeader();updateNowPlaying();loadAudioForCurrent();buildQueue();
-}
-function showEmpty(){document.getElementById('queue-list').innerHTML='<div class="empty-state"><div class="empty-title">Nothing to play</div></div>';}
-
-// ── HEADER ──
-function updateHeader(){
-  document.getElementById('header-title').textContent=state.sourceTitle;
-  updatePhraseCount();
-}
-function updatePhraseCount(){document.getElementById('header-count').textContent=(state.current+1)+' of '+state.phrases.length;}
-
-// ── NOW PLAYING ──
-function updateNowPlaying(){
-  var idx=state.shuffleOrder[state.current],p=state.phrases[idx];if(!p)return;
-  document.getElementById('np-ru').textContent=p.Russian||'—';
-  document.getElementById('np-en').textContent=p.English||'';
-  document.getElementById('np-rom').textContent=p.Romanization||'';
-  updateVoiceIndicators();updatePhraseCount();resetProgress();
-  var sb=document.getElementById('btn-save');if(sb)sb.classList.toggle('active',isSaved(p));
-}
-function updateVoiceIndicators(){
-  var nv=VOICES.native[state.nativeVoice]||VOICES.native[0];
-  var fv=VOICES.foreign[state.foreignVoice]||VOICES.foreign[0];
-  var iN=state.voice==='native'&&state.playing,iF=state.voice==='foreign'&&state.playing;
-  var h='';
-  h+='<div class="vi'+(state.nativeOn?(iN?' active-native':''):'skipped')+'"><div class="vi-dot"></div><span class="vi-name">'+nv.name+'</span></div>';
-  h+='<div class="vi'+(state.foreignOn?(iF?' active-foreign':''):'skipped')+'"><div class="vi-dot"></div><span class="vi-name">'+fv.name+'</span></div>';
-  document.getElementById('voice-indicators').innerHTML=h;
-}
-
-// ── AUDIO ──
-function getAudioUrl(pidx,voice){var p=state.phrases[pidx];if(!p)return null;var col=voice==='native'?VOICES.native[state.nativeVoice].col:VOICES.foreign[state.foreignVoice].col;return p[col]||null;}
-function loadAudioForCurrent(){var idx=state.shuffleOrder[state.current];var nU=getAudioUrl(idx,'native'),fU=getAudioUrl(idx,'foreign');if(nU){audioNative.src=nU;audioNative.load();}if(fU){audioForeign.src=fU;audioForeign.load();}}
-function playCurrentVoice(){
-  if(state.voice==='native'){audioForeign.pause();if(state.nativeOn&&audioNative.src){audioNative.currentTime=0;audioNative.play().catch(function(){});}else{advanceVoice();return;}}
-  else{audioNative.pause();if(state.foreignOn&&audioForeign.src){audioForeign.currentTime=0;audioForeign.play().catch(function(){});}else{advanceVoice();return;}}
-  startProgressTick();updateVoiceIndicators();
-}
-audioNative.addEventListener('ended',function(){
-  if(!state.playing)return;
-  if(state.foreignOn){state.voice='foreign';var idx=state.shuffleOrder[state.current],fU=getAudioUrl(idx,'foreign');if(fU){audioForeign.src=fU;audioForeign.load();audioForeign.play().catch(function(){});updateProgressTrackColor();updateVoiceIndicators();return;}}
-  advanceVoice();
+// Basic interactivity - expand as needed
+document.getElementById('playBtn').addEventListener('click', function() {
+  this.textContent = this.textContent === '▶' ? '❚❚' : '▶';
 });
-audioForeign.addEventListener('ended',function(){if(state.playing)advanceVoice();});
-function advanceVoice(){
-  state.current++;
-  if(state.current>=state.phrases.length){if(state.loop){state.current=0;if(state.shuffle)state.shuffleOrder=shuffleArray(buildOrder());}else{state.current=state.phrases.length-1;pause();return;}}
-  state.voice=state.nativeOn?'native':'foreign';
-  loadAudioForCurrent();updateNowPlaying();buildQueue();scrollQueueToCurrent();
-  setTimeout(function(){if(state.playing)playCurrentVoice();},400);
-}
-
-// ── PROGRESS ──
-function startProgressTick(){clearInterval(state.tickTimer);state.tickTimer=setInterval(updateProgressUI,100);}
-function stopProgressTick(){clearInterval(state.tickTimer);}
-function updateProgressUI(){
-  var audio=state.voice==='native'?audioNative:audioForeign;
-  if(!audio.duration||isNaN(audio.duration))return;
-  var pct=(audio.currentTime/audio.duration)*100;
-  document.getElementById('progress-fill').style.width=Math.min(pct,100)+'%';
-  document.getElementById('time-cur').textContent=formatTime(audio.currentTime);
-  document.getElementById('time-tot').textContent=formatTime(audio.duration);
-}
-function resetProgress(){document.getElementById('progress-fill').style.width='0%';document.getElementById('time-cur').textContent='0:00';document.getElementById('time-tot').textContent='0:00';updateProgressTrackColor();}
-function updateProgressTrackColor(){document.getElementById('progress-fill').className='progress-fill '+(state.voice==='native'?'fill-native':'fill-foreign');}
-function seekClick(e){var track=document.getElementById('progress-track');var rect=track.getBoundingClientRect();var pct=Math.max(0,Math.min(1,(e.clientX-rect.left)/rect.width));var audio=state.voice==='native'?audioNative:audioForeign;if(audio.duration&&!isNaN(audio.duration))audio.currentTime=pct*audio.duration;}
-function formatTime(s){if(!s||isNaN(s))return '0:00';var m=Math.floor(s/60),sec=Math.floor(s%60);return m+':'+(sec<10?'0':'')+sec;}
-
-// ── CONTROLS ──
-function togglePlay(){if(!state.phrases.length)return;state.playing?pause():play();}
-function play(){state.playing=true;document.getElementById('btn-play').classList.add('is-playing');document.getElementById('play-icon').innerHTML='<rect x="3" y="2" width="5" height="16" rx="1" fill="currentColor"/><rect x="12" y="2" width="5" height="16" rx="1" fill="currentColor"/>';playCurrentVoice();}
-function pause(){state.playing=false;audioNative.pause();audioForeign.pause();stopProgressTick();document.getElementById('btn-play').classList.remove('is-playing');document.getElementById('play-icon').innerHTML='<polygon points="4,2 18,10 4,18" fill="currentColor"/>';updateVoiceIndicators();}
-function skipNext(){var w=state.playing;pause();state.current=Math.min(state.current+1,state.phrases.length-1);state.voice=state.nativeOn?'native':'foreign';loadAudioForCurrent();updateNowPlaying();buildQueue();scrollQueueToCurrent();if(w)setTimeout(play,100);}
-function skipPrev(){var w=state.playing;pause();state.current=Math.max(state.current-1,0);state.voice=state.nativeOn?'native':'foreign';loadAudioForCurrent();updateNowPlaying();buildQueue();scrollQueueToCurrent();if(w)setTimeout(play,100);}
-function jumpToPhrase(i){var w=state.playing;pause();state.current=i;state.voice=state.nativeOn?'native':'foreign';loadAudioForCurrent();updateNowPlaying();buildQueue();if(w)setTimeout(play,100);}
-function toggleLang(which){
-  if(which==='native'){state.nativeOn=!state.nativeOn;if(!state.nativeOn&&!state.foreignOn)state.foreignOn=true;}
-  else{state.foreignOn=!state.foreignOn;if(!state.nativeOn&&!state.foreignOn)state.nativeOn=true;}
-  document.getElementById('lt-native').className='lt-btn'+(state.nativeOn?' on-native':'');
-  document.getElementById('lt-foreign').className='lt-btn'+(state.foreignOn?' on-foreign':'');
-  updateVoiceIndicators();
-}
-function toggleLoop(){state.loop=!state.loop;document.getElementById('btn-loop').classList.toggle('active',state.loop);}
-function toggleShuffle(){state.shuffle=!state.shuffle;document.getElementById('btn-shuffle').classList.toggle('active',state.shuffle);state.shuffleOrder=buildOrder();if(state.shuffle)state.shuffleOrder=shuffleArray(state.shuffleOrder);state.current=0;loadAudioForCurrent();updateNowPlaying();buildQueue();}
-function buildOrder(){var a=[];for(var i=0;i<state.phrases.length;i++)a.push(i);return a;}
-function shuffleArray(a){var b=a.slice();for(var i=b.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=b[i];b[i]=b[j];b[j]=t;}return b;}
-
-// ── SAVE ──
-function getSaved(){try{return JSON.parse(localStorage.getItem('bb_saved')||'{}');}catch(e){return {};}}
-function isSaved(p){return !!getSaved()[p.Russian];}
-function toggleSave(phrase,btn){
-  var saved=getSaved();
-  if(saved[phrase.Russian]){delete saved[phrase.Russian];btn.classList.remove('saved');btn.textContent='♡';}
-  else{saved[phrase.Russian]={...phrase,savedAt:Date.now()};btn.classList.add('saved');btn.textContent='♥';btn.style.transform='scale(1.4)';setTimeout(function(){btn.style.transform='';},200);}
-  localStorage.setItem('bb_saved',JSON.stringify(saved));
-  try{window.parent.postMessage({type:'bb-playlist-update',count:Object.keys(saved).length},'*');}catch(e){}
-}
-function saveCurrentPhrase(){var idx=state.shuffleOrder[state.current],p=state.phrases[idx];if(!p)return;toggleSave(p,document.getElementById('btn-save'));}
-
-// ── QUEUE ──
-function buildQueue(){
-  var list=document.getElementById('queue-list');list.innerHTML='';
-  document.getElementById('queue-label').textContent='Phrase Queue';
-  document.getElementById('queue-count').textContent=state.phrases.length+' phrases';
-  state.shuffleOrder.forEach(function(phraseIdx,queuePos){
-    var p=state.phrases[phraseIdx];if(!p)return;
-    var isCurrent=queuePos===state.current,isDone=queuePos<state.current;
-    var item=document.createElement('div');
-    item.className='queue-item '+(isCurrent?'qi-active':isDone?'qi-done':'qi-pending');
-    item.id='qi-'+queuePos;
-    item.innerHTML='<div class="qi-num">'+(queuePos+1)+'</div><div class="qi-text"><div class="qi-ru">'+(p.Russian||'')+'</div><div class="qi-en">'+(p.English||'')+'</div></div><div class="qi-heart">'+(isSaved(p)?'♥':'♡')+'</div>';
-    item.querySelector('.qi-heart').addEventListener('click',(function(ph,btn){return function(e){e.stopPropagation();toggleSave(ph,btn);};})(p,item.querySelector('.qi-heart')));
-    item.addEventListener('click',(function(pos){return function(){jumpToPhrase(pos);};})(queuePos));
-    list.appendChild(item);
-  });
-}
-function scrollQueueToCurrent(){var el=document.getElementById('qi-'+state.current);if(el)el.scrollIntoView({behavior:'smooth',block:'nearest'});}
-
-document.addEventListener('DOMContentLoaded',function(){initFromGlide();});
 </script>
 </body>
 </html>
