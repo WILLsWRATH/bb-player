@@ -3,13 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Black Book Player</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
+<title>Black Book — Intimate Language</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+
+:root {
+  --gold-hi: #FFE8A0;
+  --gold-mid: #D4AF60;
+  --gold-lo: #8A6E2A;
+  --gold-dim: rgba(212,175,96,0.35);
+  --shelf: #1C140C;
+}
 
 body {
-  background: #0D0D0D;
+  background: #080808;
   font-family: 'Cormorant Garamond', Georgia, serif;
   overflow: hidden;
   height: 100vh;
@@ -17,14 +25,244 @@ body {
   flex-direction: column;
   align-items: center;
   user-select: none;
+  position: relative;
 }
 
+/* ── DUST COVER ── */
+.dust-cover {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #050505;
+  overflow: hidden;
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.dust-cover.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(1.04);
+}
+
+.dc-bg {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(180,140,40,0.18) 0%, transparent 55%),
+    radial-gradient(ellipse at 20% 100%, rgba(100,60,0,0.2) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 100%, rgba(100,60,0,0.2) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* ornate corner filigree */
+.dc-corner {
+  position: absolute;
+  width: 80px; height: 80px;
+  opacity: 0.45;
+}
+.dc-corner.tl { top: 18px; left: 18px; }
+.dc-corner.tr { top: 18px; right: 18px; transform: scaleX(-1); }
+.dc-corner.bl { bottom: 18px; left: 18px; transform: scaleY(-1); }
+.dc-corner.br { bottom: 18px; right: 18px; transform: scale(-1,-1); }
+
+.dc-border {
+  position: absolute;
+  inset: 14px;
+  border: 0.5px solid rgba(212,175,96,0.22);
+  pointer-events: none;
+}
+.dc-border-inner {
+  position: absolute;
+  inset: 20px;
+  border: 0.5px solid rgba(212,175,96,0.1);
+  pointer-events: none;
+}
+
+.dc-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 0 28px;
+  /* prevent overflow on small screens */
+  max-height: 100vh;
+  overflow: visible;
+}
+
+.dc-ornament-top {
+  width: 100px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-mid), transparent);
+  margin-bottom: 14px;
+}
+
+.dc-eyebrow {
+  font-family: 'Cinzel', serif;
+  font-size: 7.5px;
+  letter-spacing: 5px;
+  color: var(--gold-lo);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.dc-title-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 6px;
+  /* enough room for the frame to breathe without clipping */
+  padding: 14px 24px;
+}
+
+.dc-title-gold-frame {
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--gold-dim);
+  pointer-events: none;
+}
+.dc-title-gold-frame::before,
+.dc-title-gold-frame::after {
+  content: '';
+  position: absolute;
+  width: 10px; height: 10px;
+  border: 1px solid var(--gold-mid);
+}
+.dc-title-gold-frame::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+.dc-title-gold-frame::after  { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
+.dc-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(28px, 8vw, 44px);
+  font-weight: 700;
+  /* reduce letter-spacing so it doesn't clip on narrow screens */
+  letter-spacing: clamp(4px, 2vw, 10px);
+  text-transform: uppercase;
+  background: linear-gradient(165deg, #FFF8DC 0%, var(--gold-hi) 20%, var(--gold-mid) 45%, var(--gold-hi) 65%, #C8960A 85%, var(--gold-mid) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-align: center;
+  line-height: 1.1;
+}
+
+.dc-subtitle {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 13px;
+  letter-spacing: 3px;
+  color: rgba(212,175,96,0.45);
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
+.dc-rule {
+  width: 160px;
+  height: 0.5px;
+  background: linear-gradient(90deg, transparent, var(--gold-mid), transparent);
+  margin: 14px 0;
+}
+
+.dc-edition {
+  font-family: 'Cinzel', serif;
+  font-size: 8px;
+  letter-spacing: 3px;
+  color: rgba(212,175,96,0.5);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Purchase buttons */
+.dc-purchase {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 300px;
+  margin-bottom: 20px;
+}
+
+.btn-purchase {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 11px 20px;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.btn-purchase::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.06) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+.btn-primary {
+  background: linear-gradient(170deg, #2A1D00 0%, #1A1100 50%, #2A1D00 100%);
+  border: 1px solid rgba(212,175,96,0.6);
+}
+.btn-primary:hover { border-color: var(--gold-mid); box-shadow: 0 0 20px rgba(212,175,96,0.15); }
+
+.btn-secondary {
+  background: linear-gradient(170deg, #0E0E0E 0%, #080808 100%);
+  border: 0.5px solid rgba(212,175,96,0.25);
+}
+.btn-secondary:hover { border-color: rgba(212,175,96,0.45); }
+
+.btn-label {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold-hi);
+  margin-bottom: 2px;
+}
+.btn-price {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--gold-mid);
+  letter-spacing: 1px;
+}
+.btn-desc {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 11px;
+  color: rgba(212,175,96,0.45);
+  letter-spacing: 1px;
+}
+
+.dc-enter-link {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: rgba(255,255,255,0.2);
+  cursor: pointer;
+  transition: color 0.3s;
+  border-bottom: 0.5px solid rgba(255,255,255,0.08);
+  padding-bottom: 2px;
+}
+.dc-enter-link:hover { color: rgba(212,175,96,0.5); }
+
+/* ── MAIN SHELF ── */
 .app-header {
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 32px 24px 18px;
+  padding: 20px 24px 10px;
   flex-shrink: 0;
 }
 
@@ -32,12 +270,12 @@ body {
   display: flex;
   align-items: center;
   gap: 11px;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
 .app-name {
   font-family: 'Cinzel', serif;
-  font-size: 17px;
+  font-size: 15px;
   font-weight: 600;
   letter-spacing: 8px;
   text-transform: uppercase;
@@ -46,7 +284,7 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: shimmer 12s linear infinite;
+  animation: shimmer 14s linear infinite;
 }
 
 @keyframes shimmer {
@@ -55,29 +293,28 @@ body {
 }
 
 .app-tagline {
-  font-family: 'Cormorant Garamond', serif;
   font-style: italic;
-  font-size: 11px;
+  font-size: 10px;
   letter-spacing: 3px;
-  color: rgba(255,255,255,0.2);
-  margin-bottom: 20px;
+  color: rgba(255,255,255,0.16);
+  margin-bottom: 16px;
 }
 
 .lang-selector {
   display: flex;
-  background: rgba(255,255,255,0.04);
-  border: 0.5px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.03);
+  border: 0.5px solid rgba(255,255,255,0.08);
   border-radius: 24px;
   padding: 3px;
   gap: 2px;
 }
 
 .lang-btn {
-  padding: 5px 16px;
+  padding: 5px 14px;
   font-family: 'Cinzel', serif;
-  font-size: 9px;
+  font-size: 8px;
   letter-spacing: 2px;
-  color: rgba(255,255,255,0.28);
+  color: rgba(255,255,255,0.25);
   cursor: pointer;
   transition: all 0.3s;
   border-radius: 20px;
@@ -85,8 +322,8 @@ body {
 }
 
 .lang-btn.active {
-  background: rgba(100,0,0,0.55);
-  color: rgba(255,255,255,0.8);
+  background: rgba(100,0,0,0.5);
+  color: rgba(255,255,255,0.75);
 }
 
 .shelf-section {
@@ -101,11 +338,11 @@ body {
 
 .shelf-label {
   font-family: 'Cinzel', serif;
-  font-size: 8px;
+  font-size: 7px;
   letter-spacing: 5px;
   text-transform: uppercase;
-  color: rgba(255,255,255,0.12);
-  margin-bottom: 18px;
+  color: rgba(255,255,255,0.1);
+  margin-bottom: 8px;
 }
 
 .carousel-wrap {
@@ -117,27 +354,21 @@ body {
 
 .carousel {
   display: flex;
-  gap: 20px;
-  padding: 20px 0 28px;
+  gap: 18px;
+  padding: 12px 0 18px;
   transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   will-change: transform;
   cursor: grab;
 }
-
-.carousel.dragging {
-  transition: none;
-  cursor: grabbing;
-}
+.carousel.dragging { transition: none; cursor: grabbing; }
 
 .book-card {
-  flex: 0 0 180px;
-  height: 256px;
+  flex: 0 0 160px;
+  height: 230px;
   position: relative;
   transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.45s ease, filter 0.45s ease;
-  overflow: visible;
   cursor: pointer;
   transform-origin: bottom center;
-  pointer-events: auto !important;
   touch-action: manipulation;
 }
 
@@ -148,7 +379,7 @@ body {
 
 .book-card:not(.active) {
   transform: scale(0.87) translateY(12px);
-  filter: brightness(0.45) saturate(0.7);
+  filter: brightness(0.42) saturate(0.65);
 }
 
 .book-cover {
@@ -159,134 +390,63 @@ body {
   overflow: hidden;
 }
 
+/* spine shadow */
 .book-cover::before {
   content: '';
   position: absolute;
   left: 0; top: 0;
   width: 12px; height: 100%;
-  background: linear-gradient(to right, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 70%, transparent 100%);
+  background: linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.1) 70%, transparent 100%);
   z-index: 10;
   pointer-events: none;
 }
-
+/* page edge */
 .book-cover::after {
   content: '';
   position: absolute;
   right: 0; top: 0;
   width: 4px; height: 100%;
-  background: linear-gradient(to left, rgba(255,255,255,0.07) 0%, transparent 100%);
+  background: linear-gradient(to left, rgba(255,255,255,0.06) 0%, transparent 100%);
   z-index: 10;
   pointer-events: none;
 }
 
 .book-card.active .book-cover {
-  box-shadow: 0 24px 48px rgba(0,0,0,0.8), 0 0 28px rgba(120,0,0,0.2), 5px 0 14px rgba(0,0,0,0.5);
+  box-shadow: 0 22px 44px rgba(0,0,0,0.85), 0 0 24px rgba(120,80,0,0.18), 5px 0 12px rgba(0,0,0,0.5);
 }
-
 .book-card:not(.active) .book-cover {
-  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.5);
 }
 
-/* BLACK BOOK */
-.cover-bb {
-  background-color: #0C0C0C;
-  background-image:
-    repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,255,255,0.013) 3px, rgba(255,255,255,0.013) 4px),
-    repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(255,255,255,0.013) 3px, rgba(255,255,255,0.013) 4px);
-}
-
-.cover-bb .inner-border {
+/* shared gold inner border */
+.inner-border {
   position: absolute;
-  inset: 11px 11px 11px 15px;
-  border: 0.5px solid rgba(160,160,160,0.22);
+  inset: 10px 10px 10px 14px;
+  border: 0.5px solid var(--gold-dim);
   z-index: 2;
   pointer-events: none;
 }
-
-.cover-bb .inner-border::before {
+.inner-border::before {
   content: '';
   position: absolute;
   inset: 5px;
-  border: 0.5px solid rgba(160,160,160,0.1);
+  border: 0.5px solid rgba(212,175,96,0.1);
 }
 
-.cover-bb .book-title-wrap {
+/* corner decoration on gold borders */
+.inner-border::after {
+  content: '';
   position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 3;
-  gap: 0;
-  padding: 0 22px;
-}
-
-.cover-bb .book-ornament {
-  width: 40px;
-  height: 0.5px;
-  background: linear-gradient(90deg, transparent, rgba(160,160,160,0.55), transparent);
-  margin: 8px 0;
-}
-
-.cover-bb .red-rule {
-  width: 70%;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #8B0000 20%, #B00000 50%, #8B0000 80%, transparent);
-  margin-top: 10px;
-  margin-bottom: 4px;
-}
-
-.cover-bb .bb-flourish { opacity: 0.4; margin-bottom: 6px; }
-
-.cover-bb .book-main-title {
-  font-family: 'Cinzel', serif;
-  font-size: 20px;
-  font-weight: 600;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  background: linear-gradient(175deg, #E8E8E8 0%, #A8A8A8 35%, #F0F0F0 55%, #B8B8B8 75%, #888 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-align: center;
-  line-height: 1.25;
-}
-
-.cover-bb .book-sub-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-style: italic;
-  font-size: 10px;
-  letter-spacing: 2.5px;
-  color: rgba(160,160,160,0.38);
-  text-align: center;
-}
-
-/* RED BOOK */
-.cover-rb {
-  background-color: #580000;
-  background-image:
-    radial-gradient(ellipse at 35% 25%, rgba(130,0,0,0.9) 0%, transparent 55%),
-    radial-gradient(ellipse at 65% 75%, rgba(80,0,0,1) 0%, transparent 55%),
-    repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(0,0,0,0.07) 2px, rgba(0,0,0,0.07) 4px);
-}
-
-.cover-rb .inner-border {
-  position: absolute;
-  inset: 11px 11px 11px 15px;
-  border: 0.5px solid rgba(220,180,80,0.38);
-  z-index: 2;
+  inset: -1px;
+  background: 
+    linear-gradient(to right, var(--gold-dim) 8px, transparent 8px) top left / 8px 0.5px no-repeat,
+    linear-gradient(to bottom, var(--gold-dim) 8px, transparent 8px) top left / 0.5px 8px no-repeat,
+    linear-gradient(to left, var(--gold-dim) 8px, transparent 8px) bottom right / 8px 0.5px no-repeat,
+    linear-gradient(to top, var(--gold-dim) 8px, transparent 8px) bottom right / 0.5px 8px no-repeat;
   pointer-events: none;
 }
 
-.cover-rb .inner-border::before {
-  content: '';
-  position: absolute;
-  inset: 5px;
-  border: 0.5px solid rgba(220,180,80,0.15);
-}
-
-.cover-rb .book-title-wrap {
+.book-title-wrap {
   position: absolute;
   inset: 0;
   display: flex;
@@ -294,174 +454,170 @@ body {
   align-items: center;
   justify-content: center;
   z-index: 3;
-  gap: 4px;
-  padding: 0 22px;
-}
-
-.cover-rb .book-ornament {
-  width: 36px;
-  height: 0.5px;
-  background: linear-gradient(90deg, transparent, rgba(220,180,80,0.7), transparent);
-  margin: 6px 0;
-}
-
-.cover-rb .book-main-title {
-  font-family: 'Cinzel', serif;
-  font-size: 21px;
-  font-weight: 600;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  background: linear-gradient(175deg, #FFE8A8 0%, #E8C050 35%, #FFE090 65%, #C9980A 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-align: center;
-  line-height: 1.25;
-}
-
-.cover-rb .book-sub-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-style: italic;
-  font-size: 10px;
-  letter-spacing: 2.5px;
-  color: rgba(220,180,80,0.5);
-  text-align: center;
-}
-
-/* THE WALL */
-.cover-tw {
-  background-color: #F0FAFA;
-  background-image:
-    repeating-linear-gradient(0deg, transparent, transparent 26px, #00B4BE 26px, #00B4BE 28px),
-    repeating-linear-gradient(90deg, transparent, transparent 26px, #00B4BE 26px, #00B4BE 28px);
-}
-
-.cover-tw .book-title-wrap {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 3;
-  padding: 0 16px;
-  gap: 0;
-}
-
-.cover-tw .tw-title-block {
-  background: rgba(0,160,170,0.93);
-  padding: 14px 20px 12px;
-  border: 1.5px solid rgba(255,255,255,0.7);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.2);
-}
-
-.cover-tw .book-main-title {
-  font-family: 'Cinzel', serif;
-  font-size: 19px;
-  font-weight: 600;
-  letter-spacing: 3px;
-  color: #FFFFFF;
-  text-align: center;
-  line-height: 1.2;
-  text-transform: uppercase;
-}
-
-.cover-tw .book-sub-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-style: italic;
-  font-size: 10px;
-  letter-spacing: 2px;
-  color: rgba(255,255,255,0.75);
-  text-align: center;
-}
-
-/* VOCABULARY */
-.cover-vc {
-  background-color: #0F0F1A;
-  background-image:
-    radial-gradient(ellipse at 50% 30%, rgba(28,28,80,0.9) 0%, transparent 65%),
-    radial-gradient(circle at 75% 70%, rgba(18,18,55,0.7) 0%, transparent 40%);
-}
-
-.cover-vc .inner-border {
-  position: absolute;
-  inset: 11px 11px 11px 15px;
-  border: 0.5px solid rgba(130,130,195,0.22);
-  z-index: 2;
-  pointer-events: none;
-}
-
-.cover-vc .inner-border::before {
-  content: '';
-  position: absolute;
-  inset: 5px;
-  border: 0.5px solid rgba(130,130,195,0.1);
-}
-
-.cover-vc .book-title-wrap {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  z-index: 3;
-  gap: 4px;
   padding: 0 20px;
 }
 
-.cover-vc .book-ornament {
-  width: 28px;
+.book-ornament {
+  width: 32px;
   height: 0.5px;
-  background: linear-gradient(90deg, transparent, rgba(130,130,200,0.5), transparent);
-  margin: 5px 0;
+  background: linear-gradient(90deg, transparent, var(--gold-mid), transparent);
+  margin: 6px 0;
 }
 
-.cover-vc .vc-cyrillic {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 14px;
-  letter-spacing: 4px;
-  color: rgba(130,130,200,0.35);
-  margin-bottom: 2px;
-}
-
-.cover-vc .book-main-title {
+.book-main-title {
   font-family: 'Cinzel', serif;
-  font-size: 13px;
-  font-weight: 400;
-  letter-spacing: 5px;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 3px;
   text-transform: uppercase;
-  color: rgba(170,170,235,0.72);
   text-align: center;
-  line-height: 1.5;
+  line-height: 1.25;
 }
 
-.cover-vc .book-sub-title {
+.book-vol {
   font-family: 'Cormorant Garamond', serif;
   font-style: italic;
   font-size: 10px;
-  letter-spacing: 2px;
-  color: rgba(130,130,200,0.38);
+  letter-spacing: 2.5px;
   text-align: center;
 }
 
+/* ── BLACK BOOK ── */
+.cover-bb {
+  background-color: #0A0A0A;
+  background-image:
+    repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(255,255,255,0.012) 3px, rgba(255,255,255,0.012) 4px),
+    repeating-linear-gradient(90deg, transparent, transparent 3px, rgba(255,255,255,0.012) 3px, rgba(255,255,255,0.012) 4px);
+}
+
+.cover-bb .book-main-title {
+  background: linear-gradient(175deg, #E8E8E8 0%, #A0A0A0 35%, #F0F0F0 55%, #B0B0B0 75%, #808080 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.cover-bb .red-rule {
+  width: 65%;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent, #8B0000 20%, #C00000 50%, #8B0000 80%, transparent);
+  margin: 8px 0 4px;
+}
+.cover-bb .book-vol { color: rgba(160,160,160,0.35); }
+.cover-bb .bb-flourish { opacity: 0.35; margin-bottom: 6px; }
+
+/* ── RED BOOK ── */
+.cover-rb {
+  background-color: #500000;
+  background-image:
+    radial-gradient(ellipse at 35% 25%, rgba(120,0,0,0.95) 0%, transparent 55%),
+    radial-gradient(ellipse at 65% 80%, rgba(70,0,0,1) 0%, transparent 50%),
+    repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px);
+}
+.cover-rb .book-main-title {
+  background: linear-gradient(175deg, #FFE8A8 0%, #E8C050 35%, #FFE090 65%, #C09010 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.cover-rb .book-vol { color: rgba(220,175,70,0.45); }
+.cover-rb .inner-border { border-color: rgba(220,175,70,0.38); }
+.cover-rb .inner-border::before { border-color: rgba(220,175,70,0.15); }
+
+/* ── THE WALL ── */
+.cover-tw {
+  background-color: #0D0D0D;
+  background-image:
+    radial-gradient(ellipse at 50% 20%, rgba(30,30,30,0.9) 0%, transparent 60%),
+    repeating-linear-gradient(0deg, transparent, transparent 18px, rgba(255,255,255,0.025) 18px, rgba(255,255,255,0.025) 19px),
+    repeating-linear-gradient(90deg, transparent, transparent 18px, rgba(255,255,255,0.025) 18px, rgba(255,255,255,0.025) 19px);
+}
+.cover-tw .book-main-title {
+  background: linear-gradient(175deg, #CCC 0%, #888 40%, #DDD 60%, #999 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.cover-tw .book-vol { color: rgba(150,150,150,0.3); }
+.cover-tw .tw-spray {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.06;
+  background: 
+    radial-gradient(ellipse at 30% 60%, rgba(200,200,200,0.8) 0%, transparent 40%),
+    radial-gradient(ellipse at 70% 30%, rgba(180,180,180,0.6) 0%, transparent 30%);
+}
+
+/* ── VOCABULARY → EMERALD ── */
+.cover-vc {
+  background-color: #031A0D;
+  background-image:
+    radial-gradient(ellipse at 40% 20%, rgba(5,60,25,0.95) 0%, transparent 55%),
+    radial-gradient(ellipse at 70% 80%, rgba(2,40,15,1) 0%, transparent 50%),
+    repeating-linear-gradient(60deg, transparent, transparent 2px, rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px);
+}
+.cover-vc .book-main-title {
+  background: linear-gradient(175deg, #B8FFD4 0%, #5CDB8A 30%, #A0F0C0 60%, #3DB870 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.cover-vc .book-vol { color: rgba(80,200,130,0.4); }
+.cover-vc .inner-border { border-color: rgba(80,200,130,0.3); }
+.cover-vc .inner-border::before { border-color: rgba(80,200,130,0.12); }
+.cover-vc .book-ornament {
+  background: linear-gradient(90deg, transparent, rgba(80,200,130,0.6), transparent);
+}
+.cover-vc .vc-glyph {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 11px;
+  letter-spacing: 5px;
+  color: rgba(80,200,130,0.3);
+  margin-bottom: 2px;
+}
+
+/* ── STORIES & ROLEPLAY → AMETHYST ── */
+.cover-sr {
+  background-color: #110A1A;
+  background-image:
+    radial-gradient(ellipse at 45% 25%, rgba(70,20,110,0.95) 0%, transparent 55%),
+    radial-gradient(ellipse at 65% 75%, rgba(50,10,85,1) 0%, transparent 50%),
+    repeating-linear-gradient(30deg, transparent, transparent 2px, rgba(100,0,150,0.04) 2px, rgba(100,0,150,0.04) 4px);
+}
+.cover-sr .book-main-title {
+  font-size: 16px;
+  letter-spacing: 2px;
+  background: linear-gradient(175deg, #E8C8FF 0%, #C080F0 30%, #DDB8FF 60%, #A060D8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.cover-sr .book-vol { color: rgba(180,120,240,0.4); }
+.cover-sr .inner-border { border-color: rgba(180,120,240,0.3); }
+.cover-sr .inner-border::before { border-color: rgba(180,120,240,0.12); }
+.cover-sr .book-ornament {
+  background: linear-gradient(90deg, transparent, rgba(180,120,240,0.6), transparent);
+}
+.cover-sr .sr-quill {
+  opacity: 0.4;
+  margin-bottom: 6px;
+}
+
+/* ── SHELF BASE ── */
 .shelf-base {
-  width: 88%;
-  height: 6px;
-  background: linear-gradient(180deg, #2C2218 0%, #1A140E 100%);
+  width: 86%;
+  height: 5px;
+  background: linear-gradient(180deg, #2C2010 0%, #1A1208 100%);
   border-radius: 0 0 3px 3px;
-  box-shadow: 0 4px 18px rgba(0,0,0,0.65);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.7);
   flex-shrink: 0;
 }
 
 .shelf-shadow {
-  width: 78%;
+  width: 76%;
   height: 8px;
-  background: radial-gradient(ellipse at center, rgba(0,0,0,0.45) 0%, transparent 70%);
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0.5) 0%, transparent 70%);
   flex-shrink: 0;
 }
 
@@ -469,64 +625,139 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 16px;
+  margin-top: 8px;
   flex-shrink: 0;
 }
 
 .active-title {
   font-family: 'Cinzel', serif;
-  font-size: 11px;
+  font-size: 10px;
   letter-spacing: 6px;
-  color: rgba(255,255,255,0.6);
+  color: rgba(255,255,255,0.55);
   text-transform: uppercase;
 }
 
 .active-subtitle {
-  font-family: 'Cormorant Garamond', serif;
   font-style: italic;
-  font-size: 12px;
+  font-size: 11px;
   letter-spacing: 2px;
-  color: rgba(255,255,255,0.22);
-  margin-top: 5px;
+  color: rgba(255,255,255,0.18);
+  margin-top: 3px;
 }
 
 .dots {
   display: flex;
   gap: 8px;
-  margin-top: 14px;
+  margin-top: 10px;
 }
 
 .dot {
   width: 4px; height: 4px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.12);
   transition: all 0.35s;
   cursor: pointer;
 }
 
-.dot.active { background: #8B1A1A; transform: scale(1.5); }
+.dot.active { background: var(--gold-lo); transform: scale(1.6); }
 
 .tap-hint {
-  font-family: 'Cormorant Garamond', serif;
   font-style: italic;
-  font-size: 10px;
+  font-size: 9px;
   letter-spacing: 3px;
-  color: rgba(255,255,255,0.1);
-  margin-top: 12px;
+  color: rgba(255,255,255,0.08);
+  margin-top: 10px;
 }
 </style>
 </head>
 <body>
 
+<!-- ══ DUST COVER ══ -->
+<div class="dust-cover" id="dustCover">
+  <div class="dc-bg"></div>
+
+  <!-- corner filigree SVGs -->
+  <svg class="dc-corner tl" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M2 2 L30 2" stroke="#C8960A" stroke-width="0.5"/>
+    <path d="M2 2 L2 30" stroke="#C8960A" stroke-width="0.5"/>
+    <path d="M8 8 L24 8" stroke="#C8960A" stroke-width="0.3" opacity="0.5"/>
+    <path d="M8 8 L8 24" stroke="#C8960A" stroke-width="0.3" opacity="0.5"/>
+    <circle cx="2" cy="2" r="1.5" fill="#C8960A"/>
+    <path d="M14 2 Q20 14 32 14 Q20 20 14 32 Q8 20 2 14 Q8 8 14 2Z" fill="rgba(200,150,10,0.12)" stroke="rgba(200,150,10,0.4)" stroke-width="0.5"/>
+    <path d="M14 8 Q18 14 26 14 Q18 18 14 26 Q10 18 6 14 Q10 10 14 8Z" fill="rgba(200,150,10,0.08)" stroke="rgba(200,150,10,0.25)" stroke-width="0.3"/>
+    <circle cx="14" cy="2" r="1" fill="#C8960A" opacity="0.6"/>
+    <circle cx="2" cy="14" r="1" fill="#C8960A" opacity="0.6"/>
+  </svg>
+  <svg class="dc-corner tr" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M2 2 L30 2" stroke="#C8960A" stroke-width="0.5"/>
+    <path d="M2 2 L2 30" stroke="#C8960A" stroke-width="0.5"/>
+    <path d="M8 8 L24 8" stroke="#C8960A" stroke-width="0.3" opacity="0.5"/>
+    <path d="M8 8 L8 24" stroke="#C8960A" stroke-width="0.3" opacity="0.5"/>
+    <circle cx="2" cy="2" r="1.5" fill="#C8960A"/>
+    <path d="M14 2 Q20 14 32 14 Q20 20 14 32 Q8 20 2 14 Q8 8 14 2Z" fill="rgba(200,150,10,0.12)" stroke="rgba(200,150,10,0.4)" stroke-width="0.5"/>
+    <circle cx="14" cy="2" r="1" fill="#C8960A" opacity="0.6"/>
+    <circle cx="2" cy="14" r="1" fill="#C8960A" opacity="0.6"/>
+  </svg>
+  <svg class="dc-corner bl" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M2 2 L30 2" stroke="#C8960A" stroke-width="0.5"/>
+    <path d="M2 2 L2 30" stroke="#C8960A" stroke-width="0.5"/>
+    <circle cx="2" cy="2" r="1.5" fill="#C8960A"/>
+    <path d="M14 2 Q20 14 32 14 Q20 20 14 32 Q8 20 2 14 Q8 8 14 2Z" fill="rgba(200,150,10,0.12)" stroke="rgba(200,150,10,0.4)" stroke-width="0.5"/>
+    <circle cx="14" cy="2" r="1" fill="#C8960A" opacity="0.6"/>
+    <circle cx="2" cy="14" r="1" fill="#C8960A" opacity="0.6"/>
+  </svg>
+  <svg class="dc-corner br" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M2 2 L30 2" stroke="#C8960A" stroke-width="0.5"/>
+    <path d="M2 2 L2 30" stroke="#C8960A" stroke-width="0.5"/>
+    <circle cx="2" cy="2" r="1.5" fill="#C8960A"/>
+    <path d="M14 2 Q20 14 32 14 Q20 20 14 32 Q8 20 2 14 Q8 8 14 2Z" fill="rgba(200,150,10,0.12)" stroke="rgba(200,150,10,0.4)" stroke-width="0.5"/>
+    <circle cx="14" cy="2" r="1" fill="#C8960A" opacity="0.6"/>
+    <circle cx="2" cy="14" r="1" fill="#C8960A" opacity="0.6"/>
+  </svg>
+
+  <div class="dc-border"></div>
+  <div class="dc-border-inner"></div>
+
+  <div class="dc-content">
+    <div class="dc-ornament-top"></div>
+    <div class="dc-eyebrow">Special Edition · Box Set</div>
+
+    <div class="dc-title-wrap">
+      <div class="dc-title-gold-frame"></div>
+      <div class="dc-title">Black<br>Book</div>
+    </div>
+
+    <div class="dc-subtitle">intimate language</div>
+    <div class="dc-rule"></div>
+    <div class="dc-edition">All–Gold Collector's Edition · Five Volumes</div>
+
+    <div class="dc-purchase">
+      <a class="btn-purchase btn-primary" href="https://buy.stripe.com/8x214o1JO548fjv0GA9oc01" target="_top">
+        <span class="btn-label">Single Language</span>
+        <span class="btn-price">$79</span>
+        <span class="btn-desc">Lifetime Access · One Language</span>
+      </a>
+      <a class="btn-purchase btn-secondary" href="https://buy.stripe.com/3cI6oIcosbswb3f3SM9oc00" target="_top">
+        <span class="btn-label">Full Collection</span>
+        <span class="btn-price">$199</span>
+        <span class="btn-desc">Lifetime Access · All Languages</span>
+      </a>
+    </div>
+
+    <div class="dc-enter-link" id="enterShelf">already a member — enter the library</div>
+  </div>
+</div>
+
+<!-- ══ MAIN SHELF ══ -->
 <div class="app-header">
   <div class="app-logo-row">
-    <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
-      <rect x="3" y="2" width="17" height="22" rx="1.5" fill="#1A1A1A" stroke="rgba(160,160,160,0.35)" stroke-width="0.5"/>
-      <rect x="5" y="4" width="13" height="18" rx="1" fill="none" stroke="rgba(160,160,160,0.15)" stroke-width="0.5"/>
-      <rect x="2" y="2" width="3" height="22" rx="1" fill="#070707"/>
-      <line x1="7" y1="8" x2="15" y2="8" stroke="rgba(160,160,160,0.38)" stroke-width="0.5"/>
-      <line x1="7" y1="11" x2="15" y2="11" stroke="rgba(160,160,160,0.2)" stroke-width="0.5"/>
-      <line x1="7" y1="14" x2="12" y2="14" stroke="rgba(160,160,160,0.2)" stroke-width="0.5"/>
+    <svg width="22" height="22" viewBox="0 0 26 26" fill="none">
+      <rect x="3" y="2" width="17" height="22" rx="1.5" fill="#1A1A1A" stroke="rgba(160,160,160,0.3)" stroke-width="0.5"/>
+      <rect x="5" y="4" width="13" height="18" rx="1" fill="none" stroke="rgba(160,160,160,0.12)" stroke-width="0.5"/>
+      <rect x="2" y="2" width="3" height="22" rx="1" fill="#060606"/>
+      <line x1="7" y1="8" x2="15" y2="8" stroke="rgba(160,160,160,0.35)" stroke-width="0.5"/>
+      <line x1="7" y1="11" x2="15" y2="11" stroke="rgba(160,160,160,0.18)" stroke-width="0.5"/>
+      <line x1="7" y1="14" x2="12" y2="14" stroke="rgba(160,160,160,0.18)" stroke-width="0.5"/>
     </svg>
     <div class="app-name">Black Book</div>
   </div>
@@ -549,13 +780,13 @@ body {
         <div class="book-cover cover-bb">
           <div class="inner-border"></div>
           <div class="book-title-wrap">
-            <svg class="bb-flourish" width="30" height="22" viewBox="0 0 30 22" fill="none">
-              <path d="M15 3 C11 9, 4 9, 2 15 C6 13, 10 15, 15 19 C20 15, 24 13, 28 15 C26 9, 19 9, 15 3Z" fill="rgba(150,150,150,0.2)" stroke="rgba(170,170,170,0.45)" stroke-width="0.5"/>
+            <svg class="bb-flourish" width="28" height="20" viewBox="0 0 30 22" fill="none">
+              <path d="M15 3 C11 9, 4 9, 2 15 C6 13, 10 15, 15 19 C20 15, 24 13, 28 15 C26 9, 19 9, 15 3Z" fill="rgba(140,140,140,0.18)" stroke="rgba(160,160,160,0.42)" stroke-width="0.5"/>
             </svg>
             <div class="book-main-title">Black<br>Book</div>
             <div class="red-rule"></div>
             <div class="book-ornament"></div>
-            <div class="book-sub-title">Vol. I</div>
+            <div class="book-vol">Vol. I</div>
           </div>
         </div>
       </div>
@@ -565,12 +796,12 @@ body {
         <div class="book-cover cover-rb">
           <div class="inner-border"></div>
           <div class="book-title-wrap">
-            <svg width="22" height="20" viewBox="0 0 22 20" fill="none" style="opacity:0.6;margin-bottom:4px;">
-              <path d="M11 17 C11 17, 2 11, 2 6 C2 3.5, 4 2, 6.5 2 C8.5 2, 10 3.5, 11 5 C12 3.5, 13.5 2, 15.5 2 C18 2, 20 3.5, 20 6 C20 11, 11 17, 11 17Z" fill="rgba(200,60,60,0.45)" stroke="rgba(220,180,80,0.6)" stroke-width="0.5"/>
+            <svg width="20" height="18" viewBox="0 0 22 20" fill="none" style="opacity:0.55;margin-bottom:5px;">
+              <path d="M11 17 C11 17, 2 11, 2 6 C2 3.5, 4 2, 6.5 2 C8.5 2, 10 3.5, 11 5 C12 3.5, 13.5 2, 15.5 2 C18 2, 20 3.5, 20 6 C20 11, 11 17, 11 17Z" fill="rgba(190,50,50,0.4)" stroke="rgba(220,175,70,0.55)" stroke-width="0.5"/>
             </svg>
             <div class="book-main-title">Red<br>Book</div>
             <div class="book-ornament"></div>
-            <div class="book-sub-title">Vol. II</div>
+            <div class="book-vol">Vol. II</div>
           </div>
         </div>
       </div>
@@ -578,25 +809,42 @@ body {
       <!-- THE WALL -->
       <div class="book-card" data-index="2" data-book="The Wall" data-desc="raw &amp; explicit">
         <div class="book-cover cover-tw">
+          <div class="tw-spray"></div>
+          <div class="inner-border"></div>
           <div class="book-title-wrap">
-            <div class="tw-title-block">
-              <div class="book-main-title">The<br>Wall</div>
-              <div class="book-sub-title">Vol. III</div>
-            </div>
+            <div class="book-main-title">The<br>Wall</div>
+            <div class="book-ornament"></div>
+            <div class="book-vol">Vol. III</div>
           </div>
         </div>
       </div>
 
-      <!-- VOCABULARY -->
-      <div class="book-card" data-index="3" data-book="Vocabulary" data-desc="words &amp; phrases">
+      <!-- VOCABULARY — EMERALD -->
+      <div class="book-card" data-index="3" data-book="Vocabulary" data-desc="words &amp; reference">
         <div class="book-cover cover-vc">
           <div class="inner-border"></div>
           <div class="book-title-wrap">
-            <div class="vc-cyrillic">Я · Л · С</div>
+            <div class="vc-glyph">Я · Л · С</div>
             <div class="book-ornament"></div>
             <div class="book-main-title">Vocab-<br>ulary</div>
             <div class="book-ornament"></div>
-            <div class="book-sub-title">reference</div>
+            <div class="book-vol">Reference</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STORIES & ROLEPLAY — AMETHYST -->
+      <div class="book-card" data-index="4" data-book="Stories &amp; Roleplay" data-desc="narrative &amp; immersive">
+        <div class="book-cover cover-sr">
+          <div class="inner-border"></div>
+          <div class="book-title-wrap">
+            <svg class="sr-quill" width="22" height="24" viewBox="0 0 22 24" fill="none">
+              <path d="M18 2 C20 4, 20 8, 16 10 L10 18 L8 22 L10 20 L14 12 C10 14, 6 14, 4 12 C8 10, 12 8, 14 4 C15 3, 16.5 2, 18 2Z" fill="rgba(180,100,240,0.25)" stroke="rgba(200,140,255,0.5)" stroke-width="0.5"/>
+              <line x1="8" y1="22" x2="14" y2="16" stroke="rgba(200,140,255,0.3)" stroke-width="0.5"/>
+            </svg>
+            <div class="book-main-title">Stories<br>&amp; Roleplay</div>
+            <div class="book-ornament"></div>
+            <div class="book-vol">Vol. V</div>
           </div>
         </div>
       </div>
@@ -615,34 +863,49 @@ body {
       <div class="dot"></div>
       <div class="dot"></div>
       <div class="dot"></div>
+      <div class="dot"></div>
     </div>
   </div>
   <div class="tap-hint">tap to enter</div>
 </div>
 
 <script>
-var carousel  = document.getElementById('carousel');
-var cards     = Array.from(carousel.querySelectorAll('.book-card'));
-var dotsEl    = Array.from(document.getElementById('dots').querySelectorAll('.dot'));
-var activeTitle = document.getElementById('activeTitle');
-var activeSub   = document.getElementById('activeSubtitle');
+// ── DUST COVER ──
+var dustCover = document.getElementById('dustCover');
+var enterLink = document.getElementById('enterShelf');
+enterLink.addEventListener('click', function() {
+  dustCover.classList.add('hidden');
+});
+// also allow tapping anywhere on dust cover (outside buttons) to dismiss
+dustCover.addEventListener('click', function(e) {
+  if (e.target === dustCover || e.target.classList.contains('dc-bg') ||
+      e.target.classList.contains('dc-border') || e.target.classList.contains('dc-border-inner')) {
+    dustCover.classList.add('hidden');
+  }
+});
 
-var CARD_WIDTH = 180;
-var GAP        = 20;
+// ── CAROUSEL ──
+var carousel     = document.getElementById('carousel');
+var cards        = Array.from(carousel.querySelectorAll('.book-card'));
+var dotsEl       = Array.from(document.getElementById('dots').querySelectorAll('.dot'));
+var activeTitle  = document.getElementById('activeTitle');
+var activeSub    = document.getElementById('activeSubtitle');
+
+var CARD_WIDTH = 160;
+var GAP        = 18;
 var STEP       = CARD_WIDTH + GAP;
 var current    = 0;
-var translate  = 0;
 var isDragging = false;
 var hasDragged = false;
 var tapStartX  = 0;
 
-// ── KEY FIX: direct Player URLs for each book's Chapter 1 ──
 var PLAYER_BASE = 'https://willswrath.github.io/bb-player/bb-player-v1.html';
 var BOOK_CHAPTERS = {
-  'Black Book': { chapter: 'First Impressions',  book: 'Black Book' },
-  'Red Book':   { chapter: 'The Spark',          book: 'Red Book'   },
-  'The Wall':   { chapter: 'Anatomy Basics',     book: 'The Wall'   },
-  'Vocabulary': { chapter: 'Essential Terms',    book: 'Vocabulary' }
+  'Black Book':        { chapter: 'First Impressions', book: 'Black Book'        },
+  'Red Book':          { chapter: 'The Spark',         book: 'Red Book'          },
+  'The Wall':          { chapter: 'Anatomy Basics',    book: 'The Wall'          },
+  'Vocabulary':        { chapter: 'Essential Terms',   book: 'Vocabulary'        },
+  'Stories & Roleplay':{ chapter: 'The Stranger',      book: 'Stories & Roleplay'}
 };
 
 function buildPlayerUrl(bookName) {
@@ -658,53 +921,59 @@ function getOffset() {
 }
 
 function goTo(index) {
-  index = Math.max(0, Math.min(cards.length - 1, index));
-  current   = index;
-  translate = -(index * STEP) + getOffset();
-  carousel.style.transform = 'translateX(' + translate + 'px)';
+  index   = Math.max(0, Math.min(cards.length - 1, index));
+  current = index;
+  var tx  = -(index * STEP) + getOffset();
+  carousel.style.transform = 'translateX(' + tx + 'px)';
   updateActive();
 }
 
 function updateActive() {
   cards.forEach(function(c, i) { c.classList.toggle('active', i === current); });
   dotsEl.forEach(function(d, i) { d.classList.toggle('active', i === current); });
-  activeTitle.textContent = cards[current].dataset.book;
-  activeSub.textContent   = cards[current].dataset.desc;
+  var card = cards[current];
+  activeTitle.textContent = card.dataset.book.replace('&amp;', '&');
+  activeSub.textContent   = card.dataset.desc.replace('&amp;', '&');
 }
 
 function navigateTo(bookName) {
   var url = buildPlayerUrl(bookName);
   if (!url) return;
-  // Try postMessage to parent first (works when embedded in Glide)
   try { window.parent.postMessage({ type: 'bb-navigate', url: url }, '*'); } catch(e) {}
-  // Always also navigate top-level after short delay (fallback for WebView)
   setTimeout(function() {
     try { window.top.location.href = url; } catch(e) { window.location.href = url; }
   }, 80);
 }
 
-function startDrag(x) { tapStartX=x; isDragging=true; hasDragged=false; carousel.classList.add('dragging'); }
+function startDrag(x) {
+  tapStartX = x;
+  isDragging = true;
+  hasDragged = false;
+  carousel.classList.add('dragging');
+}
 function moveDrag(x) {
   if (!isDragging) return;
   var dx = x - tapStartX;
   if (Math.abs(dx) > 8) hasDragged = true;
-  carousel.style.transform = 'translateX(' + (-(current*STEP)+getOffset()+dx) + 'px)';
+  var tx = -(current * STEP) + getOffset() + dx;
+  carousel.style.transform = 'translateX(' + tx + 'px)';
 }
 function endDrag(x) {
   if (!isDragging) return;
   isDragging = false;
   carousel.classList.remove('dragging');
   var dx = x - tapStartX;
-  if (hasDragged && Math.abs(dx) > 50) {
+  if (hasDragged && Math.abs(dx) > 45) {
     goTo(dx < 0 ? current + 1 : current - 1);
-  } else {
-    var activeCard = cards[current];
-    var rect = activeCard.getBoundingClientRect();
+  } else if (!hasDragged) {
+    var rect = cards[current].getBoundingClientRect();
     if (x >= rect.left && x <= rect.right) {
-      navigateTo(activeCard.dataset.book);
+      navigateTo(cards[current].dataset.book.replace('&amp;', '&'));
     } else {
       goTo(current);
     }
+  } else {
+    goTo(current);
   }
 }
 
@@ -715,7 +984,7 @@ window.addEventListener('touchend',     function(e) { endDrag(e.changedTouches[0
 
 // Mouse
 carousel.addEventListener('mousedown', function(e) { startDrag(e.clientX); });
-window.addEventListener('mousemove',   function(e) { moveDrag(e.clientX); });
+window.addEventListener('mousemove',   function(e) { if(isDragging) moveDrag(e.clientX); });
 window.addEventListener('mouseup',     function(e) { endDrag(e.clientX); });
 
 // Dots
