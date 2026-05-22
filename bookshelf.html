@@ -334,6 +334,8 @@ body {
   align-items: center;
   justify-content: center;
   min-height: 0;
+  /* compensate: dots/title below carousel offset visual center upward */
+  margin-top: -40px;
 }
 
 .shelf-label {
@@ -525,28 +527,28 @@ body {
 
 /* ── THE WALL ── */
 .cover-tw {
-  background-color: #0D0D0D;
+  background-color: #0C0C0C;
   background-image:
-    radial-gradient(ellipse at 50% 20%, rgba(30,30,30,0.9) 0%, transparent 60%),
-    repeating-linear-gradient(0deg, transparent, transparent 18px, rgba(255,255,255,0.025) 18px, rgba(255,255,255,0.025) 19px),
-    repeating-linear-gradient(90deg, transparent, transparent 18px, rgba(255,255,255,0.025) 18px, rgba(255,255,255,0.025) 19px);
+    radial-gradient(ellipse at 50% 30%, rgba(25,25,25,0.95) 0%, transparent 65%),
+    repeating-linear-gradient(0deg, transparent, transparent 22px, rgba(255,255,255,0.018) 22px, rgba(255,255,255,0.018) 23px),
+    repeating-linear-gradient(90deg, transparent, transparent 22px, rgba(255,255,255,0.018) 22px, rgba(255,255,255,0.018) 23px);
 }
 .cover-tw .book-main-title {
-  background: linear-gradient(175deg, #CCC 0%, #888 40%, #DDD 60%, #999 100%);
+  background: linear-gradient(175deg, #D8D8D8 0%, #909090 35%, #E0E0E0 55%, #B0B0B0 80%, #787878 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
-.cover-tw .book-vol { color: rgba(150,150,150,0.3); }
+.cover-tw .book-vol { color: rgba(160,160,160,0.28); }
 .cover-tw .tw-spray {
   position: absolute;
   inset: 0;
   pointer-events: none;
   z-index: 1;
-  opacity: 0.06;
+  opacity: 0.04;
   background: 
-    radial-gradient(ellipse at 30% 60%, rgba(200,200,200,0.8) 0%, transparent 40%),
-    radial-gradient(ellipse at 70% 30%, rgba(180,180,180,0.6) 0%, transparent 30%);
+    radial-gradient(ellipse at 30% 60%, rgba(220,220,220,0.8) 0%, transparent 40%),
+    radial-gradient(ellipse at 70% 30%, rgba(200,200,200,0.6) 0%, transparent 30%);
 }
 
 /* ── VOCABULARY → EMERALD ── */
