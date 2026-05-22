@@ -30,175 +30,252 @@
   }
 
   /* ═══════════════════════════════════════════
-     DUST COVER — LANDING PAGE
+     DUST COVER — LANDING PAGE (ALL GOLD)
   ═══════════════════════════════════════════ */
   #dust-cover {
     position: fixed; inset: 0; z-index: 100;
-    background: radial-gradient(ellipse at 50% 40%, #2a1f0a 0%, #16110500 40%, #0a0806 70%),
-                radial-gradient(ellipse at 50% 100%, #1a1205 0%, #0a0806 60%);
+    /* Rich warm gold parchment — light gold top, deeper amber at base */
+    background:
+      radial-gradient(ellipse at 50% 0%, #f5e8b8 0%, #e8d080 25%, #c9a84c 55%, #a07828 80%, #7a5818 100%);
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
-    cursor: pointer;
+    overflow: hidden;
   }
 
-  /* Animated gold dust particles */
+  /* Full-bleed decorative line grid — fills entire page */
   #dust-cover::before {
     content: '';
     position: absolute; inset: 0;
     background-image:
-      radial-gradient(1px 1px at 20% 30%, rgba(201,168,76,0.4) 0%, transparent 100%),
-      radial-gradient(1px 1px at 80% 20%, rgba(201,168,76,0.3) 0%, transparent 100%),
-      radial-gradient(1px 1px at 60% 70%, rgba(201,168,76,0.35) 0%, transparent 100%),
-      radial-gradient(1px 1px at 30% 80%, rgba(201,168,76,0.25) 0%, transparent 100%),
-      radial-gradient(1px 1px at 70% 50%, rgba(201,168,76,0.3) 0%, transparent 100%),
-      radial-gradient(2px 2px at 15% 60%, rgba(201,168,76,0.2) 0%, transparent 100%),
-      radial-gradient(1px 1px at 90% 80%, rgba(201,168,76,0.3) 0%, transparent 100%),
-      radial-gradient(1px 1px at 45% 15%, rgba(201,168,76,0.25) 0%, transparent 100%);
+      /* Outer page border */
+      linear-gradient(rgba(90,55,5,0.35) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(90,55,5,0.35) 1px, transparent 1px),
+      /* Inner diagonal texture */
+      repeating-linear-gradient(45deg, transparent, transparent 18px, rgba(90,55,5,0.05) 18px, rgba(90,55,5,0.05) 19px),
+      repeating-linear-gradient(-45deg, transparent, transparent 18px, rgba(90,55,5,0.05) 18px, rgba(90,55,5,0.05) 19px);
+    background-size: 100% 100%, 100% 100%, 38px 38px, 38px 38px;
     pointer-events: none;
   }
 
-  .dc-frame {
-    position: relative;
-    width: min(340px, 88vw);
-    padding: 36px 32px 32px;
-    border: 1px solid rgba(201,168,76,0.35);
-    box-shadow:
-      inset 0 0 0 4px rgba(201,168,76,0.08),
-      inset 0 0 0 5px transparent,
-      inset 0 0 0 8px rgba(201,168,76,0.12),
-      0 0 80px rgba(201,168,76,0.08),
-      0 20px 60px rgba(0,0,0,0.8);
+  /* Page-edge shadow vignette */
+  #dust-cover::after {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 50% 50%, transparent 60%, rgba(90,50,5,0.25) 100%),
+      linear-gradient(180deg, rgba(245,235,160,0.3) 0%, transparent 30%, transparent 70%, rgba(90,50,5,0.2) 100%);
+    pointer-events: none;
   }
 
-  /* Corner ornaments */
+  /* Horizontal decorative rules across the full page */
+  .dc-page-rules {
+    position: absolute; inset: 0;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .dc-page-rule {
+    position: absolute;
+    left: 20px; right: 20px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(90,55,5,0.3) 10%, rgba(90,55,5,0.5) 50%, rgba(90,55,5,0.3) 90%, transparent);
+  }
+  .dc-page-rule.double { box-shadow: 0 3px 0 rgba(90,55,5,0.2); }
+
+  /* Full-page corner filigree */
+  .dc-page-corner {
+    position: absolute;
+    width: 80px; height: 80px;
+    z-index: 2;
+    pointer-events: none;
+  }
+  .dc-page-corner svg { width: 100%; height: 100%; }
+  .dc-page-corner.tl { top: 16px; left: 16px; }
+  .dc-page-corner.tr { top: 16px; right: 16px; transform: scaleX(-1); }
+  .dc-page-corner.bl { bottom: 16px; left: 16px; transform: scaleY(-1); }
+  .dc-page-corner.br { bottom: 16px; right: 16px; transform: scale(-1); }
+
+  /* Central content card — no background, just framing lines */
+  .dc-frame {
+    position: relative;
+    width: min(320px, 86vw);
+    padding: 28px 28px 24px;
+    z-index: 5;
+  }
+
+  /* Frame border lines */
+  .dc-frame::before {
+    content: '';
+    position: absolute; inset: 0;
+    border: 1.5px solid rgba(90,55,5,0.45);
+    box-shadow:
+      inset 0 0 0 4px transparent,
+      inset 0 0 0 6px rgba(90,55,5,0.12),
+      inset 0 0 0 7px transparent,
+      inset 0 0 0 9px rgba(90,55,5,0.08);
+  }
+  .dc-frame::after {
+    content: '';
+    position: absolute; inset: 5px;
+    border: 0.75px solid rgba(90,55,5,0.25);
+    pointer-events: none;
+  }
+
+  /* Frame corner ornaments */
   .dc-corner {
     position: absolute;
-    width: 36px; height: 36px;
-    opacity: 0.7;
+    width: 42px; height: 42px;
+    z-index: 6;
   }
   .dc-corner svg { width: 100%; height: 100%; }
-  .dc-corner.tl { top: -1px; left: -1px; }
-  .dc-corner.tr { top: -1px; right: -1px; transform: scaleX(-1); }
-  .dc-corner.bl { bottom: -1px; left: -1px; transform: scaleY(-1); }
-  .dc-corner.br { bottom: -1px; right: -1px; transform: scale(-1); }
+  .dc-corner.tl { top: -2px; left: -2px; }
+  .dc-corner.tr { top: -2px; right: -2px; transform: scaleX(-1); }
+  .dc-corner.bl { bottom: -2px; left: -2px; transform: scaleY(-1); }
+  .dc-corner.br { bottom: -2px; right: -2px; transform: scale(-1); }
 
   .dc-eyebrow {
     font-family: 'Cinzel', serif;
-    font-size: 8px;
-    letter-spacing: 0.25em;
-    color: var(--gold);
-    opacity: 0.7;
+    font-size: 7.5px;
+    letter-spacing: 0.3em;
+    color: rgba(60,35,5,0.65);
     text-align: center;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     text-transform: uppercase;
   }
 
   .dc-rule {
-    width: 100%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--gold), var(--gold-light), var(--gold), transparent);
-    opacity: 0.5;
-    margin: 10px 0;
+    width: 100%; height: 0;
+    border: none;
+    border-top: 1px solid rgba(90,55,5,0.35);
+    margin: 8px 0;
+    position: relative;
   }
+  /* Diamond ornament on rule */
+  .dc-rule::after {
+    content: '◆';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 7px;
+    color: rgba(90,55,5,0.45);
+    background: inherit;
+    padding: 0 4px;
+    /* Patch the line behind the diamond */
+    background: linear-gradient(90deg, #c9a84c, #c9a84c);
+    line-height: 0;
+  }
+  .dc-rule.plain::after { display: none; }
 
   .dc-title {
     font-family: 'Cinzel Decorative', 'Cinzel', serif;
-    font-size: clamp(30px, 8vw, 42px);
+    font-size: clamp(28px, 7.5vw, 40px);
     font-weight: 700;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.14em;
     line-height: 1.1;
     text-align: center;
-    background: linear-gradient(180deg, var(--gold-bright) 0%, var(--gold) 40%, var(--gold-dark) 80%, var(--gold) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-shadow: none;
-    padding: 8px 0;
+    color: #2a1a02;
+    text-shadow:
+      0 1px 0 rgba(255,240,180,0.6),
+      0 -1px 0 rgba(80,45,5,0.4);
+    padding: 6px 0 4px;
   }
 
   .dc-subtitle {
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
     font-size: 13px;
-    letter-spacing: 0.18em;
-    color: rgba(201,168,76,0.6);
+    letter-spacing: 0.2em;
+    color: rgba(60,35,5,0.6);
     text-align: center;
-    margin: 6px 0 16px;
+    margin: 4px 0 10px;
   }
 
   .dc-edition {
     font-family: 'Cinzel', serif;
-    font-size: 7.5px;
-    letter-spacing: 0.3em;
-    color: rgba(201,168,76,0.5);
+    font-size: 7px;
+    letter-spacing: 0.32em;
+    color: rgba(60,35,5,0.5);
     text-align: center;
     text-transform: uppercase;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
   }
 
+  /* ── SINGLE LANGUAGE BUTTON — CRIMSON ── */
   .dc-btn {
     display: block;
     width: 100%;
-    padding: 12px 16px;
-    margin: 8px 0;
-    border: 1px solid rgba(201,168,76,0.4);
-    background: linear-gradient(135deg, rgba(201,168,76,0.08) 0%, rgba(201,168,76,0.15) 50%, rgba(201,168,76,0.08) 100%);
+    padding: 11px 16px;
+    margin: 7px 0;
     cursor: pointer;
     text-decoration: none;
-    transition: all 0.25s ease;
+    transition: all 0.2s ease;
     position: relative;
     overflow: hidden;
   }
-  .dc-btn::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: linear-gradient(135deg, rgba(201,168,76,0.15), transparent);
-    opacity: 0;
-    transition: opacity 0.2s;
+  .dc-btn.crimson {
+    background: linear-gradient(135deg, #6e0f0f 0%, #8b1a1a 40%, #6e0f0f 100%);
+    border: 1px solid rgba(180,60,60,0.5);
+    box-shadow: inset 0 1px 0 rgba(255,180,180,0.12), 0 2px 8px rgba(80,0,0,0.4);
   }
-  .dc-btn:hover::before, .dc-btn:active::before { opacity: 1; }
+  .dc-btn.crimson:hover, .dc-btn.crimson:active {
+    background: linear-gradient(135deg, #7e1515 0%, #a02020 40%, #7e1515 100%);
+  }
+  .dc-btn.gold-btn {
+    background: linear-gradient(135deg, #7a5010 0%, #a07020 40%, #7a5010 100%);
+    border: 1px solid rgba(201,168,76,0.6);
+    box-shadow: inset 0 1px 0 rgba(255,240,180,0.2), 0 2px 8px rgba(60,35,5,0.35);
+  }
+  .dc-btn.gold-btn:hover, .dc-btn.gold-btn:active {
+    background: linear-gradient(135deg, #8a6015 0%, #b08025 40%, #8a6015 100%);
+  }
+
   .dc-btn-label {
     font-family: 'Cinzel', serif;
-    font-size: 9px;
-    letter-spacing: 0.25em;
-    color: var(--gold);
+    font-size: 8.5px;
+    letter-spacing: 0.28em;
     text-align: center;
     display: block;
     text-transform: uppercase;
   }
+  .dc-btn.crimson .dc-btn-label { color: rgba(255,200,200,0.85); }
+  .dc-btn.gold-btn .dc-btn-label { color: rgba(255,235,160,0.85); }
+
   .dc-btn-price {
     font-family: 'Cinzel Decorative', serif;
-    font-size: 20px;
+    font-size: 22px;
     letter-spacing: 0.05em;
-    color: var(--gold-bright);
     text-align: center;
     display: block;
     margin-top: 2px;
+    font-weight: 700;
   }
+  .dc-btn.crimson .dc-btn-price { color: #fff5f5; }
+  .dc-btn.gold-btn .dc-btn-price { color: #fff8e0; }
+
   .dc-btn-sub {
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
     font-size: 10px;
-    color: rgba(201,168,76,0.5);
     text-align: center;
     display: block;
     margin-top: 1px;
   }
+  .dc-btn.crimson .dc-btn-sub { color: rgba(255,200,200,0.5); }
+  .dc-btn.gold-btn .dc-btn-sub { color: rgba(255,235,160,0.5); }
 
   .dc-enter {
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
     font-size: 11px;
-    letter-spacing: 0.12em;
-    color: rgba(201,168,76,0.35);
+    letter-spacing: 0.14em;
+    color: rgba(60,35,5,0.45);
     text-align: center;
-    margin-top: 18px;
+    margin-top: 16px;
     cursor: pointer;
     transition: color 0.2s;
     text-decoration: none;
     display: block;
   }
-  .dc-enter:hover { color: rgba(201,168,76,0.65); }
+  .dc-enter:hover { color: rgba(60,35,5,0.75); }
 
   /* ═══════════════════════════════════════════
      BOOKSHELF
@@ -770,58 +847,143 @@
 <body>
 
 <!-- ═══════════════════════════════════════════
-     DUST COVER
+     DUST COVER — ALL GOLD
 ═══════════════════════════════════════════ -->
 <div id="dust-cover">
+
+  <!-- Full-page horizontal decorative rules -->
+  <div class="dc-page-rules">
+    <div class="dc-page-rule" style="top:18px"></div>
+    <div class="dc-page-rule double" style="top:24px"></div>
+    <div class="dc-page-rule" style="top:32px"></div>
+    <div class="dc-page-rule" style="bottom:18px"></div>
+    <div class="dc-page-rule double" style="bottom:24px"></div>
+    <div class="dc-page-rule" style="bottom:32px"></div>
+    <!-- Subtle mid-page accent lines -->
+    <div class="dc-page-rule" style="top:18%;opacity:0.25"></div>
+    <div class="dc-page-rule" style="bottom:18%;opacity:0.25"></div>
+  </div>
+
+  <!-- Full-page SVG vertical rules (left and right) -->
+  <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:1" preserveAspectRatio="none">
+    <!-- Left border triple-rule -->
+    <line x1="18" y1="0" x2="18" y2="100%" stroke="rgba(90,55,5,0.35)" stroke-width="1"/>
+    <line x1="24" y1="0" x2="24" y2="100%" stroke="rgba(90,55,5,0.2)" stroke-width="0.5"/>
+    <line x1="32" y1="0" x2="32" y2="100%" stroke="rgba(90,55,5,0.15)" stroke-width="0.5"/>
+    <!-- Right border triple-rule -->
+    <line x1="calc(100% - 18px)" y1="0" x2="calc(100% - 18px)" y2="100%" stroke="rgba(90,55,5,0.35)" stroke-width="1"/>
+    <line x1="calc(100% - 24px)" y1="0" x2="calc(100% - 24px)" y2="100%" stroke="rgba(90,55,5,0.2)" stroke-width="0.5"/>
+    <line x1="calc(100% - 32px)" y1="0" x2="calc(100% - 32px)" y2="100%" stroke="rgba(90,55,5,0.15)" stroke-width="0.5"/>
+  </svg>
+
+  <!-- Full-page corner filigree (large, page-filling) -->
+  <div class="dc-page-corner tl">
+    <svg viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M4 4 L50 4 M4 4 L4 50" stroke="rgba(80,45,5,0.55)" stroke-width="2"/>
+      <path d="M4 4 L22 4 L22 12 L12 12 L12 22 L4 22 Z" stroke="rgba(80,45,5,0.4)" stroke-width="1" fill="rgba(80,45,5,0.06)"/>
+      <circle cx="22" cy="22" r="8" stroke="rgba(80,45,5,0.35)" stroke-width="1" fill="none"/>
+      <circle cx="22" cy="22" r="4" stroke="rgba(80,45,5,0.25)" stroke-width="0.75" fill="none"/>
+      <path d="M8 4 Q16 4 16 12 Q16 20 8 20" stroke="rgba(80,45,5,0.25)" stroke-width="0.75" fill="none"/>
+      <path d="M4 8 Q4 16 12 16 Q20 16 20 8" stroke="rgba(80,45,5,0.25)" stroke-width="0.75" fill="none"/>
+      <path d="M30 4 Q40 14 30 22" stroke="rgba(80,45,5,0.18)" stroke-width="0.75" fill="none"/>
+      <path d="M4 30 Q14 40 22 30" stroke="rgba(80,45,5,0.18)" stroke-width="0.75" fill="none"/>
+      <circle cx="36" cy="4" r="2" stroke="rgba(80,45,5,0.25)" stroke-width="0.75" fill="none"/>
+      <circle cx="4" cy="36" r="2" stroke="rgba(80,45,5,0.25)" stroke-width="0.75" fill="none"/>
+    </svg>
+  </div>
+  <div class="dc-page-corner tr">
+    <svg viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M4 4 L50 4 M4 4 L4 50" stroke="rgba(80,45,5,0.55)" stroke-width="2"/>
+      <path d="M4 4 L22 4 L22 12 L12 12 L12 22 L4 22 Z" stroke="rgba(80,45,5,0.4)" stroke-width="1" fill="rgba(80,45,5,0.06)"/>
+      <circle cx="22" cy="22" r="8" stroke="rgba(80,45,5,0.35)" stroke-width="1" fill="none"/>
+      <circle cx="22" cy="22" r="4" stroke="rgba(80,45,5,0.25)" stroke-width="0.75" fill="none"/>
+      <path d="M8 4 Q16 4 16 12 Q16 20 8 20" stroke="rgba(80,45,5,0.25)" stroke-width="0.75" fill="none"/>
+      <path d="M4 8 Q4 16 12 16 Q20 16 20 8" stroke="rgba(80,45,5,0.25)" stroke-width="0.75" fill="none"/>
+      <circle cx="36" cy="4" r="2" stroke="rgba(80,45,5,0.25)" stroke-width="0.75" fill="none"/>
+      <circle cx="4" cy="36" r="2" stroke="rgba(80,45,5,0.25)" stroke-width="0.75" fill="none"/>
+    </svg>
+  </div>
+  <div class="dc-page-corner bl">
+    <svg viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M4 4 L50 4 M4 4 L4 50" stroke="rgba(80,45,5,0.55)" stroke-width="2"/>
+      <path d="M4 4 L22 4 L22 12 L12 12 L12 22 L4 22 Z" stroke="rgba(80,45,5,0.4)" stroke-width="1" fill="rgba(80,45,5,0.06)"/>
+      <circle cx="22" cy="22" r="8" stroke="rgba(80,45,5,0.35)" stroke-width="1" fill="none"/>
+      <circle cx="22" cy="22" r="4" stroke="rgba(80,45,5,0.25)" stroke-width="0.75" fill="none"/>
+      <path d="M8 4 Q16 4 16 12 Q16 20 8 20" stroke="rgba(80,45,5,0.25)" stroke-width="0.75" fill="none"/>
+      <path d="M4 8 Q4 16 12 16 Q20 16 20 8" stroke="rgba(80,45,5,0.25)" stroke-width="0.75" fill="none"/>
+      <circle cx="36" cy="4" r="2" stroke="rgba(80,45,5,0.25)" stroke-width="0.75" fill="none"/>
+      <circle cx="4" cy="36" r="2" stroke="rgba(80,45,5,0.25)" stroke-width="0.75" fill="none"/>
+    </svg>
+  </div>
+  <div class="dc-page-corner br">
+    <svg viewBox="0 0 90 90" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M4 4 L50 4 M4 4 L4 50" stroke="rgba(80,45,5,0.55)" stroke-width="2"/>
+      <path d="M4 4 L22 4 L22 12 L12 12 L12 22 L4 22 Z" stroke="rgba(80,45,5,0.4)" stroke-width="1" fill="rgba(80,45,5,0.06)"/>
+      <circle cx="22" cy="22" r="8" stroke="rgba(80,45,5,0.35)" stroke-width="1" fill="none"/>
+      <circle cx="22" cy="22" r="4" stroke="rgba(80,45,5,0.25)" stroke-width="0.75" fill="none"/>
+      <path d="M8 4 Q16 4 16 12 Q16 20 8 20" stroke="rgba(80,45,5,0.25)" stroke-width="0.75" fill="none"/>
+      <path d="M4 8 Q4 16 12 16 Q20 16 20 8" stroke="rgba(80,45,5,0.25)" stroke-width="0.75" fill="none"/>
+      <circle cx="36" cy="4" r="2" stroke="rgba(80,45,5,0.25)" stroke-width="0.75" fill="none"/>
+      <circle cx="4" cy="36" r="2" stroke="rgba(80,45,5,0.25)" stroke-width="0.75" fill="none"/>
+    </svg>
+  </div>
+
+  <!-- Central content frame -->
   <div class="dc-frame">
-    <!-- Corner ornaments -->
+    <!-- Frame corner ornaments -->
     <div class="dc-corner tl">
-      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M2 2 L20 2 M2 2 L2 20" stroke="#c9a84c" stroke-width="1.5"/>
-        <path d="M2 2 L10 2 L10 6 L6 6 L6 10 L2 10 Z" stroke="#c9a84c" stroke-width="0.75" fill="rgba(201,168,76,0.08)"/>
-        <circle cx="10" cy="10" r="3" stroke="#c9a84c" stroke-width="0.75" fill="none"/>
-        <path d="M4 4 L8 4 L8 8 L4 8 Z" stroke="#c9a84c" stroke-width="0.5" fill="none"/>
-        <path d="M10 2 Q14 6 10 10 Q6 14 2 10" stroke="#c9a84c" stroke-width="0.5" fill="none" opacity="0.5"/>
+      <svg viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 3 L24 3 M3 3 L3 24" stroke="rgba(70,40,5,0.7)" stroke-width="1.5"/>
+        <path d="M3 3 L13 3 L13 8 L8 8 L8 13 L3 13 Z" stroke="rgba(70,40,5,0.5)" stroke-width="0.75" fill="rgba(70,40,5,0.08)"/>
+        <circle cx="13" cy="13" r="4" stroke="rgba(70,40,5,0.45)" stroke-width="0.75" fill="none"/>
+        <path d="M3 13 Q8 18 13 13" stroke="rgba(70,40,5,0.3)" stroke-width="0.6" fill="none"/>
+        <path d="M13 3 Q18 8 13 13" stroke="rgba(70,40,5,0.3)" stroke-width="0.6" fill="none"/>
       </svg>
     </div>
     <div class="dc-corner tr">
-      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M2 2 L20 2 M2 2 L2 20" stroke="#c9a84c" stroke-width="1.5"/>
-        <path d="M2 2 L10 2 L10 6 L6 6 L6 10 L2 10 Z" stroke="#c9a84c" stroke-width="0.75" fill="rgba(201,168,76,0.08)"/>
-        <circle cx="10" cy="10" r="3" stroke="#c9a84c" stroke-width="0.75" fill="none"/>
-        <path d="M4 4 L8 4 L8 8 L4 8 Z" stroke="#c9a84c" stroke-width="0.5" fill="none"/>
+      <svg viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 3 L24 3 M3 3 L3 24" stroke="rgba(70,40,5,0.7)" stroke-width="1.5"/>
+        <path d="M3 3 L13 3 L13 8 L8 8 L8 13 L3 13 Z" stroke="rgba(70,40,5,0.5)" stroke-width="0.75" fill="rgba(70,40,5,0.08)"/>
+        <circle cx="13" cy="13" r="4" stroke="rgba(70,40,5,0.45)" stroke-width="0.75" fill="none"/>
+        <path d="M3 13 Q8 18 13 13" stroke="rgba(70,40,5,0.3)" stroke-width="0.6" fill="none"/>
+        <path d="M13 3 Q18 8 13 13" stroke="rgba(70,40,5,0.3)" stroke-width="0.6" fill="none"/>
       </svg>
     </div>
     <div class="dc-corner bl">
-      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M2 2 L20 2 M2 2 L2 20" stroke="#c9a84c" stroke-width="1.5"/>
-        <path d="M2 2 L10 2 L10 6 L6 6 L6 10 L2 10 Z" stroke="#c9a84c" stroke-width="0.75" fill="rgba(201,168,76,0.08)"/>
-        <circle cx="10" cy="10" r="3" stroke="#c9a84c" stroke-width="0.75" fill="none"/>
-        <path d="M4 4 L8 4 L8 8 L4 8 Z" stroke="#c9a84c" stroke-width="0.5" fill="none"/>
+      <svg viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 3 L24 3 M3 3 L3 24" stroke="rgba(70,40,5,0.7)" stroke-width="1.5"/>
+        <path d="M3 3 L13 3 L13 8 L8 8 L8 13 L3 13 Z" stroke="rgba(70,40,5,0.5)" stroke-width="0.75" fill="rgba(70,40,5,0.08)"/>
+        <circle cx="13" cy="13" r="4" stroke="rgba(70,40,5,0.45)" stroke-width="0.75" fill="none"/>
+        <path d="M3 13 Q8 18 13 13" stroke="rgba(70,40,5,0.3)" stroke-width="0.6" fill="none"/>
+        <path d="M13 3 Q18 8 13 13" stroke="rgba(70,40,5,0.3)" stroke-width="0.6" fill="none"/>
       </svg>
     </div>
     <div class="dc-corner br">
-      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M2 2 L20 2 M2 2 L2 20" stroke="#c9a84c" stroke-width="1.5"/>
-        <path d="M2 2 L10 2 L10 6 L6 6 L6 10 L2 10 Z" stroke="#c9a84c" stroke-width="0.75" fill="rgba(201,168,76,0.08)"/>
-        <circle cx="10" cy="10" r="3" stroke="#c9a84c" stroke-width="0.75" fill="none"/>
-        <path d="M4 4 L8 4 L8 8 L4 8 Z" stroke="#c9a84c" stroke-width="0.5" fill="none"/>
+      <svg viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 3 L24 3 M3 3 L3 24" stroke="rgba(70,40,5,0.7)" stroke-width="1.5"/>
+        <path d="M3 3 L13 3 L13 8 L8 8 L8 13 L3 13 Z" stroke="rgba(70,40,5,0.5)" stroke-width="0.75" fill="rgba(70,40,5,0.08)"/>
+        <circle cx="13" cy="13" r="4" stroke="rgba(70,40,5,0.45)" stroke-width="0.75" fill="none"/>
+        <path d="M3 13 Q8 18 13 13" stroke="rgba(70,40,5,0.3)" stroke-width="0.6" fill="none"/>
+        <path d="M13 3 Q18 8 13 13" stroke="rgba(70,40,5,0.3)" stroke-width="0.6" fill="none"/>
       </svg>
     </div>
 
     <div class="dc-eyebrow">Special Edition · Box Set</div>
-    <div class="dc-rule"></div>
+    <div class="dc-rule plain"></div>
     <div class="dc-title">BLACK<br>BOOK</div>
     <div class="dc-subtitle">intimate language</div>
     <div class="dc-rule"></div>
     <div class="dc-edition">All-Gold Collector's Edition · Five Volumes</div>
 
-    <a href="https://buy.stripe.com/8x214o1JO548fjv0GA9oc01" class="dc-btn" target="_top" onclick="event.stopPropagation()">
+    <!-- SINGLE LANGUAGE — CRIMSON -->
+    <a href="https://buy.stripe.com/8x214o1JO548fjv0GA9oc01" class="dc-btn crimson" target="_top" onclick="event.stopPropagation()">
       <span class="dc-btn-label">Single Language</span>
       <span class="dc-btn-price">$79</span>
       <span class="dc-btn-sub">Lifetime Access · One Language</span>
     </a>
-    <a href="https://buy.stripe.com/3cI6oIcosbswb3f3SM9oc00" class="dc-btn" target="_top" onclick="event.stopPropagation()">
+
+    <!-- FULL COLLECTION — GOLD -->
+    <a href="https://buy.stripe.com/3cI6oIcosbswb3f3SM9oc00" class="dc-btn gold-btn" target="_top" onclick="event.stopPropagation()">
       <span class="dc-btn-label">Full Collection</span>
       <span class="dc-btn-price">$199</span>
       <span class="dc-btn-sub">Lifetime Access · All Languages</span>
@@ -1102,6 +1264,12 @@
       dustCover.style.display = 'none';
       shelf.classList.add('visible');
     }, 600);
+  }
+
+  // Skip dust cover instantly when embedded in Glide (?shelf=1)
+  if (new URLSearchParams(window.location.search).get('shelf') === '1') {
+    dustCover.style.display = 'none';
+    shelf.classList.add('visible');
   }
 
   document.getElementById('dc-enter').addEventListener('click', function(e) {
