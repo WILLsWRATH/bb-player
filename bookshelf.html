@@ -873,7 +873,13 @@ body {
 
 <script>
 // ── DUST COVER ──
+// Skip entirely when embedded in Glide (or any iframe)
 var dustCover = document.getElementById('dustCover');
+var isEmbedded = (window.self !== window.top);
+if (isEmbedded) {
+  dustCover.classList.add('hidden');
+}
+
 var enterLink = document.getElementById('enterShelf');
 enterLink.addEventListener('click', function() {
   dustCover.classList.add('hidden');
@@ -941,10 +947,13 @@ function updateActive() {
 function navigateTo(bookName) {
   var url = buildPlayerUrl(bookName);
   if (!url) return;
-  try { window.parent.postMessage({ type: 'bb-navigate', url: url }, '*'); } catch(e) {}
-  setTimeout(function() {
+  // When embedded in Glide, navigate the top frame directly to the player
+  // postMessage is unreliable — the Glide Rich Text listener ignores the URL
+  if (isEmbedded) {
     try { window.top.location.href = url; } catch(e) { window.location.href = url; }
-  }, 80);
+  } else {
+    window.location.href = url;
+  }
 }
 
 function startDrag(x) {
